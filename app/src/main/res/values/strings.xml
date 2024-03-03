@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">movie</string>
+    <string name="movies_nav">Movies</string>
+    <string name="favourites_nav">Favourites</string>
+    <string name="search_nav">Search</string>
+    <string name="series_nav">Series</string>
+    <string name="popular">Popular</string>
+    <string name="view_all">View all</string>
+    <string name="top_rated">Top Rated</string>
+</resources>

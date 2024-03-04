@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.movieapi.movie.R;
+import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
 import com.movieapi.movie.adapter.MovieCarouselAdapter;
 import com.movieapi.movie.network.movie.MovieBrief;
 import com.movieapi.movie.network.movie.NowShowingMoviesResponse;
+import com.movieapi.movie.network.movie.PopularMoviesResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
@@ -38,14 +40,24 @@ public class MovieFragment extends Fragment {
     ProgressBar mProgressBar;
     TextView view_popular, view_top_rated;
     NestedScrollView fragment_movie_scrollView;
+    LinearLayout popular_heading;
 
+    // carousel
     LinearLayoutManager carouselLayoutManager;
     RecyclerView carousel_recView;
     List<MovieBrief> mNowShowingMovie;
     MovieCarouselAdapter movieCarouselAdapter;
+
+    // popular
+    RecyclerView popular_recView;
+    List<MovieBrief> mPopularList;
+    MovieBriefSmallAdapter mPopularAdapter;
+
     private boolean mNowShowingMoviesLoaded;
+    private boolean mPopularMoviesLoaded;
 
     Call<NowShowingMoviesResponse> nowShowingMoviesResponseCall;
+    Call<PopularMoviesResponse> popularMoviesResponseCall;
 
     Timer timer;
     TimerTask timerTask;
@@ -70,14 +82,24 @@ public class MovieFragment extends Fragment {
 
         fragment_movie_scrollView = view.findViewById(R.id.fragment_movie_scrollView);
 
+        popular_heading = view.findViewById(R.id.popular_heading);
+
         carousel_recView = view.findViewById(R.id.carousel_recView);
+        popular_recView = view.findViewById(R.id.popular_recView);
 
         mNowShowingMovie = new ArrayList<>();
+        mPopularList = new ArrayList<>();
 
+        // carousel
         movieCarouselAdapter = new MovieCarouselAdapter(mNowShowingMovie, getContext());
         carouselLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         carousel_recView.setLayoutManager(carouselLayoutManager);
         carousel_recView.setAdapter(movieCarouselAdapter);
+
+        // popular
+        mPopularAdapter = new MovieBriefSmallAdapter(mPopularList, getContext());
+        popular_recView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        popular_recView.setAdapter(mPopularAdapter);
 
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(carousel_recView);
@@ -137,6 +159,7 @@ public class MovieFragment extends Fragment {
 
     private void initViews(){
         loadNowShowingMovies();
+        loadPopularMovie();
     }
 
     private void loadNowShowingMovies(){
@@ -169,10 +192,43 @@ public class MovieFragment extends Fragment {
         });
     }
 
+    private void loadPopularMovie(){
+        ApiInterface apiInterface = ApiClient.getMovieApi();
+        popularMoviesResponseCall = apiInterface.getPopularMovies(Constants.API_KEY, 1);
+        popularMoviesResponseCall.enqueue(new Callback<PopularMoviesResponse>() {
+            @Override
+            public void onResponse(Call<PopularMoviesResponse> call, Response<PopularMoviesResponse> response) {
+                if(!response.isSuccessful()){
+                    popularMoviesResponseCall = call.clone();
+                    popularMoviesResponseCall.enqueue(this);
+                    return;
+                }
+
+                if(response.body() == null) return;
+                if (response.body().getResults() == null) return;
+
+                for (MovieBrief movieBrief : response.body().getResults()){
+                    if (movieBrief != null && movieBrief.getBackdropPath() != null)
+                        mPopularList.add(movieBrief);
+                }
+                mPopularAdapter.notifyDataSetChanged();
+                mPopularMoviesLoaded = true;
+                checkAllDataLoad();
+            }
+
+            @Override
+            public void onFailure(Call<PopularMoviesResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void checkAllDataLoad() {
-        if(mNowShowingMoviesLoaded){
+        if(mNowShowingMoviesLoaded && mPopularMoviesLoaded){
             mProgressBar.setVisibility(View.GONE);
             carousel_recView.setVisibility(View.VISIBLE);
+            popular_heading.setVisibility(View.VISIBLE);
+            popular_recView.setVisibility(View.VISIBLE);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.movieapi.movie;
+package com.movieapi.movie.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import com.movieapi.movie.Fragment.FavouritesFragment;
 import com.movieapi.movie.Fragment.MovieFragment;
 import com.movieapi.movie.Fragment.SearchFragment;
 import com.movieapi.movie.Fragment.SeriesFragment;
+import com.movieapi.movie.R;
 import com.movieapi.movie.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

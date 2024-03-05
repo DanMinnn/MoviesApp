@@ -2,6 +2,7 @@ package com.movieapi.movie.database.movies;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "favMovies")
@@ -20,6 +21,13 @@ public class FavMovie {
 
     public FavMovie(int id, Integer movie_id, String poster_path, String name) {
         this.id = id;
+        this.movie_id = movie_id;
+        this.poster_path = poster_path;
+        this.name = name;
+    }
+
+    @Ignore
+    public FavMovie(Integer movie_id, String poster_path, String name) {
         this.movie_id = movie_id;
         this.poster_path = poster_path;
         this.name = name;

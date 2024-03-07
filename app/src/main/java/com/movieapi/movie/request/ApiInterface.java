@@ -3,6 +3,7 @@ package com.movieapi.movie.request;
 import android.net.TransportInfo;
 
 import com.movieapi.movie.network.movie.Movie;
+import com.movieapi.movie.network.movie.MovieCreditsResponse;
 import com.movieapi.movie.network.movie.NowShowingMoviesResponse;
 import com.movieapi.movie.network.movie.PopularMoviesResponse;
 import com.movieapi.movie.network.videos.TrailerResponse;
@@ -24,4 +25,7 @@ public interface ApiInterface {
 
     @GET("movie/{id}/videos")
     Call<TrailerResponse> getTrailerMovie(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+
+    @GET("movie/{id}/credits")
+    Call<MovieCreditsResponse> getMovieCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
 }

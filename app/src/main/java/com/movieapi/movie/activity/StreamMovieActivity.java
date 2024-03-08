@@ -88,7 +88,7 @@ public class StreamMovieActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(binding.webView !=null && binding.webView.canGoBack()) {
+        if(binding.webView != null && binding.webView.canGoBack()) {
             binding.webView.goBack();
         } else {
             super.onBackPressed();

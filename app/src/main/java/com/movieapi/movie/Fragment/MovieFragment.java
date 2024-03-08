@@ -23,6 +23,7 @@ import com.movieapi.movie.adapter.MovieCarouselAdapter;
 import com.movieapi.movie.network.movie.MovieBrief;
 import com.movieapi.movie.network.movie.NowShowingMoviesResponse;
 import com.movieapi.movie.network.movie.PopularMoviesResponse;
+import com.movieapi.movie.network.movie.TopRatedMoviesResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
@@ -40,7 +41,7 @@ public class MovieFragment extends Fragment {
     ProgressBar mProgressBar;
     TextView view_popular, view_top_rated;
     NestedScrollView fragment_movie_scrollView;
-    LinearLayout popular_heading;
+    LinearLayout popular_heading, top_rated_heading;
 
     // carousel
     LinearLayoutManager carouselLayoutManager;
@@ -53,11 +54,18 @@ public class MovieFragment extends Fragment {
     List<MovieBrief> mPopularList;
     MovieBriefSmallAdapter mPopularAdapter;
 
+    //top rated
+    RecyclerView topRated_recView;
+    List<MovieBrief> mTopRateMovie;
+    MovieBriefSmallAdapter mTopRatedAdapter;
+
     private boolean mNowShowingMoviesLoaded;
     private boolean mPopularMoviesLoaded;
+    private boolean mTopRatedMoviesLoad;
 
     Call<NowShowingMoviesResponse> nowShowingMoviesResponseCall;
     Call<PopularMoviesResponse> popularMoviesResponseCall;
+    Call<TopRatedMoviesResponse> topRatedMoviesResponseCall;
 
     Timer timer;
     TimerTask timerTask;
@@ -83,12 +91,15 @@ public class MovieFragment extends Fragment {
         fragment_movie_scrollView = view.findViewById(R.id.fragment_movie_scrollView);
 
         popular_heading = view.findViewById(R.id.popular_heading);
+        top_rated_heading = view.findViewById(R.id.top_rated_heading);
 
         carousel_recView = view.findViewById(R.id.carousel_recView);
         popular_recView = view.findViewById(R.id.popular_recView);
+        topRated_recView = view.findViewById(R.id.top_rated_recView);
 
         mNowShowingMovie = new ArrayList<>();
         mPopularList = new ArrayList<>();
+        mTopRateMovie = new ArrayList<>();
 
         // carousel
         movieCarouselAdapter = new MovieCarouselAdapter(mNowShowingMovie, getContext());
@@ -100,6 +111,12 @@ public class MovieFragment extends Fragment {
         mPopularAdapter = new MovieBriefSmallAdapter(mPopularList, getContext());
         popular_recView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         popular_recView.setAdapter(mPopularAdapter);
+
+        // top rated
+        mTopRatedAdapter = new MovieBriefSmallAdapter(mTopRateMovie, getContext());
+        topRated_recView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        topRated_recView.setAdapter(mTopRatedAdapter);
+
 
         SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(carousel_recView);
@@ -160,6 +177,7 @@ public class MovieFragment extends Fragment {
     private void initViews(){
         loadNowShowingMovies();
         loadPopularMovie();
+        loadTopRatedMovie();
     }
 
     private void loadNowShowingMovies(){
@@ -223,12 +241,46 @@ public class MovieFragment extends Fragment {
         });
     }
 
+    private void loadTopRatedMovie(){
+        ApiInterface apiService = ApiClient.getMovieApi();
+        topRatedMoviesResponseCall = apiService.getTopRatedMovies(Constants.API_KEY, 1, "US");
+        topRatedMoviesResponseCall.enqueue(new Callback<TopRatedMoviesResponse>() {
+            @Override
+            public void onResponse(Call<TopRatedMoviesResponse> call, Response<TopRatedMoviesResponse> response) {
+                if (!response.isSuccessful()){
+                    topRatedMoviesResponseCall = call.clone();
+                    topRatedMoviesResponseCall.enqueue(this);
+                    return;
+                }
+
+                if (response.body() == null) return;
+                if (response.body().getResults() == null) return;
+
+                for(MovieBrief movieBrief : response.body().getResults()){
+                    if (movieBrief != null && movieBrief.getPosterPath() != null)
+                        mTopRateMovie.add(movieBrief);
+                }
+
+                mTopRatedAdapter.notifyDataSetChanged();
+                mTopRatedMoviesLoad = true;
+                checkAllDataLoad();
+            }
+
+            @Override
+            public void onFailure(Call<TopRatedMoviesResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void checkAllDataLoad() {
-        if(mNowShowingMoviesLoaded && mPopularMoviesLoaded){
+        if(mNowShowingMoviesLoaded && mPopularMoviesLoaded && mTopRatedMoviesLoad){
             mProgressBar.setVisibility(View.GONE);
             carousel_recView.setVisibility(View.VISIBLE);
             popular_heading.setVisibility(View.VISIBLE);
             popular_recView.setVisibility(View.VISIBLE);
+            top_rated_heading.setVisibility(View.VISIBLE);
+            topRated_recView.setVisibility(View.VISIBLE);
         }
     }
 

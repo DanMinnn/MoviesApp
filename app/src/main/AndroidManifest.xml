@@ -24,6 +24,9 @@
 
         <activity android:name=".activity.MovieDetailsActivity"
             android:exported="true"/>
+
+        <activity android:name=".activity.StreamMovieActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

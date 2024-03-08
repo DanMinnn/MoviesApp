@@ -105,6 +105,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
 
+        binding.movieDetailsFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StreamMovie();
+            }
+        });
+
         loadActivity(favMovie);
     }
 
@@ -406,5 +413,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void StreamMovie() {
+        Intent iStreamMovie = new Intent(MovieDetailsActivity.this, StreamMovieActivity.class);
+        iStreamMovie.putExtra("movie_id", imdbId);
+        startActivity(iStreamMovie);
     }
 }

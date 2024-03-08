@@ -31,7 +31,7 @@ public class MovieBriefSmallAdapter extends RecyclerView.Adapter<MovieBriefSmall
     @NonNull
     @Override
     public MovieBriefSmallAdapter.MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MovieBriefSmallAdapter.MovieViewHolder(LayoutInflater.from(context).inflate(R.layout.popular_top_rated_small_single_item, parent, false));
+        return new MovieBriefSmallAdapter.MovieViewHolder(LayoutInflater.from(context).inflate(R.layout.small_single_item, parent, false));
     }
 
     @Override

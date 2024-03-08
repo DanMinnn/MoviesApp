@@ -6,6 +6,7 @@ import com.movieapi.movie.network.movie.Movie;
 import com.movieapi.movie.network.movie.MovieCreditsResponse;
 import com.movieapi.movie.network.movie.NowShowingMoviesResponse;
 import com.movieapi.movie.network.movie.PopularMoviesResponse;
+import com.movieapi.movie.network.movie.SimilarMovieResponse;
 import com.movieapi.movie.network.videos.TrailerResponse;
 
 import retrofit2.Call;
@@ -28,4 +29,7 @@ public interface ApiInterface {
 
     @GET("movie/{id}/credits")
     Call<MovieCreditsResponse> getMovieCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+
+    @GET("movie/{id}/similar")
+    Call<SimilarMovieResponse> getSimilarMovie(@Path("id") Integer movieId, @Query("api_key") String apiKey, @Query("page") Integer page);
 }

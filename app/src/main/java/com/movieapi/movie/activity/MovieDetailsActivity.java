@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.CastAdapter;
+import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
 import com.movieapi.movie.adapter.TrailerAdapter;
 import com.movieapi.movie.database.DatabaseHelper;
 import com.movieapi.movie.database.movies.FavMovie;
@@ -30,8 +31,10 @@ import com.movieapi.movie.database.movies.MovieDatabase;
 import com.movieapi.movie.databinding.ActivityMovieDetailsBinding;
 import com.movieapi.movie.network.movie.Genre;
 import com.movieapi.movie.network.movie.Movie;
+import com.movieapi.movie.network.movie.MovieBrief;
 import com.movieapi.movie.network.movie.MovieCastBrief;
 import com.movieapi.movie.network.movie.MovieCreditsResponse;
+import com.movieapi.movie.network.movie.SimilarMovieResponse;
 import com.movieapi.movie.network.videos.Trailer;
 import com.movieapi.movie.network.videos.TrailerResponse;
 import com.movieapi.movie.request.ApiClient;
@@ -55,13 +58,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     List<Trailer> trailerList;
     List<MovieCastBrief> mCast;
+    List<MovieBrief> mSimilarList;
 
     TrailerAdapter trailerAdapter;
     CastAdapter castAdapter;
+    MovieBriefSmallAdapter mSimilarMovieAdapter;
 
     Call<TrailerResponse> mMovieTrailersCall;
     Call<Movie> mMovieDetailsCall;
     Call<MovieCreditsResponse> mMovieCreditsResponseCall;
+    Call<SimilarMovieResponse> mSimilarMovieResponse;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +76,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Intent receivedItent = getIntent();
         movieId = receivedItent.getIntExtra("movie_id", -1);
+
+        if (movieId == -1 ) finish();
+
+        final FavMovie favMovie = (FavMovie) getIntent().getSerializableExtra("name");
 
         trailerList = new ArrayList<>();
         SnapHelper snapHelper = new PagerSnapHelper();
@@ -83,7 +93,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
         binding.movieDetailsCast.setAdapter(castAdapter);
         binding.movieDetailsCast.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
-        final FavMovie favMovie = (FavMovie) getIntent().getSerializableExtra("name");
+        mSimilarList = new ArrayList<>();
+        mSimilarMovieAdapter = new MovieBriefSmallAdapter(mSimilarList, MovieDetailsActivity.this);
+        binding.movieDetailsRecommend.setAdapter(mSimilarMovieAdapter);
+        binding.movieDetailsRecommend.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+
+        binding.movieDetailsBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         loadActivity(favMovie);
     }
 
@@ -141,6 +162,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 setGenres(response.body().getGenres());
                 setTrailers();
                 setCast();
+                setSimilarMovie();
             }
 
             @Override
@@ -348,6 +370,39 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MovieCreditsResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setSimilarMovie(){
+        ApiInterface apiService = ApiClient.getMovieApi();
+        mSimilarMovieResponse = apiService.getSimilarMovie(movieId, Constants.API_KEY, 1);
+        mSimilarMovieResponse.enqueue(new Callback<SimilarMovieResponse>() {
+            @Override
+            public void onResponse(Call<SimilarMovieResponse> call, Response<SimilarMovieResponse> response) {
+                if (!response.isSuccessful()){
+                    mSimilarMovieResponse = call.clone();
+                    mSimilarMovieResponse.enqueue(this);
+                    return;
+                }
+
+                if (response.body() == null) return;
+                if (response.body().getResults() == null) return;
+
+                for(MovieBrief movieBrief : response.body().getResults()){
+                    if (movieBrief != null && movieBrief.getTitle() != null && movieBrief.getPosterPath() != null)
+                        mSimilarList.add(movieBrief);
+                }
+
+                if(!mSimilarList.isEmpty()){
+                    binding.movieDetailsRecommendHeading.setVisibility(View.VISIBLE);
+                }
+                mSimilarMovieAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<SimilarMovieResponse> call, Throwable t) {
 
             }
         });

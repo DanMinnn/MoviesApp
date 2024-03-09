@@ -1,5 +1,6 @@
 package com.movieapi.movie.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.movieapi.movie.R;
+import com.movieapi.movie.activity.ViewAllMoviesActivity;
 import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
 import com.movieapi.movie.adapter.MovieCarouselAdapter;
 import com.movieapi.movie.network.movie.MovieBrief;
@@ -86,7 +88,7 @@ public class MovieFragment extends Fragment {
 
         mProgressBar = view.findViewById(R.id.movie_progressBar);
         view_popular = view.findViewById(R.id.view_popular);
-        view_top_rated = view_popular.findViewById(R.id.view_top_rated);
+        view_top_rated = view.findViewById(R.id.view_top_rated);
 
         fragment_movie_scrollView = view.findViewById(R.id.fragment_movie_scrollView);
 
@@ -96,6 +98,10 @@ public class MovieFragment extends Fragment {
         carousel_recView = view.findViewById(R.id.carousel_recView);
         popular_recView = view.findViewById(R.id.popular_recView);
         topRated_recView = view.findViewById(R.id.top_rated_recView);
+
+        mNowShowingMoviesLoaded = false;
+        mPopularMoviesLoaded = false;
+        mTopRatedMoviesLoad = false;
 
         mNowShowingMovie = new ArrayList<>();
         mPopularList = new ArrayList<>();
@@ -133,6 +139,24 @@ public class MovieFragment extends Fragment {
                     position = carouselLayoutManager.findFirstCompletelyVisibleItemPosition();
                     runAutoScrollingCarousel();
                 }
+            }
+        });
+
+        view_popular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iViewAllPopular = new Intent(getContext(), ViewAllMoviesActivity.class);
+                iViewAllPopular.putExtra(Constants.VIEW_ALL_MOVIES_TYPE, Constants.POPULAR_MOVIES_TYPE);
+                startActivity(iViewAllPopular);
+            }
+        });
+
+        view_top_rated.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iViewAllTop = new Intent(getContext(), ViewAllMoviesActivity.class);
+                iViewAllTop.putExtra(Constants.VIEW_ALL_MOVIES_TYPE, Constants.TOP_RATED_MOVIES_TYPE);
+                startActivity(iViewAllTop);
             }
         });
 

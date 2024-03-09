@@ -2,6 +2,7 @@ package com.movieapi.movie.request;
 
 import android.net.TransportInfo;
 
+import com.movieapi.movie.network.movie.GenreMoviesResponse;
 import com.movieapi.movie.network.movie.Movie;
 import com.movieapi.movie.network.movie.MovieCreditsResponse;
 import com.movieapi.movie.network.movie.NowShowingMoviesResponse;
@@ -34,4 +35,7 @@ public interface ApiInterface {
 
     @GET("movie/{id}/similar")
     Call<SimilarMovieResponse> getSimilarMovie(@Path("id") Integer movieId, @Query("api_key") String apiKey, @Query("page") Integer page);
+
+    @GET("discover/movie")
+    Call<GenreMoviesResponse> getMoviesByGenre(@Query("api_key") String apiKey, @Query("with_genres") Integer genreNumber, @Query("page") Integer page);
 }

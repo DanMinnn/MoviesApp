@@ -19,7 +19,7 @@ public class FavMovie {
     @ColumnInfo(name = "name")
     private String name;
 
-    public FavMovie(int id, Integer movie_id, String poster_path, String name) {
+    public FavMovie(int id, Integer movie_id, String name, String poster_path) {
         this.id = id;
         this.movie_id = movie_id;
         this.poster_path = poster_path;
@@ -27,7 +27,7 @@ public class FavMovie {
     }
 
     @Ignore
-    public FavMovie(Integer movie_id, String poster_path, String name) {
+    public FavMovie(Integer movie_id, String name, String poster_path) {
         this.movie_id = movie_id;
         this.poster_path = poster_path;
         this.name = name;

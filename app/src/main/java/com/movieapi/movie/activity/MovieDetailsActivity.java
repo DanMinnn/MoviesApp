@@ -309,7 +309,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         String genre = binding.movieDetailsGenre.getText().toString();
         if(!genre.equals("") && !detailsString.equals("")){
-            binding.movieDetailsGenre.setVisibility(View.VISIBLE);
+            binding.movieDetailsGenreSeperator.setVisibility(View.VISIBLE);
         }
         binding.movieDetailsDuration.setText(detailsString);
     }

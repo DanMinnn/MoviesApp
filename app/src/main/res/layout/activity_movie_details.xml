@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:text="|"
                     android:layout_marginHorizontal="3dp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/grey"
                     android:visibility="gone"/>
 
                 <TextView

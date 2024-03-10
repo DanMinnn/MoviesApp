@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.movieapi.movie.databinding.ActivityStreamMovieBinding;
+import com.movieapi.movie.utils.AdBlocker;
 import com.movieapi.movie.utils.Browser;
 import com.movieapi.movie.utils.Constants;
 
@@ -22,6 +24,8 @@ public class StreamMovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AdBlocker.init(this);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
@@ -73,7 +77,7 @@ public class StreamMovieActivity extends AppCompatActivity {
         }
 
         public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallBack){
-            if (this.mCustomView == null){
+            if (this.mCustomView != null){
                 onHideCustomView();
                 return;
             }

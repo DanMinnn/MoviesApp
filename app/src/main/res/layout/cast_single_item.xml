@@ -3,6 +3,7 @@
     android:layout_width="120dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cast_root_view"
     android:gravity="center"
     android:layout_margin="8dp"
     android:orientation="vertical">

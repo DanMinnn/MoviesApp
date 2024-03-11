@@ -2,8 +2,11 @@ package com.movieapi.movie.request;
 
 import android.net.TransportInfo;
 
+import com.movieapi.movie.network.cast.Person;
 import com.movieapi.movie.network.movie.GenreMoviesResponse;
 import com.movieapi.movie.network.movie.Movie;
+import com.movieapi.movie.network.movie.MovieCastOfPerson;
+import com.movieapi.movie.network.movie.MovieCastsOfPersonResponse;
 import com.movieapi.movie.network.movie.MovieCreditsResponse;
 import com.movieapi.movie.network.movie.NowShowingMoviesResponse;
 import com.movieapi.movie.network.movie.PopularMoviesResponse;
@@ -38,4 +41,11 @@ public interface ApiInterface {
 
     @GET("discover/movie")
     Call<GenreMoviesResponse> getMoviesByGenre(@Query("api_key") String apiKey, @Query("with_genres") Integer genreNumber, @Query("page") Integer page);
+
+    //Cast
+    @GET("person/{person_id}")
+    Call<Person> getPersonDetails(@Path("person_id") Integer personId, @Query("api_key") String apiKey);
+
+    @GET("person/{person_id}/movie_credits")
+    Call<MovieCastsOfPersonResponse> getMovieCastOfPerson(@Path("person_id") Integer personId, @Query("api_key") String apiKey);
 }

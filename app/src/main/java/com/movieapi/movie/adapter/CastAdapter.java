@@ -1,10 +1,12 @@
 package com.movieapi.movie.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
+import com.movieapi.movie.activity.CastActivity;
 import com.movieapi.movie.network.movie.MovieCastBrief;
 import com.movieapi.movie.utils.Constants;
 
@@ -61,6 +64,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastHolder> {
     public class CastHolder extends RecyclerView.ViewHolder {
         ImageView cast_imv;
         TextView txt_cast_name, txt_cast_alias;
+        LinearLayout castDetails;
 
         public CastHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +72,16 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastHolder> {
             cast_imv = itemView.findViewById(R.id.cast_imv);
             txt_cast_name = itemView.findViewById(R.id.txt_cast_name);
             txt_cast_alias = itemView.findViewById(R.id.txt_cast_alias);
+            castDetails = itemView.findViewById(R.id.cast_root_view);
+
+            castDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent iCastDetails = new Intent(context, CastActivity.class);
+                    iCastDetails.putExtra("person_id", movieCastBriefList.get(getAdapterPosition()).getId());
+                    context.startActivity(iCastDetails);
+                }
+            });
         }
     }
 }

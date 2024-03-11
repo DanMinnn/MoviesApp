@@ -33,6 +33,10 @@
 
         <activity android:name=".activity.ViewAllMoviesActivity"
             android:exported="true"/>
+
+        <activity android:name=".activity.CastActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName;
 public class Person {
     @SerializedName("adult")
     private Boolean adult;
-    @SerializedName("also_known_as")
-    private String also_known_as;
     @SerializedName("biography")
     private String biography;
     @SerializedName("birthday")
@@ -14,15 +12,11 @@ public class Person {
     @SerializedName("deathday")
     private String dateOfDeadth;
     @SerializedName("gender")
-    private int gender;
-    @SerializedName("homepage")
-    private String homepage;
+    private Integer gender;
     @SerializedName("id")
     private int id;
     @SerializedName("imdb_id")
     private String imdb_id;
-    @SerializedName("known_for_department")
-    private String known_for_department;
     @SerializedName("name")
     private String name;
     @SerializedName("place_of_birth")
@@ -32,17 +26,14 @@ public class Person {
     @SerializedName("profile_path")
     private String profile_path;
 
-    public Person(Boolean adult, String also_known_as, String biography, String dateOfBirth, String dateOfDeadth, int gender, String homepage, int id, String imdb_id, String known_for_department, String name, String place_of_birth, Double popularity, String profile_path) {
+    public Person(Boolean adult, String biography, String dateOfBirth, String dateOfDeadth, Integer gender, int id, String imdb_id, String name, String place_of_birth, Double popularity, String profile_path) {
         this.adult = adult;
-        this.also_known_as = also_known_as;
         this.biography = biography;
         this.dateOfBirth = dateOfBirth;
         this.dateOfDeadth = dateOfDeadth;
         this.gender = gender;
-        this.homepage = homepage;
         this.id = id;
         this.imdb_id = imdb_id;
-        this.known_for_department = known_for_department;
         this.name = name;
         this.place_of_birth = place_of_birth;
         this.popularity = popularity;
@@ -55,14 +46,6 @@ public class Person {
 
     public void setAdult(Boolean adult) {
         this.adult = adult;
-    }
-
-    public String getAlso_known_as() {
-        return also_known_as;
-    }
-
-    public void setAlso_known_as(String also_known_as) {
-        this.also_known_as = also_known_as;
     }
 
     public String getBiography() {
@@ -89,20 +72,12 @@ public class Person {
         this.dateOfDeadth = dateOfDeadth;
     }
 
-    public int getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
-    }
-
-    public String getHomepage() {
-        return homepage;
-    }
-
-    public void setHomepage(String homepage) {
-        this.homepage = homepage;
     }
 
     public int getId() {
@@ -119,14 +94,6 @@ public class Person {
 
     public void setImdb_id(String imdb_id) {
         this.imdb_id = imdb_id;
-    }
-
-    public String getKnown_for_department() {
-        return known_for_department;
-    }
-
-    public void setKnown_for_department(String known_for_department) {
-        this.known_for_department = known_for_department;
     }
 
     public String getName() {

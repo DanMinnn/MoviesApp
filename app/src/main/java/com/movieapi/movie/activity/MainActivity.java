@@ -38,12 +38,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
 
-                    case R.id.nav_series:
+                    /*case R.id.nav_series:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("SeriesFragment")){
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SeriesFragment()).commit();
                             binding.toolbarMain.setTitle(getString(R.string.series_nav));
                         }
-                        break;
+                        break;*/
 
                     case R.id.nav_search:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("SearchFragment")){

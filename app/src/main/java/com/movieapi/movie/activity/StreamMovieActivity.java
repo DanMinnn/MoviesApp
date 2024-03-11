@@ -1,5 +1,6 @@
 package com.movieapi.movie.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +22,7 @@ import com.movieapi.movie.utils.Constants;
 public class StreamMovieActivity extends AppCompatActivity {
     ActivityStreamMovieBinding binding;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +60,7 @@ public class StreamMovieActivity extends AppCompatActivity {
         private int mOriginOrientation;
         private int mOriginSystemUiVisibility;
 
-        public ChromeClient() {
+        ChromeClient() {
         }
 
         public Bitmap getDefaultVideoPoster(){

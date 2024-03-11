@@ -1,6 +1,5 @@
 package com.movieapi.movie.utils;
 
-import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;

@@ -191,7 +191,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         binding.movieDetailsFavouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View    view) {
+            public void onClick(View view) {
 
                 class SaveMovie extends AsyncTask<Void, Void, Void> {
 

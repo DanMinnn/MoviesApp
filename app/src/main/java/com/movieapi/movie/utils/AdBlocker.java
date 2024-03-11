@@ -28,6 +28,11 @@ public class AdBlocker {
 
             @Override
             protected Void doInBackground(Void... params) {
+                try {
+                    loadFromAssets(context);
+                } catch (IOException e) {
+                    //
+                }
                 return null;
             }
         }.execute();

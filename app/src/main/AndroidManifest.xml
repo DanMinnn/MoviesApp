@@ -37,6 +37,9 @@
         <activity android:name=".activity.CastActivity"
             android:exported="true"/>
 
+        <activity android:name=".activity.SearchResultActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

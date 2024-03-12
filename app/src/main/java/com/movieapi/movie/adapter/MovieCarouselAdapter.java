@@ -18,6 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
+import com.movieapi.movie.activity.StreamMovieActivity;
 import com.movieapi.movie.network.movie.MovieBrief;
 import com.movieapi.movie.utils.Constants;
 
@@ -84,6 +85,15 @@ public class MovieCarouselAdapter extends RecyclerView.Adapter<MovieCarouselAdap
                     Intent iMovieDetails = new Intent(context, MovieDetailsActivity.class);
                     iMovieDetails.putExtra("movie_id", movieBriefs.get(getAdapterPosition()).getId());
                     context.startActivity(iMovieDetails);
+                }
+            });
+
+            play_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent iMovieStream = new Intent(context, MovieDetailsActivity.class);
+                    iMovieStream.putExtra("movie_id", movieBriefs.get(getAdapterPosition()).getId());
+                    context.startActivity(iMovieStream);
                 }
             });
         }

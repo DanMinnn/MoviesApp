@@ -63,8 +63,11 @@ public class SearchResultActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
+                // số lượng trên màn hình
                 int visibleItemCount = linearLayoutManager.getChildCount();
+                // số lượng trong recView
                 int totalItemCount = linearLayoutManager.getItemCount();
+                //vị trí đầu tiên hiển thị trong màn hình
                 int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
 
                 if (loading) {

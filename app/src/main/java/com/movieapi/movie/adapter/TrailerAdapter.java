@@ -1,7 +1,6 @@
 package com.movieapi.movie.adapter;
 
 import android.content.Context;
-import android.view.ContentInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
-import com.movieapi.movie.network.videos.Trailer;
+import com.movieapi.movie.model.videos.Trailer;
 import com.movieapi.movie.utils.Constants;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.movieapi.movie.network.search;
+package com.movieapi.movie.model.search;
 
 import java.util.List;
 

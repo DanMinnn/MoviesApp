@@ -2,6 +2,7 @@ package com.movieapi.movie.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
-import com.movieapi.movie.network.search.SearchResult;
+import com.movieapi.movie.model.search.SearchResult;
 import com.movieapi.movie.utils.Constants;
 
 import java.text.ParseException;
@@ -41,10 +42,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(@NonNull SearchResultAdapter.ViewHolder holder, int position) {
-        Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_342 + searchResults.get(position).getPosterPath())
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.posterImv);
+            Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_342 + searchResults.get(position).getPosterPath())
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.posterImv);
 
         if (searchResults.get(position).getName() != null && !searchResults.get(position).getName().trim().isEmpty())
             holder.name.setText(searchResults.get(position).getName());
@@ -107,6 +108,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                 public void onClick(View v) {
                     Intent iMovieDetails = new Intent(context, MovieDetailsActivity.class);
                     iMovieDetails.putExtra("movie_id", searchResults.get(getAdapterPosition()).getId());
+                    Log.d("movieId_Search", searchResults.get(getAdapterPosition()).getId() + "");
                     context.startActivity(iMovieDetails);
                 }
             });

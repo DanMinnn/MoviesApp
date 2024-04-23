@@ -1,31 +1,31 @@
-package com.movieapi.movie.network.movie;
+package com.movieapi.movie.model.movie;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PopularMoviesResponse {
+public class GenreMoviesResponse {
     @SerializedName("page")
-    private Integer page;
+    private int page;
     @SerializedName("results")
     private List<MovieBrief> results;
     @SerializedName("total_pages")
-    private Integer totalPages;
+    private int totalPages;
     @SerializedName("total_results")
-    private Integer totalResults;
+    private int totalResults;
 
-    public PopularMoviesResponse(Integer page, List<MovieBrief> results, Integer totalPages, Integer totalResults) {
+    public GenreMoviesResponse(int page, List<MovieBrief> results, int totalPages, int totalResults) {
         this.page = page;
         this.results = results;
         this.totalPages = totalPages;
         this.totalResults = totalResults;
     }
 
-    public Integer getPage() {
+    public int getPage() {
         return page;
     }
 
-    public void setPage(Integer page) {
+    public void setPage(int page) {
         this.page = page;
     }
 
@@ -37,19 +37,19 @@ public class PopularMoviesResponse {
         this.results = results;
     }
 
-    public Integer getTotalPages() {
+    public int getTotalPages() {
         return totalPages;
     }
 
-    public void setTotalPages(Integer totalPages) {
+    public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
     }
 
-    public Integer getTotalResults() {
+    public int getTotalResults() {
         return totalResults;
     }
 
-    public void setTotalResults(Integer totalResults) {
+    public void setTotalResults(int totalResults) {
         this.totalResults = totalResults;
     }
 }

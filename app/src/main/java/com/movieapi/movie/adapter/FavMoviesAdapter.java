@@ -17,10 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
 import com.movieapi.movie.database.movies.FavMovie;
-import com.movieapi.movie.network.movie.MovieBrief;
 import com.movieapi.movie.utils.Constants;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

@@ -11,14 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
 import com.movieapi.movie.databinding.ActivityViewAllMoviesBinding;
-import com.movieapi.movie.network.movie.GenreMoviesResponse;
-import com.movieapi.movie.network.movie.Movie;
-import com.movieapi.movie.network.movie.MovieBrief;
-import com.movieapi.movie.network.movie.PopularMoviesResponse;
-import com.movieapi.movie.network.movie.TopRatedMoviesResponse;
+import com.movieapi.movie.model.movie.GenreMoviesResponse;
+import com.movieapi.movie.model.movie.MovieBrief;
+import com.movieapi.movie.model.movie.PopularMoviesResponse;
+import com.movieapi.movie.model.movie.TopRatedMoviesResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;

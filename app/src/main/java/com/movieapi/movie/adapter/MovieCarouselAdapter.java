@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,8 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
-import com.movieapi.movie.activity.StreamMovieActivity;
-import com.movieapi.movie.network.movie.MovieBrief;
+import com.movieapi.movie.model.movie.MovieBrief;
 import com.movieapi.movie.utils.Constants;
 
 import java.util.List;

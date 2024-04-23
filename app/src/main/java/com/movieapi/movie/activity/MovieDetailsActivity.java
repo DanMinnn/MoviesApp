@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 
@@ -29,14 +30,14 @@ import com.movieapi.movie.database.DatabaseHelper;
 import com.movieapi.movie.database.movies.FavMovie;
 import com.movieapi.movie.database.movies.MovieDatabase;
 import com.movieapi.movie.databinding.ActivityMovieDetailsBinding;
-import com.movieapi.movie.network.movie.Genre;
-import com.movieapi.movie.network.movie.Movie;
-import com.movieapi.movie.network.movie.MovieBrief;
-import com.movieapi.movie.network.movie.MovieCastBrief;
-import com.movieapi.movie.network.movie.MovieCreditsResponse;
-import com.movieapi.movie.network.movie.SimilarMovieResponse;
-import com.movieapi.movie.network.videos.Trailer;
-import com.movieapi.movie.network.videos.TrailerResponse;
+import com.movieapi.movie.model.movie.Genre;
+import com.movieapi.movie.model.movie.Movie;
+import com.movieapi.movie.model.movie.MovieBrief;
+import com.movieapi.movie.model.movie.MovieCastBrief;
+import com.movieapi.movie.model.movie.MovieCreditsResponse;
+import com.movieapi.movie.model.movie.SimilarMovieResponse;
+import com.movieapi.movie.model.videos.Trailer;
+import com.movieapi.movie.model.videos.TrailerResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
@@ -76,6 +77,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Intent receivedItent = getIntent();
         movieId = receivedItent.getIntExtra("movie_id", -1);
+
+        Log.d("movieId", movieId + "");
 
         if (movieId == -1 ) finish();
 
@@ -131,6 +134,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 if (response.body() == null) return;
 
                 imdbId = response.body().getImdb_id();
+
                 binding.movieDetailsFab.setEnabled(true);
 
                 Glide.with(getApplicationContext())
@@ -174,7 +178,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Movie> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
     }

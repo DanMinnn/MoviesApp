@@ -1,6 +1,6 @@
 package com.movieapi.movie.utils;
 
-import com.movieapi.movie.network.movie.MovieBrief;
+import com.movieapi.movie.model.movie.MovieBrief;
 
 import java.util.List;
 

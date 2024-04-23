@@ -1,18 +1,15 @@
 package com.movieapi.movie.request;
 
-import android.net.TransportInfo;
-
-import com.movieapi.movie.network.cast.Person;
-import com.movieapi.movie.network.movie.GenreMoviesResponse;
-import com.movieapi.movie.network.movie.Movie;
-import com.movieapi.movie.network.movie.MovieCastOfPerson;
-import com.movieapi.movie.network.movie.MovieCastsOfPersonResponse;
-import com.movieapi.movie.network.movie.MovieCreditsResponse;
-import com.movieapi.movie.network.movie.NowShowingMoviesResponse;
-import com.movieapi.movie.network.movie.PopularMoviesResponse;
-import com.movieapi.movie.network.movie.SimilarMovieResponse;
-import com.movieapi.movie.network.movie.TopRatedMoviesResponse;
-import com.movieapi.movie.network.videos.TrailerResponse;
+import com.movieapi.movie.model.cast.Person;
+import com.movieapi.movie.model.movie.GenreMoviesResponse;
+import com.movieapi.movie.model.movie.Movie;
+import com.movieapi.movie.model.movie.MovieCastsOfPersonResponse;
+import com.movieapi.movie.model.movie.MovieCreditsResponse;
+import com.movieapi.movie.model.movie.NowShowingMoviesResponse;
+import com.movieapi.movie.model.movie.PopularMoviesResponse;
+import com.movieapi.movie.model.movie.SimilarMovieResponse;
+import com.movieapi.movie.model.movie.TopRatedMoviesResponse;
+import com.movieapi.movie.model.videos.TrailerResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

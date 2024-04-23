@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.CastActivity;
-import com.movieapi.movie.network.movie.MovieCastBrief;
+import com.movieapi.movie.model.movie.MovieCastBrief;
 import com.movieapi.movie.utils.Constants;
 
 import java.util.List;

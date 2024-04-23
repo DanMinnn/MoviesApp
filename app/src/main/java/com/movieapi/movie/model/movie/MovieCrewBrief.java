@@ -1,8 +1,8 @@
-package com.movieapi.movie.network.movie;
+package com.movieapi.movie.model.movie;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MovieCastBrief {
+public class MovieCrewBrief {
     @SerializedName("adult")
     private Boolean adult;
 
@@ -27,19 +27,16 @@ public class MovieCastBrief {
     @SerializedName("profile_path")
     private String profile_path;
 
-    @SerializedName("cast_id")
-    private Integer cast_id;
-
-    @SerializedName("character")
-    private String character;
-
     @SerializedName("credit_id")
     private String credit_id;
 
-    @SerializedName("order")
-    private Integer order;
+    @SerializedName("department")
+    private String department;
 
-    public MovieCastBrief(Boolean adult, Integer gender, Integer id, String known_for_department, String name, String original_name, Double popularity, String profile_path, Integer cast_id, String character, String credit_id, Integer order) {
+    @SerializedName("job")
+    private String job;
+
+    public MovieCrewBrief(Boolean adult, Integer gender, Integer id, String known_for_department, String name, String original_name, Double popularity, String profile_path, String credit_id, String department, String job) {
         this.adult = adult;
         this.gender = gender;
         this.id = id;
@@ -48,10 +45,9 @@ public class MovieCastBrief {
         this.original_name = original_name;
         this.popularity = popularity;
         this.profile_path = profile_path;
-        this.cast_id = cast_id;
-        this.character = character;
         this.credit_id = credit_id;
-        this.order = order;
+        this.department = department;
+        this.job = job;
     }
 
     public Boolean getAdult() {
@@ -118,22 +114,6 @@ public class MovieCastBrief {
         this.profile_path = profile_path;
     }
 
-    public Integer getCast_id() {
-        return cast_id;
-    }
-
-    public void setCast_id(Integer cast_id) {
-        this.cast_id = cast_id;
-    }
-
-    public String getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(String character) {
-        this.character = character;
-    }
-
     public String getCredit_id() {
         return credit_id;
     }
@@ -142,11 +122,19 @@ public class MovieCastBrief {
         this.credit_id = credit_id;
     }
 
-    public Integer getOrder() {
-        return order;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 }

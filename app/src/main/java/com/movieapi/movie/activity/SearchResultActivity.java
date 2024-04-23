@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.SearchResultAdapter;
 import com.movieapi.movie.databinding.ActivitySearchResultBinding;
-import com.movieapi.movie.network.search.SearchResponse;
-import com.movieapi.movie.network.search.SearchAsyncTaskLoader;
-import com.movieapi.movie.network.search.SearchResult;
+import com.movieapi.movie.model.search.SearchResponse;
+import com.movieapi.movie.model.search.SearchAsyncTaskLoader;
+import com.movieapi.movie.model.search.SearchResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +63,8 @@ public class SearchResultActivity extends AppCompatActivity {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                // số lượng trên màn hình
                 int visibleItemCount = linearLayoutManager.getChildCount();
-                // số lượng trong recView
                 int totalItemCount = linearLayoutManager.getItemCount();
-                //vị trí đầu tiên hiển thị trong màn hình
                 int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
 
                 if (loading) {

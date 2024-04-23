@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Metflix</string>
+    <string name="app_name">movie</string>
     <string name="movies_nav">Movies</string>
     <string name="favourites_nav">Favourites</string>
     <string name="search_nav">Search</string>
@@ -7,4 +7,5 @@
     <string name="popular">Popular</string>
     <string name="view_all">View all</string>
     <string name="top_rated">Top Rated</string>
+    <string name="default_web_client_id">1080754709997-r0v3633hqrm3mqf8j3i6ld9gp7a9sim7.apps.googleusercontent.com</string>
 </resources>

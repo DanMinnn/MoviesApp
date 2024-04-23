@@ -1,4 +1,4 @@
-package com.movieapi.movie.network.cast;
+package com.movieapi.movie.model.cast;
 
 import com.google.gson.annotations.SerializedName;
 

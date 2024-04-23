@@ -1,10 +1,10 @@
-package com.movieapi.movie.network.movie;
+package com.movieapi.movie.model.movie;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class NowShowingMoviesResponse {
+public class PopularMoviesResponse {
     @SerializedName("page")
     private Integer page;
     @SerializedName("results")
@@ -14,7 +14,7 @@ public class NowShowingMoviesResponse {
     @SerializedName("total_results")
     private Integer totalResults;
 
-    public NowShowingMoviesResponse(Integer page, List<MovieBrief> results, Integer totalPages, Integer totalResults) {
+    public PopularMoviesResponse(Integer page, List<MovieBrief> results, Integer totalPages, Integer totalResults) {
         this.page = page;
         this.results = results;
         this.totalPages = totalPages;

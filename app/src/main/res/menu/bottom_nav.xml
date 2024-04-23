@@ -23,4 +23,10 @@
         android:icon="@drawable/ic_favourite_outlined"
         android:iconTint="@color/white"
         android:title="@string/favourites_nav"/>
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/user_outline_ic"
+        android:iconTint="@color/white"
+        android:title="Profile"/>
 </menu>

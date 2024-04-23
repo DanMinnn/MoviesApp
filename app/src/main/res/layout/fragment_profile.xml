@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/black">
+
+   <androidx.core.widget.NestedScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+
+           <androidx.cardview.widget.CardView
+               android:id="@+id/user_cardView"
+               android:layout_width="140dp"
+               android:layout_height="140dp"
+               app:cardCornerRadius="70dp"
+               android:elevation="100dp"
+               android:layout_gravity="center"
+               android:layout_marginTop="50dp">
+
+               <ImageView
+                   android:id="@+id/user_imageView"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="centerCrop"
+                   android:background="@android:color/darker_gray" />
+           </androidx.cardview.widget.CardView>
+
+           <TextView
+               android:id="@+id/txtNameUser"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:textColor="@color/white"
+               android:textSize="20sp"
+               android:layout_marginTop="10dp"
+               android:textStyle="bold"/>
+
+           <TextView
+               android:id="@+id/txtEmailUser"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:textColor="@color/white"
+               android:textSize="16sp"
+               android:layout_marginTop="5dp"
+               android:layout_marginBottom="20dp"/>
+
+           <LinearLayout
+               android:id="@+id/lnEditProfile"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_margin="10dp"
+               android:padding="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Edit Profile"
+                   android:drawableLeft="@drawable/user_outline_ic"
+                   android:textColor="@color/white"
+                   android:drawableTint="@color/white"
+                   android:drawablePadding="15dp"
+                   android:textSize="20sp"
+                   android:fontFamily="@font/roboto_medium"
+                   android:layout_weight="1"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="end"
+                   android:src="@drawable/baseline_arrow_right"
+                   android:layout_weight=".1"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/lnNotification"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_margin="10dp"
+               android:padding="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Notification"
+                   android:drawableLeft="@drawable/notification_ic"
+                   android:textColor="@color/white"
+                   android:drawableTint="@color/white"
+                   android:drawablePadding="15dp"
+                   android:textSize="20sp"
+                   android:fontFamily="@font/roboto_medium"
+                   android:layout_weight="1"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="end"
+                   android:src="@drawable/baseline_arrow_right"
+                   android:layout_weight=".1"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/lnSecurity"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_margin="10dp"
+               android:padding="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Security"
+                   android:drawableLeft="@drawable/security_ic"
+                   android:textColor="@color/white"
+                   android:drawableTint="@color/white"
+                   android:drawablePadding="15dp"
+                   android:textSize="20sp"
+                   android:fontFamily="@font/roboto_medium"
+                   android:layout_weight="1"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="end"
+                   android:src="@drawable/baseline_arrow_right"
+                   android:layout_weight=".1"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/lnHelpCenter"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_margin="10dp"
+               android:padding="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Help center"
+                   android:drawableLeft="@drawable/hepl_center_ic"
+                   android:textColor="@color/white"
+                   android:drawableTint="@color/white"
+                   android:drawablePadding="15dp"
+                   android:textSize="20sp"
+                   android:fontFamily="@font/roboto_medium"
+                   android:layout_weight="1"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="end"
+                   android:src="@drawable/baseline_arrow_right"
+                   android:layout_weight=".1"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/lnAbout"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_margin="10dp"
+               android:padding="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="About"
+                   android:drawableLeft="@drawable/about_ic"
+                   android:textColor="@color/white"
+                   android:drawableTint="@color/white"
+                   android:drawablePadding="15dp"
+                   android:textSize="20sp"
+                   android:fontFamily="@font/roboto_medium"
+                   android:layout_weight="1"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="end"
+                   android:src="@drawable/baseline_arrow_right"
+                   android:layout_weight=".1"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/lnLogout"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_margin="10dp"
+               android:padding="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Log out"
+                   android:drawableLeft="@drawable/logout_ic"
+                   android:textColor="@color/white"
+                   android:drawableTint="@color/white"
+                   android:drawablePadding="15dp"
+                   android:textSize="20sp"
+                   android:layout_marginLeft="5dp"
+                   android:fontFamily="@font/roboto_medium"
+                   android:layout_weight="1"/>
+
+               <ImageView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_gravity="end"
+                   android:src="@drawable/baseline_arrow_right"
+                   android:layout_weight=".1"/>
+           </LinearLayout>
+
+       </LinearLayout>
+   </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

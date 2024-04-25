@@ -50,7 +50,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+        //mAuth.signOut();
 
         progressDialog = new ProgressDialog(this);
 
@@ -64,7 +64,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         binding.btnGoogleSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SignInGoogle(apiClient);
+
+                try {
+                    SignInGoogle(apiClient);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -79,23 +84,37 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setMessage("Pending...");
-                progressDialog.show();
 
                 String email = binding.edEmailSignIn.getText().toString();
                 String password = binding.edPasswordSignIn.getText().toString();
 
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            progressDialog.dismiss();
-                            Toast.makeText(SignInActivity.this, "Sign in success !", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }else
-                            Toast.makeText(SignInActivity.this, "Sign in failed !", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                if(email.trim().length() == 0){
+                    binding.txtEnterEmailSignIn.setVisibility(View.VISIBLE);
+                }else
+                    binding.txtEnterEmailSignIn.setVisibility(View.INVISIBLE);
+
+                if (password.trim().length() == 0){
+                    binding.txtEnterPasswordSignIn.setVisibility(View.VISIBLE);
+                } else {
+                    binding.txtEnterPasswordSignIn.setVisibility(View.INVISIBLE);
+                }
+                if(email.trim().length() != 0 && password.trim().length() != 0){
+                    progressDialog.setMessage("Pending...");
+                    progressDialog.show();
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                progressDialog.dismiss();
+                                Toast.makeText(SignInActivity.this, "Sign in success !", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }else{
+                                progressDialog.dismiss();
+                                Toast.makeText(SignInActivity.this, "Sign in failed ! Please check your email or password", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
             }
         });
 

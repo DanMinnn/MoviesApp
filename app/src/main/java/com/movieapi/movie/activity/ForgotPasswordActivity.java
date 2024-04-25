@@ -1,6 +1,7 @@
 package com.movieapi.movie.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -43,6 +44,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 progressDialog.show();
 
                 String email = binding.edEmailForgot.getText().toString();
+                if(email.trim().length() == 0) {
+                    Toast.makeText(ForgotPasswordActivity.this, "Please enter email", Toast.LENGTH_SHORT).show();
+                }
                 if (CheckEmail(email)){
                     mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -57,8 +61,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     Toast.makeText(ForgotPasswordActivity.this, "Invalid email !", Toast.LENGTH_SHORT).show();
                 }
             }
+        });
 
-
+        binding.txtSignUpForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iSignUp = new Intent(ForgotPasswordActivity.this, SignUpActivity.class);
+                startActivity(iSignUp);
+            }
         });
     }
 

@@ -140,7 +140,7 @@
         android:backgroundTint="#F30B0B"
         android:layout_marginTop="10dp"/>
 
-    <LinearLayout
+   <!-- <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -177,7 +177,7 @@
         android:drawableLeft="@drawable/google_ic"
         android:background="@drawable/bg_google"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -33,7 +33,6 @@
         android:padding="10dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="30dp"
         android:textColor="@color/black"
         android:textColorHint="@color/grey"
@@ -41,6 +40,17 @@
         android:drawableLeft="@drawable/email_ic"
         android:drawablePadding="5dp"
         android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/txtEnterEmailSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter your email !"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="70dp"
+        android:textColor="#F30B0B"
+        android:textStyle="bold"
+        android:visibility="invisible"/>
 
     <EditText
         android:id="@+id/edPassword_SignIn"
@@ -50,7 +60,6 @@
         android:padding="10dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginBottom="20dp"
         android:textColor="@color/black"
         android:textColorHint="@color/grey"
         android:background="@drawable/custom_input"
@@ -59,6 +68,17 @@
         android:drawablePadding="5dp"
         android:password="true"
         android:maxLines="1"/>
+
+    <TextView
+        android:id="@+id/txtEnterPasswordSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter your password !"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="70dp"
+        android:textColor="#F30B0B"
+        android:textStyle="bold"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnSignIn"

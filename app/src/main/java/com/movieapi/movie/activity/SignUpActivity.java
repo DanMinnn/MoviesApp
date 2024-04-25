@@ -30,7 +30,7 @@ import com.movieapi.movie.databinding.ActivitySignInBinding;
 import com.movieapi.movie.databinding.ActivitySignUpBinding;
 import com.movieapi.movie.model.member.Member;
 
-public class SignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener{
+public class SignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     ActivitySignUpBinding binding;
     FirebaseAuth mAuth;
     ProgressDialog progressDialog;
@@ -110,12 +110,12 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             }
         });
 
-        binding.btnGoogleSignUp.setOnClickListener(new View.OnClickListener() {
+       /* binding.btnGoogleSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SignInGoogle(apiClient);
             }
-        });
+        });*/
 
         binding.txtSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,13 +129,13 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(this);
+//        mAuth.addAuthStateListener(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mAuth.removeAuthStateListener(this);
+//        mAuth.removeAuthStateListener(this);
     }
 
     private void CreateClientSignInGoogle() {
@@ -177,15 +177,5 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
-
-    @Override
-    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null){
-            Intent iMain = new Intent(SignUpActivity.this, MainActivity.class);
-            startActivity(iMain);
-            Toast.makeText(this, "Sign in success !", Toast.LENGTH_SHORT).show();
-        }
     }
 }

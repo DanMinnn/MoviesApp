@@ -1,6 +1,9 @@
 package com.movieapi.movie.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MainActivity;
+import com.movieapi.movie.activity.SignInActivity;
 import com.movieapi.movie.controller.interfaces.InformationInterface;
 import com.movieapi.movie.databinding.FragmentProfileBinding;
 import com.movieapi.movie.model.member.Member;
@@ -35,6 +40,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
     SharedPreferences prefSignIn;
     Context context;
     DatabaseReference nodeRoot;
+    FirebaseAuth mAuth;
     String email, name;
     private InformationInterface anInterface;
     public ProfileFragment() {
@@ -54,10 +60,12 @@ public class ProfileFragment extends Fragment implements InformationInterface{
         super.onViewCreated(view, savedInstanceState);
 
         nodeRoot = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
 
         anInterface = this;//notice
 
         //binding.txtNameUser.setText("");
+        binding.txtNameUser.setVisibility(View.GONE);
         binding.txtEmailUser.setText("");
 
         prefSignIn = getActivity().getApplicationContext().getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
@@ -67,6 +75,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
         binding.txtEmailUser.setText(email);
 
         setImageUser(binding.userImageView, "user.jpg");
+        Logout();
     }
 
     @Override
@@ -93,7 +102,13 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                                         getActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                binding.txtNameUser.setText(name);
+                                                if (name != null){
+                                                    binding.txtNameUser.setVisibility(View.VISIBLE);
+                                                    binding.txtNameUser.setText(name);
+                                                }
+                                                else
+                                                    binding.txtNameUser.setVisibility(View.GONE);
+
                                             }
                                         });
                                     }
@@ -142,5 +157,33 @@ public class ProfileFragment extends Fragment implements InformationInterface{
         });
 
 
+    }
+
+    private void Logout(){
+        binding.lnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Log out");
+                builder.setIcon(R.drawable.logout_ic);
+                builder.setMessage("Do you want log out?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAuth.signOut();
+                        Intent iSignIn = new Intent(getContext(), SignInActivity.class);
+                        startActivity(iSignIn);
+                    }
+                });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">movie</string>
+    <string name="app_name">Mova</string>
     <string name="movies_nav">Movies</string>
     <string name="favourites_nav">Favourites</string>
     <string name="search_nav">Search</string>

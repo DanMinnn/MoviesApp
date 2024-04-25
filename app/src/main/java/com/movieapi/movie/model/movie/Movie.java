@@ -11,8 +11,8 @@ public class Movie {
     @SerializedName("backdrop_path")
     private  String backdrop_path;
 
-    @SerializedName("belongs_to_collection")
-    private String belongs_to_collection;
+//    @SerializedName("belongs_to_collection")
+//    private String belongs_to_collection;
 
     @SerializedName("budget")
     private Integer budget;
@@ -71,10 +71,9 @@ public class Movie {
     @SerializedName("vote_count")
     private Integer vote_count;
 
-    public Movie(Boolean adult, String backdrop_path, String belongs_to_collection, Integer budget, List<Genre> genres, String homepage, Integer id, String imdb_id, String original_language, String original_title, String overview, Double popularity, String poster_path, String release_date, Integer revenue, Integer runtime, String status, String tagline, String title, Boolean video, Double vote_average, Integer vote_count) {
+    public Movie(Boolean adult, String backdrop_path, Integer budget, List<Genre> genres, String homepage, Integer id, String imdb_id, String original_language, String original_title, String overview, Double popularity, String poster_path, String release_date, Integer revenue, Integer runtime, String status, String tagline, String title, Boolean video, Double vote_average, Integer vote_count) {
         this.adult = adult;
         this.backdrop_path = backdrop_path;
-        this.belongs_to_collection = belongs_to_collection;
         this.budget = budget;
         this.genres = genres;
         this.homepage = homepage;
@@ -110,14 +109,6 @@ public class Movie {
 
     public void setBackdrop_path(String backdrop_path) {
         this.backdrop_path = backdrop_path;
-    }
-
-    public String getBelongs_to_collection() {
-        return belongs_to_collection;
-    }
-
-    public void setBelongs_to_collection(String belongs_to_collection) {
-        this.belongs_to_collection = belongs_to_collection;
     }
 
     public Integer getBudget() {

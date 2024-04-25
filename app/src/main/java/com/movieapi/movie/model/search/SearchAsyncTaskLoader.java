@@ -90,6 +90,19 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         }
                         break;
 
+                    case "tv":
+                        searchResult.setId(result.getInt("id"));
+                        searchResult.setPosterPath(result.getString("poster_path"));
+                        searchResult.setName(result.getString("name"));
+                        searchResult.setMediaType("tv");
+                        searchResult.setOverview(result.getString("overview"));
+                        try {
+                            searchResult.setReleaseDate(result.getString("first_air_date"));
+                        } catch (Exception e){
+                            searchResult.setReleaseDate("N/A");
+                        }
+                        break;
+
                     case "person":
                         searchResult.setId(result.getInt("id"));
                         searchResult.setPosterPath(result.getString("profile_path"));

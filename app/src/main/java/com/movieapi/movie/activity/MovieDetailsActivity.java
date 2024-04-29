@@ -22,6 +22,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.movieapi.movie.Fragment.PagerAdapter;
+import com.movieapi.movie.Fragment.TrailerFragment;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.CastAdapter;
 import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
@@ -76,6 +78,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Intent receivedItent = getIntent();
+
         movieId = receivedItent.getIntExtra("movie_id", -1);
 
         Log.d("movieId", movieId + "");
@@ -84,22 +87,30 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         final FavMovie favMovie = (FavMovie) getIntent().getSerializableExtra("name");
 
+        binding.viewPagerMovieDetails.setAdapter(new PagerAdapter(getSupportFragmentManager(), MovieDetailsActivity.this));
+        binding.tabViewPagerMovieDetails.setViewPager(binding.viewPagerMovieDetails);
+
+        /*Bundle bundle = new Bundle();
+        bundle.putInt("movieId", movieId);
+        TrailerFragment trailerFragment = new TrailerFragment();
+        trailerFragment.setArguments(bundle);*/
+
         trailerList = new ArrayList<>();
-        SnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(binding.movieDetailsTrailer);
-        trailerAdapter = new TrailerAdapter(MovieDetailsActivity.this, trailerList);
-        binding.movieDetailsTrailer.setAdapter(trailerAdapter);
-        binding.movieDetailsTrailer.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+//        SnapHelper snapHelper = new PagerSnapHelper();
+//        snapHelper.attachToRecyclerView(binding.movieDetailsTrailer);
+//        trailerAdapter = new TrailerAdapter(MovieDetailsActivity.this, trailerList);
+//        binding.movieDetailsTrailer.setAdapter(trailerAdapter);
+//        binding.movieDetailsTrailer.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
         mCast = new ArrayList<>();
         castAdapter = new CastAdapter(MovieDetailsActivity.this, mCast);
         binding.movieDetailsCast.setAdapter(castAdapter);
         binding.movieDetailsCast.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
-        mSimilarList = new ArrayList<>();
-        mSimilarMovieAdapter = new MovieBriefSmallAdapter(mSimilarList, MovieDetailsActivity.this);
-        binding.movieDetailsRecommend.setAdapter(mSimilarMovieAdapter);
-        binding.movieDetailsRecommend.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+//        mSimilarList = new ArrayList<>();
+//        mSimilarMovieAdapter = new MovieBriefSmallAdapter(mSimilarList, MovieDetailsActivity.this);
+//        binding.movieDetailsRecommend.setAdapter(mSimilarMovieAdapter);
+//        binding.movieDetailsRecommend.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
         binding.movieDetailsBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +129,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         loadActivity(favMovie);
     }
 
+    public int getMovieId(){
+        return movieId;
+    }
+    
     private void loadActivity(FavMovie favMovie){
         ApiInterface apiInterface = ApiClient.getMovieApi();
         mMovieDetailsCall = apiInterface.getMovieDetails(movieId, Constants.API_KEY);
@@ -171,9 +186,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 setYear(response.body().getRelease_date());
                 setDuration(response.body().getRuntime());
                 setGenres(response.body().getGenres());
-                setTrailers();
                 setCast();
-                setSimilarMovie();
             }
 
             @Override
@@ -319,38 +332,38 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void setTrailers() {
-        ApiInterface apiService = ApiClient.getMovieApi();
-        mMovieTrailersCall = apiService.getTrailerMovie(movieId, Constants.API_KEY);
-        mMovieTrailersCall.enqueue(new Callback<TrailerResponse>() {
-            @Override
-            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
-                if (!response.isSuccessful()) {
-                    mMovieTrailersCall = call.clone();
-                    mMovieTrailersCall.enqueue(this);
-                    return;
-                }
-
-                if (response.body() == null) return;
-                if (response.body().getTrailers() == null) return;
-
-                for (Trailer video : response.body().getTrailers()) {
-                    if (video != null && video.getSite() != null && video.getSite().equals("YouTube") && video.getType() != null && video.getType().equals("Trailer"))
-                        trailerList.add(video);
-                }
-
-                if(!trailerList.isEmpty()) {
-                    binding.movieDetailsTrailerHeading.setVisibility(View.VISIBLE);
-                }
-
-                trailerAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<TrailerResponse> call, Throwable t) {
-
-            }
-
-        });
+//        ApiInterface apiService = ApiClient.getMovieApi();
+//        mMovieTrailersCall = apiService.getTrailerMovie(movieId, Constants.API_KEY);
+//        mMovieTrailersCall.enqueue(new Callback<TrailerResponse>() {
+//            @Override
+//            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+//                if (!response.isSuccessful()) {
+//                    mMovieTrailersCall = call.clone();
+//                    mMovieTrailersCall.enqueue(this);
+//                    return;
+//                }
+//
+//                if (response.body() == null) return;
+//                if (response.body().getTrailers() == null) return;
+//
+//                for (Trailer video : response.body().getTrailers()) {
+//                    if (video != null && video.getSite() != null && video.getSite().equals("YouTube") && video.getType() != null && video.getType().equals("Trailer"))
+//                        trailerList.add(video);
+//                }
+//
+//                if(!trailerList.isEmpty()) {
+//                    binding.movieDetailsTrailerHeading.setVisibility(View.VISIBLE);
+//                }
+//
+//                trailerAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+//
+//            }
+//
+//        });
     }
 
     private void setCast(){
@@ -381,39 +394,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MovieCreditsResponse> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void setSimilarMovie(){
-        ApiInterface apiService = ApiClient.getMovieApi();
-        mSimilarMovieResponse = apiService.getSimilarMovie(movieId, Constants.API_KEY, 1);
-        mSimilarMovieResponse.enqueue(new Callback<SimilarMovieResponse>() {
-            @Override
-            public void onResponse(Call<SimilarMovieResponse> call, Response<SimilarMovieResponse> response) {
-                if (!response.isSuccessful()){
-                    mSimilarMovieResponse = call.clone();
-                    mSimilarMovieResponse.enqueue(this);
-                    return;
-                }
-
-                if (response.body() == null) return;
-                if (response.body().getResults() == null) return;
-
-                for(MovieBrief movieBrief : response.body().getResults()){
-                    if (movieBrief != null && movieBrief.getTitle() != null && movieBrief.getPosterPath() != null)
-                        mSimilarList.add(movieBrief);
-                }
-
-                if(!mSimilarList.isEmpty()){
-                    binding.movieDetailsRecommendHeading.setVisibility(View.VISIBLE);
-                }
-                mSimilarMovieAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<SimilarMovieResponse> call, Throwable t) {
 
             }
         });

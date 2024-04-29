@@ -4,8 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,8 +36,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.movieapi.movie.R;
+import com.movieapi.movie.database.SessionManager;
 import com.movieapi.movie.databinding.ActivitySignInBinding;
 import com.movieapi.movie.model.member.Member;
+
+import java.util.HashMap;
 
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, FirebaseAuth.AuthStateListener {
     ActivitySignInBinding binding;
@@ -58,6 +65,14 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         addEvents();
 
         sharedPreferences= getSharedPreferences("sessionUser", MODE_PRIVATE);
+
+        SessionManager sessionManager = new SessionManager(SignInActivity.this, SessionManager.SESSION_REMEMBERME);
+
+        if (sessionManager.checkRememberMe()){
+            HashMap<String, String> rememberDetails = sessionManager.getRememberMeFromSession();
+            binding.edEmailSignIn.setText(rememberDetails.get(SessionManager.KEY_EMAIL));
+            binding.edPasswordSignIn.setText(rememberDetails.get(SessionManager.KEY_PASSWORD));
+        }
     }
 
     private void addEvents() {
@@ -84,10 +99,8 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String email = binding.edEmailSignIn.getText().toString();
                 String password = binding.edPasswordSignIn.getText().toString();
-
                 if(email.trim().length() == 0){
                     binding.txtEnterEmailSignIn.setVisibility(View.VISIBLE);
                 }else
@@ -123,6 +136,39 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             public void onClick(View v) {
                 Intent iReset = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
                 startActivity(iReset);
+            }
+        });
+
+        binding.checkboxRememberme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    if (binding.checkboxRememberme.isChecked()){
+                        String email = binding.edEmailSignIn.getText().toString();
+                        String password = binding.edPasswordSignIn.getText().toString();
+
+                        SessionManager sessionManager = new SessionManager(SignInActivity.this, SessionManager.SESSION_REMEMBERME);
+                        sessionManager.createRememberMeSession(email, password);
+                    }
+                }
+            }
+        });
+        ShowHidePass();
+    }
+
+    private void ShowHidePass() {
+        binding.imvShowpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.edPasswordSignIn.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                    //show pass
+                    binding.imvShowpass.setImageResource(R.drawable.visible_password);
+                    binding.edPasswordSignIn.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }else {
+                    //hide pass
+                    binding.imvShowpass.setImageResource(R.drawable.hide_password);
+                    binding.edPasswordSignIn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
             }
         });
     }
@@ -196,5 +242,9 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             startActivity(iMain);
             Toast.makeText(this, "Sign in success !", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void rememberMe(){
+
     }
 }

@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".activity.SignInActivity"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/bground">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="180dp"
-        android:src="@drawable/logo_movie"
+        android:src="@drawable/logo_mova"
         android:layout_marginTop="10dp"/>
 
     <TextView
@@ -30,15 +30,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:padding="10dp"
+        android:padding="12dp"
+        android:textSize="16sp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="30dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textColorHint="@color/grey"
         android:background="@drawable/custom_input"
         android:drawableLeft="@drawable/email_ic"
-        android:drawablePadding="5dp"
+        android:drawableTint="#a5a6a9"
+        android:drawablePadding="10dp"
         android:maxLines="1"/>
 
     <TextView
@@ -52,22 +54,76 @@
         android:textStyle="bold"
         android:visibility="invisible"/>
 
-    <EditText
-        android:id="@+id/edPassword_SignIn"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/laypass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
-        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/txtEnterEmailSignIn"
+        app:layout_constraintStart_toStartOf="@+id/txtEnterEmailSignIn"
+        app:layout_constraintTop_toBottomOf="@+id/txtEnterEmailSignIn"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:textColor="@color/black"
+        android:layout_marginRight="50dp">
+
+        <EditText
+            android:id="@+id/edPassword_SignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableStart="@drawable/password_ic"
+            android:drawablePadding="10dp"
+            android:drawableTint="#a5a6a9"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="49dp" />
+
+        <ImageView
+            android:id="@+id/imv_Showpass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/laypass"
+            app:layout_constraintTop_toTopOf="@+id/edPassword_SignIn"
+            android:src="@drawable/hide_password"
+            app:tint="#a5a6a9"
+            android:alpha=".5"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+   <!-- <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:textColorHint="@color/grey"
-        android:background="@drawable/custom_input"
-        android:drawableLeft="@drawable/password_ic"
-        android:drawableTint="#414042"
-        android:drawablePadding="5dp"
-        android:password="true"
-        android:maxLines="1"/>
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/register_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/custom_input"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey"
+            android:drawableStart="@drawable/password_ic"
+            android:drawablePadding="10dp"
+            android:maxLines="1"
+            android:drawableTint="#a5a6a9"
+            />
+    </com.google.android.material.textfield.TextInputLayout>-->
 
     <TextView
         android:id="@+id/txtEnterPasswordSignIn"
@@ -80,6 +136,19 @@
         android:textStyle="bold"
         android:visibility="invisible"/>
 
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_rememberme"
+        android:layout_width="120dp"
+        android:layout_height="20dp"
+        android:text="Remember me"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:fontFamily="@font/roboto_medium"
+        android:button="@drawable/custom_checkbox"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:layout_gravity="center"
+        />
+
     <Button
         android:id="@+id/btnSignIn"
         android:layout_width="300dp"
@@ -88,7 +157,7 @@
         android:text="Sign in"
         android:textColor="@color/white"
         android:fontFamily="@font/roboto_medium"
-        android:backgroundTint="#F30B0B"
+        android:backgroundTint="@color/deep_red"
         android:layout_marginTop="10dp"/>
 
     <TextView
@@ -113,7 +182,7 @@
             android:layout_width="100dp"
             android:layout_height="2dp"
             android:layout_marginTop="10dp"
-            android:background="@color/orange"/>
+            android:background="@color/light_gray"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -128,7 +197,7 @@
             android:layout_width="100dp"
             android:layout_height="2dp"
             android:layout_marginTop="10dp"
-            android:background="@color/orange"/>
+            android:background="@color/light_gray"/>
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton

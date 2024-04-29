@@ -30,7 +30,7 @@ import com.movieapi.movie.databinding.ActivitySignInBinding;
 import com.movieapi.movie.databinding.ActivitySignUpBinding;
 import com.movieapi.movie.model.member.Member;
 
-public class SignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class SignUpActivity extends AppCompatActivity{
     ActivitySignUpBinding binding;
     FirebaseAuth mAuth;
     ProgressDialog progressDialog;
@@ -48,8 +48,6 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
         progressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
-
-        CreateClientSignInGoogle();
 
         addEvents();
         sharedPreferences = getSharedPreferences("saveUser", MODE_PRIVATE);
@@ -109,14 +107,6 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                 }
             }
         });
-
-       /* binding.btnGoogleSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SignInGoogle(apiClient);
-            }
-        });*/
-
         binding.txtSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,58 +114,5 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                 startActivity(iSignIn);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        mAuth.addAuthStateListener(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-//        mAuth.removeAuthStateListener(this);
-    }
-
-    private void CreateClientSignInGoogle() {
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
-                .Builder()
-                .requestEmail()
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .build();
-
-        apiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-                .build();
-    }
-
-    private void SignInGoogle(GoogleApiClient apiClient){
-        Intent iGoogle = Auth.GoogleSignInApi.getSignInIntent(apiClient);
-        startActivityForResult(iGoogle, REQ_SIGN_UP);
-    }
-
-    private void SignInCredential(String tokenID){
-            AuthCredential credential = GoogleAuthProvider.getCredential(tokenID, null);
-            mAuth.signInWithCredential(credential);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_SIGN_UP){
-            if (resultCode == RESULT_OK){
-                GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                GoogleSignInAccount account = signInResult.getSignInAccount();
-                String tokenID = account.getIdToken();
-                SignInCredential(tokenID);
-            }
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }

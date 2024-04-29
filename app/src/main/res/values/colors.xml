@@ -4,4 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#EC7455</color>
     <color name="grey">#737373</color>
+    <color name="bground">#181a20</color>
+    <color name="bground_input">#1f212a</color>
+    <color name="light_red">#e21221</color>
+    <color name="deep_red">#c1232f</color>
+    <color name="light_gray">#25272d</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.movieapi.movie.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.movieapi.movie.activity.MovieDetailsActivity;
+import com.movieapi.movie.activity.ViewAllCommentsActivity;
 import com.movieapi.movie.adapter.CommentAdapter;
 import com.movieapi.movie.controller.CommentController;
 import com.movieapi.movie.controller.interfaces.GetDataCommentInterface;
@@ -79,12 +81,14 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
         postComment();
         dataComment();
 
-        Log.d("comments", commentModels + "");
-
-//        commentAdapter = new CommentAdapter(getContext(), commentModelList);
-//        binding.recViewComments.setAdapter(commentAdapter);
-//        binding.recViewComments.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-//        commentAdapter.notifyDataSetChanged();
+        binding.seeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iViewAllComments = new Intent(getContext(), ViewAllCommentsActivity.class);
+                iViewAllComments.putExtra("movieId", movieId);
+                startActivity(iViewAllComments);
+            }
+        });
     }
 
     private void postComment(){

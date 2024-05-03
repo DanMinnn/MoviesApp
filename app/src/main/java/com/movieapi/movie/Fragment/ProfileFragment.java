@@ -155,8 +155,6 @@ public class ProfileFragment extends Fragment implements InformationInterface{
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             userImageView.setImageBitmap(bitmap);
         });
-
-
     }
 
     private void Logout(){

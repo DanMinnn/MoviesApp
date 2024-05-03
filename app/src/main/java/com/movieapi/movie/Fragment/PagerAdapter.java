@@ -12,7 +12,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
     Context context;
 
     public PagerAdapter(@NonNull FragmentManager fm, Context context) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.context = context;
     }
 

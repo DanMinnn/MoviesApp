@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bground"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/avtComment_cardView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:cardCornerRadius="70dp"
+            android:elevation="100dp">
+
+            <ImageView
+                android:id="@+id/avtComment_imv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/txtNamePersonComment"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Dang Minh"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/roboto_medium"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp" />
+
+        <ImageView
+            android:id="@+id/more_comment_imv"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginHorizontal="100dp"
+            android:src="@drawable/more_ic"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtContentComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phim rat hay, cam dong vl, khoc troi rap"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/like_comment_imv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/heart_outline_ic"/>
+
+        <TextView
+            android:id="@+id/total_likes_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="989"
+            android:textColor="@color/white"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="1dp"/>
+
+        <TextView
+            android:id="@+id/time_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 days ago"
+            android:textColor="@color/white"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="1dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
 import com.movieapi.movie.activity.ViewAllCommentsActivity;
 import com.movieapi.movie.adapter.CommentAdapter;
@@ -172,5 +174,21 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        /*int pos = -1;
+        try {
+            pos = ((CommentAdapter.CommentHolder)binding.recViewComments.getChildViewHolder(binding.recViewComments.getChildAt(item.getGroupId()))).getAdapterPosition();
+
+        }catch (Exception e){
+            return super.onContextItemSelected(item);
+        }*/
+
+        if (item.getItemId() == R.id.mnReportCmt){
+            Toast.makeText(getContext(), "Report !", Toast.LENGTH_SHORT).show();
+        }
+        return super.onContextItemSelected(item);
     }
 }

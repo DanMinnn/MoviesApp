@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Layout;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -43,6 +45,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         holder.txtContentComment.setText(commentModel.getContent());
         //holder.total_likes_comments.setText(commentModel.);
         holder.time_comment.setText(commentModel.getTimeComment());
+
     }
 
     @Override
@@ -50,8 +53,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         return commentModelList.size();
     }
 
-    public class CommentHolder extends RecyclerView.ViewHolder {
-        ImageView avtComment_imv;
+    public class CommentHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+        ImageView avtComment_imv, moreComment_imv;
         TextView txtNamePersonComment, txtContentComment, total_likes_comments, time_comment;
         public CommentHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +64,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             txtContentComment = itemView.findViewById(R.id.txtContentComment);
             total_likes_comments = itemView.findViewById(R.id.total_likes_comments);
             time_comment = itemView.findViewById(R.id.time_comment);
+
+            moreComment_imv = itemView.findViewById(R.id.more_comment_imv);
+
+            moreComment_imv.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            MenuInflater inflater = new MenuInflater(v.getContext());
+            inflater.inflate(R.menu.more_comment_menu, menu);
         }
     }
 

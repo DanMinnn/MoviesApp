@@ -77,7 +77,7 @@
                             android:layout_height="50dp"
                             android:src="@drawable/send_comment_ic"
                             android:padding="15dp"
-                            android:background="@drawable/custom_send_button_cmt"
+                            android:background="@drawable/default_send_button_cmt"
                             android:layout_gravity="center"
                             android:layout_marginLeft="10dp"/>
                     </LinearLayout>

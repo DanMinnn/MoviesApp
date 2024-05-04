@@ -92,7 +92,7 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
     }
 
     private void postComment(){
-        binding.sendCmtImv.setOnClickListener(new View.OnClickListener() {
+        binding.sendCmtImbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String contentCmt = binding.edAddComment.getText().toString();
@@ -102,18 +102,18 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
 
                 if (contentCmt.trim().length() == 0){
                     Toast.makeText(getContext(), "Please add your comments", Toast.LENGTH_SHORT).show();
+                }else {
+                    CommentModel commentModel = new CommentModel();
+                    commentModel.setIdUser(idUser);
+                    commentModel.setContent(contentCmt);
+                    commentModel.setTimeComment(sdf.format(timeCmt));
+
+                    commentController.InsertComment(idMovie, commentModel);
+
+                    Toast.makeText(getContext(), "Comment success !", Toast.LENGTH_SHORT).show();
+
+                    binding.edAddComment.setText("");
                 }
-
-                CommentModel commentModel = new CommentModel();
-                commentModel.setIdUser(idUser);
-                commentModel.setContent(contentCmt);
-                commentModel.setTimeComment(sdf.format(timeCmt));
-
-                commentController.InsertComment(idMovie, commentModel);
-
-                Toast.makeText(getContext(), "Comment success !", Toast.LENGTH_SHORT).show();
-
-                binding.edAddComment.setText("");
             }
         });
     }

@@ -81,15 +81,17 @@
                         android:layout_marginRight="10dp"
                         android:layout_gravity="center"/>
 
-                    <ImageView
-                        android:id="@+id/send_cmt_imv"
+                    <ImageButton
+                        android:id="@+id/send_cmt_imbtn"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/send_comment_ic"
                         android:padding="15dp"
-                        android:background="@drawable/custom_send_button_cmt"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/default_send_button_cmt"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginLeft="10dp"
+                        android:foreground="?android:attr/selectableItemBackground"/>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

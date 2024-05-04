@@ -163,7 +163,11 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
             commentAdapter = new CommentAdapter(getContext(), commentModelList);
             binding.recViewComments.setAdapter(commentAdapter);
             binding.recViewComments.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-            binding.totalComment.setText(commentModelList.size() + " Comments");
+
+            if(commentModelList.size() > 1){
+                binding.totalComment.setText(commentModelList.size() + " Comments");
+            }else
+                binding.totalComment.setText(commentModelList.size() + " Comment");
 
         }catch (Exception ex){
             ex.printStackTrace();

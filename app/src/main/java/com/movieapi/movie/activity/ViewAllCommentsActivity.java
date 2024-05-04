@@ -115,7 +115,12 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements GetDat
             commentAdapter = new CommentAdapter(ViewAllCommentsActivity.this, commentModelList);
             binding.commentsRecView.setAdapter(commentAdapter);
             binding.commentsRecView.setLayoutManager(new LinearLayoutManager(ViewAllCommentsActivity.this, LinearLayoutManager.VERTICAL, false));
-            setTitle(commentModelList.size() + " Comments");
+
+            if(commentModelList.size() > 1){
+                setTitle(commentModelList.size() + " Comments");
+            }else
+                setTitle(commentModelList.size() + " Comment");
+
 
         }catch (Exception ex){
             ex.printStackTrace();

@@ -17,7 +17,7 @@
             android:id="@+id/total_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="24.6k Comments"
+            android:text=""
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp"

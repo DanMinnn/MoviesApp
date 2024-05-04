@@ -184,8 +184,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                 setFavourite(response.body().getId(), response.body().getPoster_path(), response.body().getTitle(), favMovie);
                 setYear(response.body().getRelease_date());
-                setDuration(response.body().getRuntime());
                 setGenres(response.body().getGenres());
+                setDuration(response.body().getRuntime());
                 setCast();
             }
 

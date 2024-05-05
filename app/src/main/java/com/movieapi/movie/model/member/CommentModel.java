@@ -10,16 +10,18 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CommentModel {
     Member member;
     String content, idUser, idComment, timeComment;
+    int totalLikeComment;
 
     public CommentModel() {
     }
 
-    public CommentModel(Member member, String content, String idUser, String idComment, String timeComment) {
+    public CommentModel(Member member, String content, String idUser, String idComment, String timeComment, int totalLikeComment) {
         this.member = member;
         this.content = content;
         this.idUser = idUser;
         this.idComment = idComment;
         this.timeComment = timeComment;
+        this.totalLikeComment = totalLikeComment;
     }
 
     public Member getMember() {
@@ -62,10 +64,23 @@ public class CommentModel {
         this.timeComment = timeComment;
     }
 
+    public int getTotalLikeComment() {
+        return totalLikeComment;
+    }
+
+    public void setTotalLikeComment(int totalLikeComment) {
+        this.totalLikeComment = totalLikeComment;
+    }
+
     public void InsertComment(String movieId, CommentModel commentModel){
         DatabaseReference nodeComment = FirebaseDatabase.getInstance().getReference().child("comments");
-        String idComment = nodeComment.child(movieId).push().getKey();
+        idComment = nodeComment.child(movieId).push().getKey();
 
         nodeComment.child(movieId).child(idComment).setValue(commentModel);
+    }
+
+    public void insertTotalLikesCmt(String movieId, String idComment, int totalLike){
+        DatabaseReference nodeComment = FirebaseDatabase.getInstance().getReference().child("comments");
+        nodeComment.child(movieId).child(idComment).child("totalLikeComment").setValue(totalLike);
     }
 }

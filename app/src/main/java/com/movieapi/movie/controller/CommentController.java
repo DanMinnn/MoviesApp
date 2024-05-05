@@ -11,4 +11,8 @@ public class CommentController {
     public void InsertComment(String movieId, CommentModel commentModel){
         commentModel.InsertComment(movieId, commentModel);
     }
+
+    public void insertTotalLikeCmt(String movieId, String idComment, int totalLike){
+        commentModel.insertTotalLikesCmt(movieId, idComment, totalLike);
+    }
 }

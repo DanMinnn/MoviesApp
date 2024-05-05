@@ -44,7 +44,7 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
     SharedPreferences prefUser;
     String idUser;
     CommentController commentController;
-    CommentAdapter commentAdapter;
+    CommentAdapter commentAdapter, commentAdapter2;
     List<CommentModel> commentModels;
     String idMovie;
     DatabaseReference nodeRoot;
@@ -109,6 +109,7 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
                     commentModel.setIdUser(idUser);
                     commentModel.setContent(contentCmt);
                     commentModel.setTimeComment(sdf.format(timeCmt));
+                    commentModel.setTotalLikeComment(0);
 
                     commentController.InsertComment(idMovie, commentModel);
 
@@ -163,9 +164,9 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
             }*/
 
             commentAdapter = new CommentAdapter(getContext(), commentModelList);
+            commentAdapter.setMovieId(idMovie);
             binding.recViewComments.setAdapter(commentAdapter);
             binding.recViewComments.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
             if(commentModelList.size() > 1){
                 binding.totalComment.setText(commentModelList.size() + " Comments");
             }else

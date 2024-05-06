@@ -15,4 +15,8 @@ public class CommentController {
     public void insertTotalLikeCmt(String movieId, String idComment, int totalLike){
         commentModel.insertTotalLikesCmt(movieId, idComment, totalLike);
     }
+
+    public void stateLikeComments(String idUser, String idComment, boolean liked){
+        commentModel.stateLikeComments(idUser, idComment, liked);
+    }
 }

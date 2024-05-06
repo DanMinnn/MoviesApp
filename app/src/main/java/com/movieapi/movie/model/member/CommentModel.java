@@ -83,4 +83,9 @@ public class CommentModel {
         DatabaseReference nodeComment = FirebaseDatabase.getInstance().getReference().child("comments");
         nodeComment.child(movieId).child(idComment).child("totalLikeComment").setValue(totalLike);
     }
+
+    public void stateLikeComments(String idUser, String idComment, boolean liked){
+        DatabaseReference nodeLike = FirebaseDatabase.getInstance().getReference().child("likecomments");
+        nodeLike.child(idUser).child(idComment).setValue(liked);
+    }
 }

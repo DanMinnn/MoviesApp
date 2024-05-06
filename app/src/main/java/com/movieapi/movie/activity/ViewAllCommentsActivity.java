@@ -37,17 +37,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ViewAllCommentsActivity extends AppCompatActivity implements GetDataCommentInterface {
+public class ViewAllCommentsActivity extends AppCompatActivity{
     ActivityViewAllCommentsBinding binding;
-    List<CommentModel> commentModelList;
     CommentAdapter commentAdapter;
-    GetDataCommentInterface commentInterface;
     int movieId;
     String idMovie;
     DatabaseReference nodeRoot;
     SharedPreferences prefUser;
     String idUser;
     CommentController commentController;
+    ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,6 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements GetDat
 
         if (movieId == -1) finish();
 
-        commentInterface = this;
         nodeRoot = FirebaseDatabase.getInstance().getReference();
 
         prefUser = getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
@@ -78,11 +76,13 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements GetDat
     }
 
     private void loadComments() {
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 DataSnapshot dataComments = snapshot.child("comments").child(idMovie);
                 List<CommentModel> commentModels = new ArrayList<>();
+
+                commentAdapter = new CommentAdapter(ViewAllCommentsActivity.this, commentModels);
 
                 for (DataSnapshot valueComment : dataComments.getChildren()){
                     CommentModel commentModel = valueComment.getValue(CommentModel.class);
@@ -94,11 +94,17 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements GetDat
                     commentModels.add(commentModel);
                 }
 
-                try {
-                    commentInterface.getDataComment(commentModels);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                commentAdapter.setMovieId(idMovie);
+                binding.commentsRecView.setLayoutManager(new LinearLayoutManager(ViewAllCommentsActivity.this, LinearLayoutManager.VERTICAL, false));
+                binding.commentsRecView.setAdapter(commentAdapter);
+
+                if(commentModels.size() > 1){
+                    setTitle(commentModels.size() + " Comments");
+                }else
+                    setTitle(commentModels.size() + " Comment");
+
+                commentAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -106,25 +112,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements GetDat
 
             }
         };
-        nodeRoot.addListenerForSingleValueEvent(valueEventListener);
-    }
-
-    @Override
-    public void getDataComment(List<CommentModel> commentModelList) {
-        try {
-            commentAdapter = new CommentAdapter(ViewAllCommentsActivity.this, commentModelList);
-            binding.commentsRecView.setAdapter(commentAdapter);
-            binding.commentsRecView.setLayoutManager(new LinearLayoutManager(ViewAllCommentsActivity.this, LinearLayoutManager.VERTICAL, false));
-
-            if(commentModelList.size() > 1){
-                setTitle(commentModelList.size() + " Comments");
-            }else
-                setTitle(commentModelList.size() + " Comment");
-
-
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
+        nodeRoot.addValueEventListener(valueEventListener);
     }
 
     private void postComment(){
@@ -152,6 +140,13 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements GetDat
                 binding.edAddComment.setText("");
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (nodeRoot != null && valueEventListener != null)
+            nodeRoot.removeEventListener(valueEventListener);
     }
 
     @Override

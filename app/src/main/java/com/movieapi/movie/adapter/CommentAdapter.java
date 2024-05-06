@@ -1,6 +1,7 @@
 package com.movieapi.movie.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Layout;
@@ -16,6 +17,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.movieapi.movie.R;
@@ -30,9 +36,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     Context context;
     List<CommentModel> commentModelList;
     private String movieId;
-    private String idCmt;
     private CommentController commentController;
-
+    private String idUser;
+    private SharedPreferences prefUser;
     public void setMovieId(String movieId) {
         this.movieId = movieId;
         notifyDataSetChanged();
@@ -53,7 +59,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     public void onBindViewHolder(@NonNull CommentAdapter.CommentHolder holder, int position) {
         commentController = new CommentController();
         CommentModel commentModel = commentModelList.get(position);
-        idCmt = commentModel.getIdComment();
+
+        final String idCmt = commentModel.getIdComment();
 
         setImageUser(holder.avtComment_imv, commentModel.getMember().getAvt());
         holder.txtNamePersonComment.setText(commentModel.getMember().getName());
@@ -61,27 +68,38 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         holder.total_likes_comments.setText(String.valueOf(commentModel.getTotalLikeComment()));
         holder.time_comment.setText(commentModel.getTimeComment());
 
+        prefUser = context.getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
+        idUser = prefUser.getString("idUser", "");
 
-        holder.likeCommentImv.setOnClickListener(new View.OnClickListener() {
+        DatabaseReference userLike = FirebaseDatabase.getInstance().getReference().child("likecomments").child(idUser).child(idCmt);
+        userLike.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                int count = 0;
-                //holder.likeCommentImv.setTag(Constants.TAG_NOT_FAV);
-                holder.likeCommentImv.setImageResource(R.drawable.heart_fill_ic);
-                count++;
-                //holder.likeCommentImv.setTag(Constants.TAG_FAV);
-                commentController.insertTotalLikeCmt(movieId, idCmt, commentModel.getTotalLikeComment() + 1);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isLiked = snapshot.exists();
+                holder.likeCommentImv.setImageResource(isLiked ? R.drawable.heart_fill_ic : R.drawable.heart_outline_ic);
+                holder.likeCommentImv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                /*if ((int)holder.likeCommentImv.getTag() == Constants.TAG_NOT_FAV) {
+                        if(isLiked){
+                            if (commentModel.getTotalLikeComment() == 0){
+                                commentController.insertTotalLikeCmt(movieId, idCmt, commentModel.getTotalLikeComment());
+                            }else {
+                                commentController.insertTotalLikeCmt(movieId, idCmt, commentModel.getTotalLikeComment() - 1);
+                            }
+                        }else
+                            commentController.insertTotalLikeCmt(movieId, idCmt, commentModel.getTotalLikeComment() + 1);
 
-                }else {
-                    holder.likeCommentImv.setTag(Constants.TAG_NOT_FAV);
-                    holder.likeCommentImv.setImageResource(R.drawable.heart_outline_ic );
-                    count--;
-                    commentController.insertTotalLikeCmt(movieId, idCmt, count);
-                }
+                        commentController.stateLikeComments(idUser, idCmt, !isLiked);
 
-                Log.d("movieId - idCmt: ", movieId + "-" + idCmt);*/
+                        userLike.setValue(!isLiked ? true : null);
+                        holder.likeCommentImv.setImageResource(!isLiked ? R.drawable.heart_fill_ic : R.drawable.heart_outline_ic);
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 

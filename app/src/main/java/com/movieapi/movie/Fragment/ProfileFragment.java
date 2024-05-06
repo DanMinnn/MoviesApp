@@ -108,7 +108,6 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                                                 }
                                                 else
                                                     binding.txtNameUser.setVisibility(View.GONE);
-
                                             }
                                         });
                                     }

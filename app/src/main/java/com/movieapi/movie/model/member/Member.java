@@ -3,7 +3,7 @@ package com.movieapi.movie.model.member;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Member {
+public class  Member {
     String name, avt, iduser, email;
     private DatabaseReference dataNodeMember;
 

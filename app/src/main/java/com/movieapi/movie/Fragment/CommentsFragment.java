@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CommentsFragment extends Fragment implements GetDataCommentInterface{
+public class CommentsFragment extends Fragment{
     FragmentCommentsBinding binding;
     int movieId;
     SharedPreferences prefUser;
@@ -48,8 +48,8 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
     List<CommentModel> commentModels;
     String idMovie;
     DatabaseReference nodeRoot;
+    ValueEventListener valueEventListener;
     FirebaseAuth mAuth;
-    private GetDataCommentInterface getDataCommentInterface;
 
     public CommentsFragment() {
     }
@@ -71,8 +71,6 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        getDataCommentInterface = this;
 
         nodeRoot = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -123,11 +121,14 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
 
 
     private void dataComment(){
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 DataSnapshot dataComments = snapshot.child("comments").child(idMovie);
                 List<CommentModel> commentModels = new ArrayList<>();
+                commentAdapter = new CommentAdapter(getContext(), commentModels);
+
+                commentModels.clear();
 
                 for (DataSnapshot valueComment : dataComments.getChildren()){
                     CommentModel commentModel = valueComment.getValue(CommentModel.class);
@@ -139,10 +140,16 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
                     commentModels.add(commentModel);
                 }
 
-                try {
-                    getDataCommentInterface.getDataComment(commentModels);
-                }catch (Exception e){
-                    e.printStackTrace();
+                if (getActivity() != null){
+                    commentAdapter.setMovieId(idMovie);
+                    binding.recViewComments.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    binding.recViewComments.setAdapter(commentAdapter);
+                    if(commentModels.size() > 1){
+                        binding.totalComment.setText(commentModels.size() + " Comments");
+                    }else
+                        binding.totalComment.setText(commentModels.size() + " Comment");
+
+                    commentAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -151,29 +158,15 @@ public class CommentsFragment extends Fragment implements GetDataCommentInterfac
 
             }
         };
-        nodeRoot.addListenerForSingleValueEvent(valueEventListener);
+        nodeRoot.addValueEventListener(valueEventListener);
     }
 
+
     @Override
-    public void getDataComment(List<CommentModel> commentModelList) {
-        try {
-            /*if (commentAdapter == null){
-
-            }else {
-                commentAdapter.update(commentModelList);
-            }*/
-
-            commentAdapter = new CommentAdapter(getContext(), commentModelList);
-            commentAdapter.setMovieId(idMovie);
-            binding.recViewComments.setAdapter(commentAdapter);
-            binding.recViewComments.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-            if(commentModelList.size() > 1){
-                binding.totalComment.setText(commentModelList.size() + " Comments");
-            }else
-                binding.totalComment.setText(commentModelList.size() + " Comment");
-
-        }catch (Exception ex){
-            ex.printStackTrace();
+    public void onStop() {
+        super.onStop();
+        if (nodeRoot != null && valueEventListener != null){
+            nodeRoot.removeEventListener(valueEventListener);
         }
     }
 

@@ -5,20 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,17 +21,18 @@ import com.google.firebase.database.ValueEventListener;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.CommentAdapter;
 import com.movieapi.movie.controller.CommentController;
-import com.movieapi.movie.controller.interfaces.GetDataCommentInterface;
+import com.movieapi.movie.controller.interfaces.CommentItemListener;
 import com.movieapi.movie.databinding.ActivityViewAllCommentsBinding;
 import com.movieapi.movie.model.member.CommentModel;
 import com.movieapi.movie.model.member.Member;
+import com.movieapi.movie.model.member.ReportCommentModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ViewAllCommentsActivity extends AppCompatActivity{
+public class ViewAllCommentsActivity extends AppCompatActivity implements CommentItemListener {
     ActivityViewAllCommentsBinding binding;
     CommentAdapter commentAdapter;
     int movieId;
@@ -47,6 +42,9 @@ public class ViewAllCommentsActivity extends AppCompatActivity{
     String idUser;
     CommentController commentController;
     ValueEventListener valueEventListener;
+    CommentItemListener listener;
+    private ReportCommentModel reportCommentModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +68,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity{
         idUser = prefUser.getString("idUser", "");
 
         commentController = new CommentController();
+        listener = this;
 
         loadComments();
         postComment();
@@ -82,7 +81,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity{
                 DataSnapshot dataComments = snapshot.child("comments").child(idMovie);
                 List<CommentModel> commentModels = new ArrayList<>();
 
-                commentAdapter = new CommentAdapter(ViewAllCommentsActivity.this, commentModels);
+                commentAdapter = new CommentAdapter(ViewAllCommentsActivity.this, commentModels, listener);
 
                 for (DataSnapshot valueComment : dataComments.getChildren()){
                     CommentModel commentModel = valueComment.getValue(CommentModel.class);
@@ -155,5 +154,19 @@ public class ViewAllCommentsActivity extends AppCompatActivity{
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.mnReportCmt){
+            Toast.makeText(ViewAllCommentsActivity.this, "Reported ! ", Toast.LENGTH_SHORT).show();
+            commentController.reportComments(reportCommentModel);
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onCommentLongClick(ReportCommentModel reportCommentModel) {
+        this.reportCommentModel = reportCommentModel;
     }
 }

@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,28 +27,30 @@ import com.movieapi.movie.activity.MovieDetailsActivity;
 import com.movieapi.movie.activity.ViewAllCommentsActivity;
 import com.movieapi.movie.adapter.CommentAdapter;
 import com.movieapi.movie.controller.CommentController;
-import com.movieapi.movie.controller.interfaces.GetDataCommentInterface;
+import com.movieapi.movie.controller.interfaces.CommentItemListener;
 import com.movieapi.movie.databinding.FragmentCommentsBinding;
 import com.movieapi.movie.model.member.CommentModel;
 import com.movieapi.movie.model.member.Member;
+import com.movieapi.movie.model.member.ReportCommentModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CommentsFragment extends Fragment{
+public class CommentsFragment extends Fragment implements CommentItemListener {
     FragmentCommentsBinding binding;
     int movieId;
     SharedPreferences prefUser;
     String idUser;
     CommentController commentController;
-    CommentAdapter commentAdapter, commentAdapter2;
-    List<CommentModel> commentModels;
+    CommentAdapter commentAdapter;
     String idMovie;
     DatabaseReference nodeRoot;
     ValueEventListener valueEventListener;
     FirebaseAuth mAuth;
+    CommentItemListener commentItemListener;
+    private ReportCommentModel reportCommentModel;
 
     public CommentsFragment() {
     }
@@ -64,6 +65,8 @@ public class CommentsFragment extends Fragment{
         idMovie = String.valueOf(movieId);
 
         commentController = new CommentController();
+
+        commentItemListener = this;
 
         return binding.getRoot();
     }
@@ -126,7 +129,7 @@ public class CommentsFragment extends Fragment{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 DataSnapshot dataComments = snapshot.child("comments").child(idMovie);
                 List<CommentModel> commentModels = new ArrayList<>();
-                commentAdapter = new CommentAdapter(getContext(), commentModels);
+                commentAdapter = new CommentAdapter(getContext(), commentModels, commentItemListener);
 
                 commentModels.clear();
 
@@ -172,17 +175,15 @@ public class CommentsFragment extends Fragment{
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        /*int pos = -1;
-        try {
-            pos = ((CommentAdapter.CommentHolder)binding.recViewComments.getChildViewHolder(binding.recViewComments.getChildAt(item.getGroupId()))).getAdapterPosition();
-
-        }catch (Exception e){
-            return super.onContextItemSelected(item);
-        }*/
-
         if (item.getItemId() == R.id.mnReportCmt){
-            Toast.makeText(getContext(), "Report !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Reported ! ", Toast.LENGTH_SHORT).show();
+            commentController.reportComments(reportCommentModel);
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onCommentLongClick(ReportCommentModel reportCommentModel) {
+        this.reportCommentModel = reportCommentModel;
     }
 }

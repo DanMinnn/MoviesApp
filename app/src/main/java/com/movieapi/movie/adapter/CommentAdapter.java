@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,10 +25,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.movieapi.movie.Fragment.CommentsFragment;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
 import com.movieapi.movie.controller.CommentController;
+import com.movieapi.movie.controller.interfaces.CommentItemListener;
 import com.movieapi.movie.model.member.CommentModel;
+import com.movieapi.movie.model.member.ReportCommentModel;
 import com.movieapi.movie.utils.Constants;
 
 import java.util.List;
@@ -39,14 +43,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     private CommentController commentController;
     private String idUser;
     private SharedPreferences prefUser;
+    public CommentItemListener listener;
+
     public void setMovieId(String movieId) {
         this.movieId = movieId;
         notifyDataSetChanged();
     }
 
-    public CommentAdapter(Context context, List<CommentModel> commentModelList) {
+    public CommentAdapter(Context context, List<CommentModel> commentModelList, CommentItemListener listener) {
         this.context = context;
         this.commentModelList = commentModelList;
+        this.listener =  listener;
     }
 
     @NonNull
@@ -58,6 +65,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     @Override
     public void onBindViewHolder(@NonNull CommentAdapter.CommentHolder holder, int position) {
         commentController = new CommentController();
+
         CommentModel commentModel = commentModelList.get(position);
 
         final String idCmt = commentModel.getIdComment();
@@ -80,7 +88,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
                 holder.likeCommentImv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         if(isLiked){
                             if (commentModel.getTotalLikeComment() == 0){
                                 commentController.insertTotalLikeCmt(movieId, idCmt, commentModel.getTotalLikeComment());
@@ -100,6 +107,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        holder.moreComment_imv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String idComment = commentModel.getIdComment();
+                String content = commentModel.getContent();
+
+                ReportCommentModel reportCommentModel = new ReportCommentModel();
+                reportCommentModel.setIdCmt(idComment);
+                reportCommentModel.setContent(content);
+                reportCommentModel.setIdUser(idUser);
+                reportCommentModel.setNameUser(commentModel.getMember().getName());
+
+                try{
+                     listener.onCommentLongClick(reportCommentModel);
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+                return false;
             }
         });
 

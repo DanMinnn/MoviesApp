@@ -1,9 +1,11 @@
 package com.movieapi.movie.controller;
 
 import com.movieapi.movie.model.member.CommentModel;
+import com.movieapi.movie.model.member.ReportCommentModel;
 
 public class CommentController {
     CommentModel commentModel;
+    ReportCommentModel reportCommentModel;
     public CommentController(){
         commentModel = new CommentModel();
     }
@@ -18,5 +20,9 @@ public class CommentController {
 
     public void stateLikeComments(String idUser, String idComment, boolean liked){
         commentModel.stateLikeComments(idUser, idComment, liked);
+    }
+
+    public void reportComments(ReportCommentModel reportCommentModel){
+        reportCommentModel.reportComments(reportCommentModel);
     }
 }

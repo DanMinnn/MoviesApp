@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -16,6 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Movie"
         tools:targetApi="31">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.movieapi.movie.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/external_file" />
+        </provider>
+
         <activity
             android:name=".activity.ViewAllCommentsActivity"
             android:exported="false" />
@@ -57,5 +70,6 @@
             android:name=".activity.SearchResultActivity"
             android:exported="true" />
     </application>
+    
 
 </manifest>

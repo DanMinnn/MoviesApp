@@ -1,17 +1,26 @@
 package com.movieapi.movie.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.SnapHelper;
@@ -44,6 +53,7 @@ import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,19 +68,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     ActivityMovieDetailsBinding binding;
     private int movieId;
     private String imdbId = "tt10676048";
-
-    List<Trailer> trailerList;
     List<MovieCastBrief> mCast;
-    List<MovieBrief> mSimilarList;
-
-    TrailerAdapter trailerAdapter;
     CastAdapter castAdapter;
-    MovieBriefSmallAdapter mSimilarMovieAdapter;
-
-    Call<TrailerResponse> mMovieTrailersCall;
     Call<Movie> mMovieDetailsCall;
     Call<MovieCreditsResponse> mMovieCreditsResponseCall;
-    Call<SimilarMovieResponse> mSimilarMovieResponse;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,28 +91,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
         binding.viewPagerMovieDetails.setAdapter(new PagerAdapter(getSupportFragmentManager(), MovieDetailsActivity.this));
         binding.tabViewPagerMovieDetails.setViewPager(binding.viewPagerMovieDetails);
 
-        /*Bundle bundle = new Bundle();
-        bundle.putInt("movieId", movieId);
-        TrailerFragment trailerFragment = new TrailerFragment();
-        trailerFragment.setArguments(bundle);*/
-
-        trailerList = new ArrayList<>();
-//        SnapHelper snapHelper = new PagerSnapHelper();
-//        snapHelper.attachToRecyclerView(binding.movieDetailsTrailer);
-//        trailerAdapter = new TrailerAdapter(MovieDetailsActivity.this, trailerList);
-//        binding.movieDetailsTrailer.setAdapter(trailerAdapter);
-//        binding.movieDetailsTrailer.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
-
         mCast = new ArrayList<>();
         castAdapter = new CastAdapter(MovieDetailsActivity.this, mCast);
         binding.movieDetailsCast.setAdapter(castAdapter);
         binding.movieDetailsCast.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
-//        mSimilarList = new ArrayList<>();
-//        mSimilarMovieAdapter = new MovieBriefSmallAdapter(mSimilarList, MovieDetailsActivity.this);
-//        binding.movieDetailsRecommend.setAdapter(mSimilarMovieAdapter);
-//        binding.movieDetailsRecommend.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        addEvents();
 
+        loadActivity(favMovie);
+    }
+
+    private void addEvents(){
         binding.movieDetailsBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,8 +116,109 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
 
-        loadActivity(favMovie);
+        binding.imvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(MovieDetailsActivity.this);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setContentView(R.layout.dialog_share);
+
+                View cancel = dialog.findViewById(R.id.cancelDialog);
+
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                ImageView ins, fb, x, tiktok;
+
+                ins = dialog.findViewById(R.id.imv_ins);
+                ins.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.instagram.com/";
+                        String installPackageName = "com.instagram.android";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                        /*File img = new File("/storage/emulated/0/Download/pho.jpg");
+                        if(img.exists()){
+                            Uri imageUri = FileProvider.getUriForFile(
+                                    MovieDetailsActivity.this,
+                                    "com.movieapi.movie.fileprovider",
+                                    img
+                            );
+                            shareToIns(imageUri);
+                        }*/
+
+                    }
+                });
+
+                fb = dialog.findViewById(R.id.imv_fb);
+                fb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.facebook.com/";
+                        String installPackageName = "com.facebook.katana";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                    }
+                });
+
+                x = dialog.findViewById(R.id.imv_x);
+                x.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.twitter.com/";
+                        String installPackageName = "com.twitter.android";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                    }
+                });
+
+                tiktok = dialog.findViewById(R.id.imv_tiktok);
+                tiktok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.tiktok.com/";
+                        String installPackageName = "com.aweme.opensdk.action.stay.in.dy";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                    }
+                });
+
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+                dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                dialog.show();
+            }
+        });
     }
+
+    private void toAnotherAppOpen(String profilePath, String installPackageName) {
+        String uri = String.valueOf(Uri.parse(profilePath));
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)).setPackage(installPackageName));
+        }catch (Exception e){
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
+        }
+    }
+
+   /* private void shareToIns(Uri imageUri){
+        String profilePath = "https://www.instagram.com/_.dnm_/";
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(profilePath)).setPackage("com.instagram.android"));
+        }catch (ActivityNotFoundException e){
+            e.printStackTrace();
+            Toast.makeText(this, "Fail !", Toast.LENGTH_SHORT).show();
+        }
+    }*/
 
     public int getMovieId(){
         return movieId;
@@ -329,41 +420,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             binding.movieDetailsGenreSeperator.setVisibility(View.VISIBLE);
         }
         binding.movieDetailsDuration.setText(detailsString);
-    }
-
-    private void setTrailers() {
-//        ApiInterface apiService = ApiClient.getMovieApi();
-//        mMovieTrailersCall = apiService.getTrailerMovie(movieId, Constants.API_KEY);
-//        mMovieTrailersCall.enqueue(new Callback<TrailerResponse>() {
-//            @Override
-//            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
-//                if (!response.isSuccessful()) {
-//                    mMovieTrailersCall = call.clone();
-//                    mMovieTrailersCall.enqueue(this);
-//                    return;
-//                }
-//
-//                if (response.body() == null) return;
-//                if (response.body().getTrailers() == null) return;
-//
-//                for (Trailer video : response.body().getTrailers()) {
-//                    if (video != null && video.getSite() != null && video.getSite().equals("YouTube") && video.getType() != null && video.getType().equals("Trailer"))
-//                        trailerList.add(video);
-//                }
-//
-//                if(!trailerList.isEmpty()) {
-//                    binding.movieDetailsTrailerHeading.setVisibility(View.VISIBLE);
-//                }
-//
-//                trailerAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<TrailerResponse> call, Throwable t) {
-//
-//            }
-//
-//        });
     }
 
     private void setCast(){

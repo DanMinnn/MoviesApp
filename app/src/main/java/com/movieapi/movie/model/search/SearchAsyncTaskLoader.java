@@ -83,6 +83,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setName(result.getString("title"));
                         searchResult.setMediaType("movie");
                         searchResult.setOverview(result.getString("overview"));
+                        searchResult.setVoteAverage(result.getDouble("vote_average"));
                         try {
                             searchResult.setReleaseDate(result.getString("release_date"));
                         } catch (Exception e){
@@ -96,6 +97,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setName(result.getString("name"));
                         searchResult.setMediaType("tv");
                         searchResult.setOverview(result.getString("overview"));
+                        searchResult.setVoteAverage(result.getDouble("vote_average"));
                         try {
                             searchResult.setReleaseDate(result.getString("first_air_date"));
                         } catch (Exception e){
@@ -110,6 +112,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setMediaType("person");
                         searchResult.setOverview(null);
                         searchResult.setReleaseDate(null);
+                        searchResult.setVoteAverage(0);
                         break;
                 }
                 searchResults.add(searchResult);

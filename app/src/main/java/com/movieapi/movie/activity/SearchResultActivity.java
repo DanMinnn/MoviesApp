@@ -3,6 +3,7 @@ package com.movieapi.movie.activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +47,7 @@ public class SearchResultActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.view_search_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.WHITE);
 
         Intent receiveIntent = getIntent();
         query = receiveIntent.getStringExtra("query");
@@ -54,18 +57,20 @@ public class SearchResultActivity extends AppCompatActivity {
 
         searchResultList = new ArrayList<>();
         searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, searchResultList);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(SearchResultActivity.this, 2);
+        binding.recyclerViewSearch.setLayoutManager(gridLayoutManager);
         binding.recyclerViewSearch.setAdapter(searchResultAdapter);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchResultActivity.this, LinearLayoutManager.VERTICAL, false);
-        binding.recyclerViewSearch.setLayoutManager(linearLayoutManager);
+        //final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchResultActivity.this, LinearLayoutManager.VERTICAL, false);
+
 
         binding.recyclerViewSearch.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                int visibleItemCount = linearLayoutManager.getChildCount();
-                int totalItemCount = linearLayoutManager.getItemCount();
-                int firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                int visibleItemCount = gridLayoutManager.getChildCount();
+                int totalItemCount = gridLayoutManager.getItemCount();
+                int firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
 
                 if (loading) {
                     if (totalItemCount > previousTotal) {
@@ -106,7 +111,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 searchResultAdapter.notifyDataSetChanged();
 
                 if (searchResultList.isEmpty())
-                    binding.textViewEmptySearch.setVisibility(View.VISIBLE);
+                    binding.lnNotFound.setVisibility(View.VISIBLE);
 
                 if (searchResponse.getPage() == searchResponse.getTotalPages())
                     pagesOver = true;

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/bground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -35,16 +35,45 @@
             android:layout_marginRight="4dp" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/text_view_empty_search"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ln_not_found"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:text="No Results Found!"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="200dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imv_not_found"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@drawable/search_not_found"
+            />
+
+        <TextView
+            android:id="@+id/text_view_empty_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Not Found"
+            android:textColor="@color/light_red"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/keyword_not_found"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/search_progressBar"

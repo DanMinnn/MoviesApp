@@ -42,12 +42,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(@NonNull SearchResultAdapter.ViewHolder holder, int position) {
-            Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_342 + searchResults.get(position).getPosterPath())
+            Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_1280 + searchResults.get(position).getPosterPath())
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.posterImv);
 
-        if (searchResults.get(position).getName() != null && !searchResults.get(position).getName().trim().isEmpty())
+            if (searchResults.get(position).getVoteAverage() != 0)
+                holder.txtVoteAverage.setText(String.format("%.1f", searchResults.get(position).getVoteAverage()));
+
+        /*if (searchResults.get(position).getName() != null && !searchResults.get(position).getName().trim().isEmpty())
             holder.name.setText(searchResults.get(position).getName());
         else
             holder.name.setText("");
@@ -76,7 +79,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                 throw new RuntimeException(e);
             }
         }else
-            holder.year.setText("");
+            holder.year.setText("");*/
     }
 
     @Override
@@ -87,20 +90,21 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardViewResutlSearch;
         ImageView posterImv;
-        TextView name, mediaType, overview, year;
+        TextView name, mediaType, overview, year, txtVoteAverage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             cardViewResutlSearch = itemView.findViewById(R.id.card_view_search);
             posterImv = itemView.findViewById(R.id.image_view_poster_search);
-            name = itemView.findViewById(R.id.text_view_name_search);
+            txtVoteAverage = itemView.findViewById(R.id.txtVoteAverage);
+            /*name = itemView.findViewById(R.id.text_view_name_search);
             mediaType = itemView.findViewById(R.id.text_view_media_type_search);
             overview = itemView.findViewById(R.id.text_view_overview_search);
-            year = itemView.findViewById(R.id.text_view_year_search);
+            year = itemView.findViewById(R.id.text_view_year_search);*/
 
-            posterImv.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.31);
-            posterImv.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.31) / 0.66);
+            posterImv.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.50);
+            posterImv.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.50) / 0.79);
 
 
             cardViewResutlSearch.setOnClickListener(new View.OnClickListener() {

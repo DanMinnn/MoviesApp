@@ -7,18 +7,20 @@ public class SearchResult {
     private String mediaType;
     private String overview;
     private String releaseDate;
+    private double voteAverage;
 
     public SearchResult(){
 
     }
 
-    public SearchResult(Integer id, String posterPath, String name, String mediaType, String overview, String releaseDate) {
+    public SearchResult(Integer id, String posterPath, String name, String mediaType, String overview, String releaseDate, double voteAverage) {
         this.id = id;
         this.posterPath = posterPath;
         this.name = name;
         this.mediaType = mediaType;
         this.overview = overview;
         this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
     }
 
     public Integer getId() {
@@ -67,5 +69,13 @@ public class SearchResult {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 }

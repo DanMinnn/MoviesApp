@@ -1,8 +1,12 @@
 package com.movieapi.movie.Fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +51,7 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         edSearchView = view.findViewById(R.id.searchView);
-        fabSearch = view.findViewById(R.id.search_fab);
+        fabSearch = view.findViewById(R.id.sort_filter_fab);
         searchRecent = view.findViewById(R.id.search_recents_textView);
         recentSearchRecView = view.findViewById(R.id.search_recView_recents);
 
@@ -73,7 +77,6 @@ public class SearchFragment extends Fragment {
         fabSearch.setOnClickListener(new View.OnClickListener() {
 
             class SaveSearch extends AsyncTask<Void, Void, Void>{
-
                 @Override
                 protected Void doInBackground(Void... voids) {
                     query = edSearchView.getText().toString().trim().toLowerCase();
@@ -96,6 +99,25 @@ public class SearchFragment extends Fragment {
                 Intent iSearchResult = new Intent(getActivity(), SearchResultActivity.class);
                 iSearchResult.putExtra("query", query);
                 startActivity(iSearchResult);
+            }
+        });
+
+        fabSearch.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Dialog dialog = new Dialog(getContext());
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.setContentView(R.layout.dialog_sort_filter);
+
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+                dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                dialog.show();
+                return false;
             }
         });
     }

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bground">
 
     <EditText
         android:id="@+id/searchView"
@@ -12,28 +13,31 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/ic_search_outline"
+        android:background="@drawable/custom_input"
         android:hint="Search"
+        android:textColorHint="@color/grey"
         android:inputType="textPersonName"
-        android:padding="10dp"
+        android:padding="16dp"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="12dp"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/search_fab"
+        app:layout_constraintEnd_toStartOf="@+id/sort_filter_fab"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/search_fab"
+        android:id="@+id/sort_filter_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:clickable="true"
-        android:src="@drawable/ic_search"
-        app:backgroundTint="@color/white"
+        android:src="@drawable/sort_filter_ic"
+        app:backgroundTint="#351C28"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="@+id/searchView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/searchView"
-        app:tint="@color/orange" />
+        app:tint="@color/light_red" />
 
     <TextView
         android:id="@+id/search_recents_textView"

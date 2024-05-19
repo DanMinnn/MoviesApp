@@ -39,6 +39,16 @@
         app:layout_constraintTop_toTopOf="@+id/searchView"
         app:tint="@color/light_red" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filter_recView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"/>
+
+
     <TextView
         android:id="@+id/search_recents_textView"
         android:layout_width="wrap_content"
@@ -51,7 +61,7 @@
         android:textSize="17dp"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toBottomOf="@+id/filter_recView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recView_recents"

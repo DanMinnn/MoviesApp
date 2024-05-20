@@ -41,6 +41,7 @@ import com.movieapi.movie.model.ButtonItem;
 import com.movieapi.movie.model.ShareModel;
 import com.movieapi.movie.utils.Constants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -120,6 +121,7 @@ public class SearchFragment extends Fragment{
 
                 Intent iSearchResult = new Intent(getActivity(), SearchResultActivity.class);
                 iSearchResult.putExtra("query", query);
+                iSearchResult.putExtra("filterFilm", (Serializable) buttonItemList);
                 startActivity(iSearchResult);
             }
         });
@@ -278,12 +280,24 @@ public class SearchFragment extends Fragment{
                     button.setPressed(isPress);
 
                     ButtonItem buttonItem = new ButtonItem(button.getText().toString());
+                    String buttonText = button.getText().toString();
+
                     if(buttonItemList.contains(buttonItem)){
                         int index = buttonItemList.indexOf(buttonItem);
                         buttonItem = buttonItemList.get(index);
                         buttonItem.setSelected(!buttonItem.isSelected());
                     }else {
                         buttonItem.setSelected(true);
+
+                        //set categoriesId
+                        setCateId(buttonText, buttonItem);
+                        //set genresId
+                        setIdGenre(buttonText, buttonItem);
+                        //set time
+                        setTime(buttonText, buttonItem);
+                        //set region
+                        setRegion(buttonText, buttonItem);
+
                         buttonItemList.add(buttonItem);
                     }
 
@@ -303,4 +317,124 @@ public class SearchFragment extends Fragment{
         }
     }
 
+    private void setIdGenre(String genres, ButtonItem buttonItem){
+        switch (genres){
+            case "Action":
+                buttonItem.setIdGenre(Constants.ACTION_MOVIES_TYPE);
+                break;
+            case "Comedy":
+                buttonItem.setIdGenre(Constants.COMEDY_MOVIES_TYPE);
+                break;
+            case "Romance":
+                buttonItem.setIdGenre(Constants.ROMANCE_MOVIES_TYPE);
+                break;
+            case "Aventure":
+                buttonItem.setIdGenre(Constants.ADVENTURE_MOVIES_TYPE);
+                break;
+            case "Animation":
+                buttonItem.setIdGenre(Constants.ANIMATION_MOVIES_TYPE);
+                break;
+            case "Crime":
+                buttonItem.setIdGenre(Constants.CRIME_MOVIES_TYPE);
+                break;
+            case "Documentary":
+                buttonItem.setIdGenre(Constants.DOCUMENTARY_MOVIES_TYPE);
+                break;
+            case "Drama":
+                buttonItem.setIdGenre(Constants.DRAMA_MOVIES_TYPE);
+                break;
+            case "Horror":
+                buttonItem.setIdGenre(Constants.HORROR_MOVIES_TYPE);
+                break;
+            case "Scientific":
+                buttonItem.setIdGenre(Constants.SCIFI_MOVIES_TYPE);
+                break;
+            case "Thriller":
+                buttonItem.setIdGenre(Constants.THRILLER_MOVIES_TYPE);
+                break;
+            case "War":
+                buttonItem.setIdGenre(Constants.WAR_MOVIES_TYPE);
+                break;
+            case "Western":
+                buttonItem.setIdGenre(Constants.WESTERN_MOVIES_TYPE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setCateId(String cate, ButtonItem buttonItem){
+        switch (cate){
+            case "Movie":
+                buttonItem.setMediaType("movie");
+                break;
+            case "TV Shows":
+                buttonItem.setMediaType("tv");
+                break;
+            case "K-Drama":
+                buttonItem.setMediaType("k-drama");
+                break;
+            case "Anime":
+                buttonItem.setMediaType("anime");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setTime(String time, ButtonItem buttonItem){
+        switch (time){
+            case "All Periods":
+                buttonItem.setTime("All Periods");
+                break;
+            case "2024":
+                buttonItem.setTime("2024");
+                break;
+            case "2023":
+                buttonItem.setTime("2023");
+                break;
+            case "2022":
+                buttonItem.setTime("2022");
+                break;
+            case "2021":
+                buttonItem.setTime("2021");
+                break;
+            case "2020":
+                buttonItem.setTime("2020");
+                break;
+            case "2019":
+                buttonItem.setTime("2019");
+                break;
+            case "2018":
+                buttonItem.setTime("2018");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setRegion(String region, ButtonItem buttonItem){
+        switch (region){
+            case "All Regions":
+                buttonItem.setRegion("All Regions");
+                break;
+            case "US":
+                buttonItem.setRegion("US");
+                break;
+            case "South Korea":
+                buttonItem.setRegion("KR");
+                break;
+            case "Hong Kong":
+                buttonItem.setRegion("HK");
+                break;
+            case "Japan":
+                buttonItem.setRegion("JP");
+                break;
+            case "France":
+                buttonItem.setRegion("FR");
+                break;
+            default:
+                break;
+        }
+    }
 }

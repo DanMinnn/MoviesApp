@@ -34,6 +34,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         this.searchResults = searchResults;
     }
 
+    public void updateSearchResults(List<SearchResult> filterResList) {
+        this.searchResults.clear();
+        this.searchResults.addAll(filterResList);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public SearchResultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

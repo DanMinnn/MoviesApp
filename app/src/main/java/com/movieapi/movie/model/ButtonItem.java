@@ -2,13 +2,50 @@ package com.movieapi.movie.model;
 
 import androidx.annotation.Nullable;
 
-public class ButtonItem {
+import java.io.Serializable;
+
+public class ButtonItem implements Serializable {
     private String buttonText;
     private boolean isSelected;
+    private int idGenre;
+    private String mediaType;
+    private String time, region;
 
     public ButtonItem(String buttonText) {
         this.buttonText = buttonText;
         this.isSelected = false;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getIdGenre() {
+        return idGenre;
+    }
+
+    public void setIdGenre(int idGenre) {
+        this.idGenre = idGenre;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
     }
 
     public String getButtonText() {

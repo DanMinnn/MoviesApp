@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -19,18 +20,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.SearchResultAdapter;
 import com.movieapi.movie.databinding.ActivitySearchResultBinding;
+import com.movieapi.movie.model.ButtonItem;
 import com.movieapi.movie.model.search.SearchResponse;
 import com.movieapi.movie.model.search.SearchAsyncTaskLoader;
 import com.movieapi.movie.model.search.SearchResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SearchResultActivity extends AppCompatActivity {
     ActivitySearchResultBinding binding;
     private String query;
-    List<SearchResult> searchResultList;
+    List<SearchResult> searchResultList, filterRes;
     SearchResultAdapter searchResultAdapter;
+    List<ButtonItem> buttonItemList;
 
     private boolean pagesOver = false;
     private int presentPage = 1;
@@ -51,12 +55,17 @@ public class SearchResultActivity extends AppCompatActivity {
 
         Intent receiveIntent = getIntent();
         query = receiveIntent.getStringExtra("query");
+        buttonItemList = (List<ButtonItem>) receiveIntent.getSerializableExtra("filterFilm");
+
+        //Log.d("ButtonList: ", buttonItemList.get(1).getButtonText() + "");
 
         if (query == null || query.trim().isEmpty()) finish();
         setTitle(query.trim());
 
+        filterRes = new ArrayList<>();
         searchResultList = new ArrayList<>();
-        searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, searchResultList);
+
+        searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, filterRes);
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(SearchResultActivity.this, 2);
         binding.recyclerViewSearch.setLayoutManager(gridLayoutManager);
         binding.recyclerViewSearch.setAdapter(searchResultAdapter);
@@ -108,9 +117,11 @@ public class SearchResultActivity extends AppCompatActivity {
                         searchResultList.add(searchResult);
                 }
 
+                filterRes = filterResult(searchResultList, buttonItemList);
+                searchResultAdapter.updateSearchResults(filterRes);
                 searchResultAdapter.notifyDataSetChanged();
 
-                if (searchResultList.isEmpty())
+                if (filterRes.isEmpty())
                     binding.lnNotFound.setVisibility(View.VISIBLE);
 
                 if (searchResponse.getPage() == searchResponse.getTotalPages())
@@ -126,6 +137,22 @@ public class SearchResultActivity extends AppCompatActivity {
         }).forceLoad();
     }
 
+    public List<SearchResult> filterResult(List<SearchResult> allRes, List<ButtonItem> filters){
+        return allRes.stream()
+                .filter(result -> {
+                    boolean matches = true;
+                    for (ButtonItem filter : filters){
+                        if (filter.isSelected()){
+                            matches &= /*(filter.getIdGenre() == 0 || result.getId().equals(filter.getIdGenre())) ||*/
+                                    (filter.getMediaType() == null || filter.getMediaType().equals(result.getMediaType()));
+                                   /* (filter.getTime() == null || filter.getTime().isEmpty() || result.getReleaseDate().contains(filter.getTime())) ||
+                                    (filter.getRegion() == null || filter.getRegion().isEmpty() || result.getOverview().contains(filter.getRegion()));*/
+                        }
+                    }
+                    return matches;
+                })
+                .collect(Collectors.toList());
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

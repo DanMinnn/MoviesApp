@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.annotation.Nullable;
 
+import com.movieapi.movie.model.movie.Genre;
 import com.movieapi.movie.utils.Constants;
 
 import org.json.JSONArray;
@@ -84,10 +85,24 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setMediaType("movie");
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
+
+                        JSONArray genreIdsArray = result.getJSONArray("genre_ids");
+                        List<Genre> genreList = new ArrayList<>();
+                        for (int j = 0; j < genreIdsArray.length(); j++) {
+                            int genreId = genreIdsArray.getInt(j);
+
+                            Genre genre = new Genre(genreId);
+                            genreList.add(genre);
+                        }
+                        searchResult.setGenreList(genreList);
+
                         try {
-                            searchResult.setReleaseDate(result.getString("release_date"));
+                            String date = result.getString("release_date");
+                            String year = date.split("-")[0];
+                            searchResult.setReleaseDate(year);
                         } catch (Exception e){
                             searchResult.setReleaseDate("N/A");
+                            e.printStackTrace();
                         }
                         break;
 
@@ -99,7 +114,9 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
                         try {
-                            searchResult.setReleaseDate(result.getString("first_air_date"));
+                            String date = result.getString("first_air_date");
+                            String year = date.split("-")[0];
+                            searchResult.setReleaseDate(year);
                         } catch (Exception e){
                             searchResult.setReleaseDate("N/A");
                         }

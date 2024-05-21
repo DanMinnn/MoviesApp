@@ -21,6 +21,7 @@ import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.SearchResultAdapter;
 import com.movieapi.movie.databinding.ActivitySearchResultBinding;
 import com.movieapi.movie.model.ButtonItem;
+import com.movieapi.movie.model.movie.Genre;
 import com.movieapi.movie.model.search.SearchResponse;
 import com.movieapi.movie.model.search.SearchAsyncTaskLoader;
 import com.movieapi.movie.model.search.SearchResult;
@@ -143,10 +144,10 @@ public class SearchResultActivity extends AppCompatActivity {
                     boolean matches = true;
                     for (ButtonItem filter : filters){
                         if (filter.isSelected()){
-                            matches &= /*(filter.getIdGenre() == 0 || result.getId().equals(filter.getIdGenre())) ||*/
-                                    (filter.getMediaType() == null || filter.getMediaType().equals(result.getMediaType()));
-                                   /* (filter.getTime() == null || filter.getTime().isEmpty() || result.getReleaseDate().contains(filter.getTime())) ||
-                                    (filter.getRegion() == null || filter.getRegion().isEmpty() || result.getOverview().contains(filter.getRegion()));*/
+                            matches &= (filter.getIdGenre() == 0 || result.getGenreList() != null && result.getGenreList().contains(new Genre(filter.getIdGenre()))) &&
+                                    (filter.getMediaType() == null || filter.getMediaType().equals(result.getMediaType())) &&
+                                    (filter.getTime() == null || filter.getTime().equals(result.getReleaseDate())) &&
+                                    (filter.getRegion() == null || filter.getRegion().isEmpty() || result.getOverview().contains(filter.getRegion()));
                         }
                     }
                     return matches;

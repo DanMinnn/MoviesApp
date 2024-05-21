@@ -1,5 +1,9 @@
 package com.movieapi.movie.model.search;
 
+import com.movieapi.movie.model.movie.Genre;
+
+import java.util.List;
+
 public class SearchResult {
     private Integer id;
     private String posterPath;
@@ -8,12 +12,13 @@ public class SearchResult {
     private String overview;
     private String releaseDate;
     private double voteAverage;
+    private List<Genre> genreList;
 
     public SearchResult(){
 
     }
 
-    public SearchResult(Integer id, String posterPath, String name, String mediaType, String overview, String releaseDate, double voteAverage) {
+    public SearchResult(Integer id, String posterPath, String name, String mediaType, String overview, String releaseDate, double voteAverage, List<Genre> genreList) {
         this.id = id;
         this.posterPath = posterPath;
         this.name = name;
@@ -21,6 +26,7 @@ public class SearchResult {
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
+        this.genreList = genreList;
     }
 
     public Integer getId() {
@@ -77,5 +83,13 @@ public class SearchResult {
 
     public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
+    }
+
+    public List<Genre> getGenreList() {
+        return genreList;
+    }
+
+    public void setGenreList(List<Genre> genreList) {
+        this.genreList = genreList;
     }
 }

@@ -64,6 +64,8 @@ public class ButtonItem implements Serializable {
         isSelected = selected;
     }
 
+
+
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;

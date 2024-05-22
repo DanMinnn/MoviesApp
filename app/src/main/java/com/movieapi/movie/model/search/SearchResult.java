@@ -14,6 +14,8 @@ public class SearchResult {
     private double voteAverage;
     private List<Genre> genreList;
     private String regions;
+    private String year;
+    private double popularity;
 
     public SearchResult(){
 
@@ -100,5 +102,21 @@ public class SearchResult {
 
     public void setRegions(String regions) {
         this.regions = regions;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
     }
 }

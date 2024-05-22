@@ -192,14 +192,14 @@ public class SearchFragment extends Fragment{
             }
         }
 
-        lnSort = dialog.findViewById(R.id.lnSort);
+        /*lnSort = dialog.findViewById(R.id.lnSort);
         for (int i = 0; i < lnSort.getChildCount(); i++){
             View child = lnSort.getChildAt(i);
             if (child instanceof Button){
                 Button button = (Button) child;
                 setToggleOnTouchListener(button);
             }
-        }
+        }*/
 
         btnReset = dialog.findViewById(R.id.btnReset);
         btnReset.setOnClickListener(new View.OnClickListener() {
@@ -243,14 +243,14 @@ public class SearchFragment extends Fragment{
                     }
                 }
 
-                lnSort = dialog.findViewById(R.id.lnSort);
+                /*lnSort = dialog.findViewById(R.id.lnSort);
                 for (int i = 0; i < lnSort.getChildCount(); i++){
                     View child = lnSort.getChildAt(i);
                     if (child instanceof Button){
                         Button button = (Button) child;
                         button.setPressed(false);
                     }
-                }
+                }*/
 
             }
         });
@@ -286,6 +286,7 @@ public class SearchFragment extends Fragment{
                         int index = buttonItemList.indexOf(buttonItem);
                         buttonItem = buttonItemList.get(index);
                         buttonItem.setSelected(!buttonItem.isSelected());
+                        removeButtonFromList(buttonText);
                     }else {
                         buttonItem.setSelected(true);
 
@@ -419,22 +420,23 @@ public class SearchFragment extends Fragment{
                 buttonItem.setRegion("All Regions");
                 break;
             case "US":
-                buttonItem.setRegion("US");
+                buttonItem.setRegion("en");
                 break;
             case "South Korea":
-                buttonItem.setRegion("KR");
+                buttonItem.setRegion("kr");
                 break;
             case "Hong Kong":
-                buttonItem.setRegion("HK");
+                buttonItem.setRegion("zh");
                 break;
             case "Japan":
-                buttonItem.setRegion("JP");
+                buttonItem.setRegion("jp");
                 break;
             case "France":
-                buttonItem.setRegion("FR");
+                buttonItem.setRegion("fr");
                 break;
             default:
                 break;
         }
     }
+
 }

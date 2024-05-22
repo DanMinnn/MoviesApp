@@ -450,7 +450,7 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <TextView
+   <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sort"
@@ -496,7 +496,7 @@
                 android:layout_marginRight="15dp"/>
 
         </LinearLayout>
-    </HorizontalScrollView>
+    </HorizontalScrollView>-->
 
     <View
         android:layout_width="match_parent"

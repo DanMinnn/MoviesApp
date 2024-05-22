@@ -85,6 +85,8 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setMediaType("movie");
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
+                        searchResult.setRegions(result.getString("original_language"));
+                        searchResult.setPopularity(result.getDouble("popularity"));
 
                         JSONArray genreIdsMovie = result.getJSONArray("genre_ids");
                         List<Genre> genreMovieList = new ArrayList<>();
@@ -95,12 +97,14 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                             genreMovieList.add(genre);
                         }
                         searchResult.setGenreList(genreMovieList);
-                        searchResult.setRegions(result.getString("original_language"));
+
 
                         try {
+                            searchResult.setReleaseDate(result.getString("release_date"));
+
                             String date = result.getString("release_date");
                             String year = date.split("-")[0];
-                            searchResult.setReleaseDate(year);
+                            searchResult.setYear(year);
                         } catch (Exception e){
                             searchResult.setReleaseDate("N/A");
                             e.printStackTrace();
@@ -115,6 +119,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
                         searchResult.setRegions(result.getString("original_language"));
+                        searchResult.setPopularity(result.getDouble("popularity"));
 
                         JSONArray genreIdsTV = result.getJSONArray("genre_ids");
                         List<Genre> genreTVList = new ArrayList<>();
@@ -127,9 +132,10 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setGenreList(genreTVList);
 
                         try {
+                            searchResult.setReleaseDate(result.getString("first_air_date"));
                             String date = result.getString("first_air_date");
                             String year = date.split("-")[0];
-                            searchResult.setReleaseDate(year);
+                            searchResult.setYear(year);
                         } catch (Exception e){
                             searchResult.setReleaseDate("N/A");
                         }
@@ -144,6 +150,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setReleaseDate(null);
                         searchResult.setVoteAverage(0);
                         searchResult.setRegions(null);
+                        searchResult.setPopularity(0);
                         break;
                 }
                 searchResults.add(searchResult);

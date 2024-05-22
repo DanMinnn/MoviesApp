@@ -26,7 +26,10 @@ import com.movieapi.movie.model.search.SearchResponse;
 import com.movieapi.movie.model.search.SearchAsyncTaskLoader;
 import com.movieapi.movie.model.search.SearchResult;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +69,11 @@ public class SearchResultActivity extends AppCompatActivity {
         filterRes = new ArrayList<>();
         searchResultList = new ArrayList<>();
 
-        searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, filterRes);
+        if (filterRes != null)
+            searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, filterRes);
+        else
+            searchResultAdapter = new SearchResultAdapter(SearchResultActivity.this, searchResultList);
+
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(SearchResultActivity.this, 2);
         binding.recyclerViewSearch.setLayoutManager(gridLayoutManager);
         binding.recyclerViewSearch.setAdapter(searchResultAdapter);
@@ -118,10 +125,14 @@ public class SearchResultActivity extends AppCompatActivity {
                         searchResultList.add(searchResult);
                 }
 
-                filterRes = filterResult(searchResultList, buttonItemList);
-                searchResultAdapter.updateSearchResults(filterRes);
-                searchResultAdapter.notifyDataSetChanged();
-
+                if (buttonItemList != null){
+                    filterRes = filterResult(searchResultList, buttonItemList);
+                    searchResultAdapter.updateSearchResults(filterRes);
+                    searchResultAdapter.notifyDataSetChanged();
+                }else{
+                    searchResultAdapter.updateSearchResults(searchResultList);
+                    searchResultAdapter.notifyDataSetChanged();
+                }
                 if (filterRes.isEmpty())
                     binding.lnNotFound.setVisibility(View.VISIBLE);
 
@@ -146,12 +157,14 @@ public class SearchResultActivity extends AppCompatActivity {
                         if (filter.isSelected()){
                             matches &= (filter.getIdGenre() == 0 || result.getGenreList() != null && result.getGenreList().contains(new Genre(filter.getIdGenre()))) &&
                                     (filter.getMediaType() == null || filter.getMediaType().equals(result.getMediaType())) &&
-                                    (filter.getTime() == null || filter.getTime().equals(result.getReleaseDate())) &&
+                                    (filter.getTime() == null || filter.getTime().equals(result.getYear())) &&
                                     (filter.getRegion() == null || filter.getRegion().equals(result.getRegions()));
                         }
                     }
                     return matches;
                 })
+                .sorted(Comparator.comparing(SearchResult::getPopularity).reversed())
+                //.sorted(Comparator.comparing((SearchResult result) -> LocalDate.parse(result.getReleaseDate(), DateTimeFormatter.ISO_DATE)).reversed())
                 .collect(Collectors.toList());
     }
     @Override

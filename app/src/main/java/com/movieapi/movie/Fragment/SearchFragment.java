@@ -385,9 +385,6 @@ public class SearchFragment extends Fragment{
 
     private void setTime(String time, ButtonItem buttonItem){
         switch (time){
-            case "All Periods":
-                buttonItem.setTime("All Periods");
-                break;
             case "2024":
                 buttonItem.setTime("2024");
                 break;
@@ -416,9 +413,6 @@ public class SearchFragment extends Fragment{
 
     private void setRegion(String region, ButtonItem buttonItem){
         switch (region){
-            case "All Regions":
-                buttonItem.setRegion("All Regions");
-                break;
             case "US":
                 buttonItem.setRegion("en");
                 break;

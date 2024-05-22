@@ -13,6 +13,7 @@ public class SearchResult {
     private String releaseDate;
     private double voteAverage;
     private List<Genre> genreList;
+    private String regions;
 
     public SearchResult(){
 
@@ -91,5 +92,13 @@ public class SearchResult {
 
     public void setGenreList(List<Genre> genreList) {
         this.genreList = genreList;
+    }
+
+    public String getRegions() {
+        return regions;
+    }
+
+    public void setRegions(String regions) {
+        this.regions = regions;
     }
 }

@@ -147,7 +147,7 @@ public class SearchResultActivity extends AppCompatActivity {
                             matches &= (filter.getIdGenre() == 0 || result.getGenreList() != null && result.getGenreList().contains(new Genre(filter.getIdGenre()))) &&
                                     (filter.getMediaType() == null || filter.getMediaType().equals(result.getMediaType())) &&
                                     (filter.getTime() == null || filter.getTime().equals(result.getReleaseDate())) &&
-                                    (filter.getRegion() == null || filter.getRegion().isEmpty() || result.getOverview().contains(filter.getRegion()));
+                                    (filter.getRegion() == null || filter.getRegion().equals(result.getRegions()));
                         }
                     }
                     return matches;

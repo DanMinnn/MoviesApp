@@ -86,15 +86,16 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
 
-                        JSONArray genreIdsArray = result.getJSONArray("genre_ids");
-                        List<Genre> genreList = new ArrayList<>();
-                        for (int j = 0; j < genreIdsArray.length(); j++) {
-                            int genreId = genreIdsArray.getInt(j);
+                        JSONArray genreIdsMovie = result.getJSONArray("genre_ids");
+                        List<Genre> genreMovieList = new ArrayList<>();
+                        for (int j = 0; j < genreIdsMovie.length(); j++) {
+                            int genreId = genreIdsMovie.getInt(j);
 
                             Genre genre = new Genre(genreId);
-                            genreList.add(genre);
+                            genreMovieList.add(genre);
                         }
-                        searchResult.setGenreList(genreList);
+                        searchResult.setGenreList(genreMovieList);
+                        searchResult.setRegions(result.getString("original_language"));
 
                         try {
                             String date = result.getString("release_date");
@@ -113,6 +114,18 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setMediaType("tv");
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
+                        searchResult.setRegions(result.getString("original_language"));
+
+                        JSONArray genreIdsTV = result.getJSONArray("genre_ids");
+                        List<Genre> genreTVList = new ArrayList<>();
+                        for (int j = 0; j < genreIdsTV.length(); j++) {
+                            int genreId = genreIdsTV.getInt(j);
+
+                            Genre genre = new Genre(genreId);
+                            genreTVList.add(genre);
+                        }
+                        searchResult.setGenreList(genreTVList);
+
                         try {
                             String date = result.getString("first_air_date");
                             String year = date.split("-")[0];
@@ -130,6 +143,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                         searchResult.setOverview(null);
                         searchResult.setReleaseDate(null);
                         searchResult.setVoteAverage(0);
+                        searchResult.setRegions(null);
                         break;
                 }
                 searchResults.add(searchResult);

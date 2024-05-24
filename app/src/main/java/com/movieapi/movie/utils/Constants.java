@@ -5,6 +5,7 @@ public class Constants {
     public static final String BASE_URL = "https://api.themoviedb.org/3/";
     public static final String MOVIE_STREAM_URL = "https://vidsrc.me/embed/";
     public static final String SERIES_STREAM_URL = "https://gomo.to/show/";
+    public static final String YOUTUBE_API_KEY = "AIzaSyDwN0qABNpeQmxOyFtpXJOCkHc4Gf3yhNc";
     public static final String IMAGE_LOADING_BASE_URL_1280 = "https://image.tmdb.org/t/p/w1280/";
     public static final String IMAGE_LOADING_BASE_URL_342 = "https://image.tmdb.org/t/p/w342/";
     public static final String IMAGE_LOADING_BASE_URL_780 = "https://image.tmdb.org/t/p/w780/";

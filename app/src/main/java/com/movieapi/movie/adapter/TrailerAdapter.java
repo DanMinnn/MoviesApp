@@ -1,6 +1,7 @@
 package com.movieapi.movie.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
+import com.movieapi.movie.activity.YoutubeActivity;
 import com.movieapi.movie.model.videos.Trailer;
 import com.movieapi.movie.utils.Constants;
 
@@ -64,6 +66,15 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerH
             trailer_cardView = itemView.findViewById(R.id.trailer_cardview);
             trailer_imv = itemView.findViewById(R.id.trailer_imv);
             trailer_textView = itemView.findViewById(R.id.trailer_textView);
+
+            trailer_cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent iYoutube = new Intent(context, YoutubeActivity.class);
+                    iYoutube.putExtra("youtube_id", trailerList.get(getAdapterPosition()).getKey());
+                    context.startActivity(iYoutube);
+                }
+            });
         }
     }
 }

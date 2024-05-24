@@ -273,7 +273,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 }else
                     binding.movieDetailsStorylineContent.setText("");
 
-                setFavourite(response.body().getId(), response.body().getPoster_path(), response.body().getTitle(), favMovie);
+                setFavourite(response.body().getId(), response.body().getPoster_path(), response.body().getTitle(), response.body().getVote_average(), favMovie);
                 setYear(response.body().getRelease_date());
                 setGenres(response.body().getGenres());
                 setDuration(response.body().getRuntime());
@@ -287,7 +287,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void setFavourite(final Integer movieId, final String posterPath, final String movieTitle, final FavMovie mFavMovie) {
+    private void setFavourite(final Integer movieId, final String posterPath, final String movieTitle, final Double voteAverage, final FavMovie mFavMovie) {
         if (DatabaseHelper.isFavMovie(MovieDetailsActivity.this, movieId)) {
             binding.movieDetailsFavouriteBtn.setTag(Constants.TAG_FAV);
             binding.movieDetailsFavouriteBtn.setImageResource(R.drawable.ic_favourite_filled);
@@ -305,7 +305,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        FavMovie favMovie = new FavMovie(movieId, movieTitle, posterPath);
+                        FavMovie favMovie = new FavMovie(movieId, movieTitle, posterPath, voteAverage);
                         MovieDatabase.getInstance(getApplicationContext())
                                 .movieDao()
                                 .insertMovie(favMovie);

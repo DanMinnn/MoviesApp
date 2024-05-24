@@ -50,7 +50,7 @@ public class FavouritesMoviesFragment extends Fragment {
             public void onChanged(List<FavMovie> favMovies) {
                 FavMoviesAdapter mFavMoviesAdapter = new FavMoviesAdapter(getContext(), favMovies);
                 favMoviesRecView.setAdapter(mFavMoviesAdapter);
-                favMoviesRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                favMoviesRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
                 if (favMovies.isEmpty())
                     lnFavMovies.setVisibility(View.VISIBLE);

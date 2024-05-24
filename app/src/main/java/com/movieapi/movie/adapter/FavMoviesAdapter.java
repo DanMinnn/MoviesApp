@@ -33,20 +33,18 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavH
     @NonNull
     @Override
     public FavMoviesAdapter.FavHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new FavMoviesAdapter.FavHolder(LayoutInflater.from(context).inflate(R.layout.small_single_item, parent, false));
+        return new FavMoviesAdapter.FavHolder(LayoutInflater.from(context).inflate(R.layout.item_search_result, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull FavMoviesAdapter.FavHolder holder, int position) {
-        Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_342 + mMovies.get(position).getPoster_path())
+        Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_1280 + mMovies.get(position).getPoster_path())
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.movie_imageView);
 
-        if (mMovies.get(position).getName() != null)
-            holder.movie_title.setText(mMovies.get(position).getName());
-        else
-            holder.movie_title.setText("");
+        if (mMovies.get(position).getVoteAverage() != 0)
+            holder.txtVoteAverage.setText(String.format("%.1f", mMovies.get(position).getVoteAverage()));
     }
 
     @Override
@@ -57,17 +55,17 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavH
     public class FavHolder extends RecyclerView.ViewHolder {
         CardView movie_CardView;
         ImageView movie_imageView;
-        TextView movie_title;
+        TextView txtVoteAverage;
 
         public FavHolder(@NonNull View itemView) {
             super(itemView);
 
-            movie_CardView = itemView.findViewById(R.id.card_view_show_card);
-            movie_imageView = itemView.findViewById(R.id.imv_show_card);
-            movie_title = itemView.findViewById(R.id.txt_title_show_card);
+            movie_CardView = itemView.findViewById(R.id.card_view_search);
+            movie_imageView = itemView.findViewById(R.id.image_view_poster_search);
+            txtVoteAverage = itemView.findViewById(R.id.txtVoteAverage);
 
-            movie_imageView.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.31);
-            movie_imageView.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.31) / 0.66);
+            movie_imageView.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.50);
+            movie_imageView.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.50) / 0.79);
 
             movie_CardView.setOnClickListener(new View.OnClickListener() {
                 @Override

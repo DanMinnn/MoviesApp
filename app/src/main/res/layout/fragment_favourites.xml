@@ -4,18 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/bground">
 
     <com.ogaclejapan.smarttablayout.SmartTabLayout
         android:id="@+id/tab_view_pager_fav"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         app:stl_defaultTabBackground="?attr/selectableItemBackground"
-        app:stl_defaultTabTextColor="@color/orange"
+        app:stl_defaultTabTextColor="@color/light_red"
         app:stl_distributeEvenly="true"
         app:stl_dividerThickness="0dp"
         app:stl_drawDecorationAfterTab="true"
-        app:stl_indicatorColor="@color/orange"
+        app:stl_indicatorColor="@color/light_red"
         app:stl_indicatorCornerRadius="2dp"
         app:stl_indicatorInterpolation="smart"
         app:stl_indicatorThickness="1dp"

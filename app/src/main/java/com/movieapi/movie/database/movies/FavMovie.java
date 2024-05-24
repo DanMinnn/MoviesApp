@@ -19,18 +19,23 @@ public class FavMovie {
     @ColumnInfo(name = "name")
     private String name;
 
-    public FavMovie(int id, Integer movie_id, String name, String poster_path) {
+    @ColumnInfo(name = "voteAverage")
+    private Double voteAverage;
+
+    public FavMovie(int id, Integer movie_id, String name, String poster_path, Double voteAverage) {
         this.id = id;
         this.movie_id = movie_id;
         this.poster_path = poster_path;
         this.name = name;
+        this.voteAverage = voteAverage;
     }
 
     @Ignore
-    public FavMovie(Integer movie_id, String name, String poster_path) {
+    public FavMovie(Integer movie_id, String name, String poster_path, Double voteAverage) {
         this.movie_id = movie_id;
         this.poster_path = poster_path;
         this.name = name;
+        this.voteAverage = voteAverage;
     }
 
     public int getId() {
@@ -63,5 +68,13 @@ public class FavMovie {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 }

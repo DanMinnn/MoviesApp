@@ -18,4 +18,14 @@
         <item name="android:windowEnterAnimation">@anim/slide_in</item>
         <item name="android:windowExitAnimation">@anim/slide_out</item>
     </style>
+
+    <style name="roundedImageViewAvatarUser" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">70dp</item>
+    </style>
+
+    <style name="roundedImvEdit" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
 </resources>

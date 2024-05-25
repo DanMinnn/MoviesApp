@@ -1,25 +1,42 @@
 package com.movieapi.movie.Fragment;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MainActivity;
 import com.movieapi.movie.activity.SignInActivity;
@@ -35,21 +53,42 @@ import com.movieapi.movie.controller.interfaces.InformationInterface;
 import com.movieapi.movie.databinding.FragmentProfileBinding;
 import com.movieapi.movie.model.member.Member;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public class ProfileFragment extends Fragment implements InformationInterface{
     FragmentProfileBinding binding;
     SharedPreferences prefSignIn;
     Context context;
     DatabaseReference nodeRoot;
     FirebaseAuth mAuth;
-    String email, name;
+    String email, userId, avt;
+    private static final int READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
+    private ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult o) {
+            if (o.getResultCode() == RESULT_OK && o.getData() != null){
+                Uri imageUri = o.getData().getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                    binding.userImageView.setImageBitmap(bitmap);
+                    uploadImageToFirebase(imageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });;
+
     private InformationInterface anInterface;
+
+
     public ProfileFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //this.context = container.getContext();
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         return view;
@@ -64,7 +103,22 @@ public class ProfileFragment extends Fragment implements InformationInterface{
 
         anInterface = this;//notice
 
-        //binding.txtNameUser.setText("");
+        setEmailUser();
+
+        uploadAvt();
+        Logout();
+    }
+
+    private void uploadAvt() {
+        binding.imvEditAvt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImageFromGallery();
+            }
+        });
+    }
+
+    private void setEmailUser() {
         binding.txtNameUser.setVisibility(View.GONE);
         binding.txtEmailUser.setText("");
 
@@ -72,10 +126,8 @@ public class ProfileFragment extends Fragment implements InformationInterface{
         getNameUser();
 
         email = prefSignIn.getString("emailUser", "");
+        userId = prefSignIn.getString("idUser", "");
         binding.txtEmailUser.setText(email);
-
-        setImageUser(binding.userImageView, "user.jpg");
-        Logout();
     }
 
     @Override
@@ -97,6 +149,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                         //c1
                         if (email.equals(emailData)){
                             final String name = member.getName();
+                            final String linkAvt = member.getAvt();
                                 if (isAdded()) {
                                     if (binding != null) {
                                         getActivity().runOnUiThread(new Runnable() {
@@ -105,6 +158,8 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                                                 if (name != null){
                                                     binding.txtNameUser.setVisibility(View.VISIBLE);
                                                     binding.txtNameUser.setText(name);
+                                                    avt = linkAvt;
+                                                    setImageUser(binding.userImageView, avt);
                                                 }
                                                 else
                                                     binding.txtNameUser.setVisibility(View.GONE);
@@ -180,6 +235,71 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                     }
                 });
                 builder.show();
+            }
+        });
+    }
+    private void openGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        launcher.launch(intent);
+    }
+
+    public void chooseImageFromGallery() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
+        } else {
+            openGallery();
+        }
+    }
+
+    private void uploadImageToFirebase(Uri imageUri) {
+        if (imageUri != null) {
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+            StorageReference imagesRef = storageRef.child("members/" + imageUri.getLastPathSegment());
+
+            // Lấy dữ liệu từ ImageView dưới dạng byte
+            binding.userImageView.setDrawingCacheEnabled(true);
+            binding.userImageView.buildDrawingCache();
+            Bitmap bitmap = binding.userImageView.getDrawingCache();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = imagesRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getActivity(), "Upload failed: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Xử lý trường hợp tải lên thành công
+                    Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_SHORT).show();
+
+                    imagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri downloadUrl) {
+                            updateUserAvatarInDatabase(userId, Uri.parse(imageUri.getLastPathSegment()));
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void updateUserAvatarInDatabase(String userId, Uri imageUrl) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference membersRef = database.getReference("members");
+
+        membersRef.child(userId).child("avt").setValue(imageUrl.toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Avatar updated successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Failed to update avatar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

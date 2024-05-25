@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/bground">
 
    <androidx.core.widget.NestedScrollView
        android:layout_width="match_parent"
@@ -15,12 +15,12 @@
            android:layout_height="match_parent"
            android:orientation="vertical">
 
-           <androidx.cardview.widget.CardView
+           <!--<androidx.cardview.widget.CardView
                android:id="@+id/user_cardView"
                android:layout_width="140dp"
                android:layout_height="140dp"
                app:cardCornerRadius="70dp"
-               android:elevation="100dp"
+               android:elevation="1dp"
                android:layout_gravity="center"
                android:layout_marginTop="50dp">
 
@@ -30,7 +30,40 @@
                    android:layout_height="match_parent"
                    android:scaleType="centerCrop"
                    android:background="@android:color/darker_gray" />
-           </androidx.cardview.widget.CardView>
+
+               <ImageView
+                   android:id="@+id/edit_ic"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/edit_ic"
+                   android:layout_margin="8dp"
+                   android:layout_gravity="end|bottom"
+                   android:elevation="8dp"
+                   android:translationZ="8dp" />
+           </androidx.cardview.widget.CardView>-->
+
+           <com.google.android.material.imageview.ShapeableImageView
+               android:id="@+id/user_imageView"
+               android:layout_width="140dp"
+               android:layout_height="140dp"
+               android:scaleType="centerCrop"
+               android:background="@drawable/avatar_user"
+               android:layout_gravity="center"
+               android:layout_marginTop="50dp"
+               app:shapeAppearanceOverlay="@style/roundedImageViewAvatarUser"/>
+
+           <com.google.android.material.imageview.ShapeableImageView
+               android:id="@+id/imv_edit_avt"
+               android:layout_width="30dp"
+               android:layout_height="30dp"
+               android:src="@drawable/edit_ic"
+               android:background="@color/light_red"
+               android:scaleType="fitXY"
+               app:contentPadding="5dp"
+               android:layout_marginTop="-35dp"
+               android:layout_gravity="center"
+               android:layout_marginLeft="50dp"
+               app:shapeAppearanceOverlay="@style/roundedImvEdit"/>
 
            <TextView
                android:id="@+id/txtNameUser"
@@ -68,7 +101,7 @@
                    android:textColor="@color/white"
                    android:drawableTint="@color/white"
                    android:drawablePadding="15dp"
-                   android:textSize="20sp"
+                   android:textSize="18sp"
                    android:fontFamily="@font/roboto_medium"
                    android:layout_weight="1"/>
 
@@ -96,7 +129,7 @@
                    android:textColor="@color/white"
                    android:drawableTint="@color/white"
                    android:drawablePadding="15dp"
-                   android:textSize="20sp"
+                   android:textSize="18sp"
                    android:fontFamily="@font/roboto_medium"
                    android:layout_weight="1"/>
 
@@ -124,7 +157,7 @@
                    android:textColor="@color/white"
                    android:drawableTint="@color/white"
                    android:drawablePadding="15dp"
-                   android:textSize="20sp"
+                   android:textSize="18sp"
                    android:fontFamily="@font/roboto_medium"
                    android:layout_weight="1"/>
 
@@ -152,7 +185,7 @@
                    android:textColor="@color/white"
                    android:drawableTint="@color/white"
                    android:drawablePadding="15dp"
-                   android:textSize="20sp"
+                   android:textSize="18sp"
                    android:fontFamily="@font/roboto_medium"
                    android:layout_weight="1"/>
 
@@ -180,7 +213,7 @@
                    android:textColor="@color/white"
                    android:drawableTint="@color/white"
                    android:drawablePadding="15dp"
-                   android:textSize="20sp"
+                   android:textSize="18sp"
                    android:fontFamily="@font/roboto_medium"
                    android:layout_weight="1"/>
 
@@ -208,7 +241,7 @@
                    android:textColor="@color/white"
                    android:drawableTint="@color/white"
                    android:drawablePadding="15dp"
-                   android:textSize="20sp"
+                   android:textSize="18sp"
                    android:layout_marginLeft="5dp"
                    android:fontFamily="@font/roboto_medium"
                    android:layout_weight="1"/>

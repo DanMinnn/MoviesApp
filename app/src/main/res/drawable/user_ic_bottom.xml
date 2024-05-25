@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true"
+        android:state_enabled="true"
+        android:drawable="@drawable/user_fill_ic_bottom"/>
+    <item android:drawable="@drawable/user_outline_ic_bottom"/>
+</selector>

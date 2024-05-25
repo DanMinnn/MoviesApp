@@ -38,6 +38,7 @@
         android:layout_marginEnd="0dp"
         android:background="@color/black"
         app:menu="@menu/bottom_nav"
+        app:itemActiveIndicatorStyle="@color/light_red"
         app:itemIconTint="@drawable/bottom_icon_nav_color_selector"
         app:itemTextColor="@drawable/bottom_icon_nav_color_selector"/>
 

@@ -65,7 +65,7 @@ public class FavMoviesAdapter extends RecyclerView.Adapter<FavMoviesAdapter.FavH
             txtVoteAverage = itemView.findViewById(R.id.txtVoteAverage);
 
             movie_imageView.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.50);
-            movie_imageView.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.50) / 0.79);
+            movie_imageView.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.50) / 0.70);
 
             movie_CardView.setOnClickListener(new View.OnClickListener() {
                 @Override

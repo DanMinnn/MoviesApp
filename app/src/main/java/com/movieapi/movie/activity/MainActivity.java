@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MovieFragment()).commit();
-        binding.toolbarMain.setTitle(getString(R.string.home_nav));
+        binding.titleToolbar.setText(R.string.home_nav);
 
         binding.bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_movie:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("MovieFragment")){
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MovieFragment()).commit();
-                            binding.toolbarMain.setTitle(getString(R.string.home_nav));
+                            binding.titleToolbar.setText(R.string.home_nav);
                         }
                         break;
 
@@ -51,20 +51,20 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_search:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("SearchFragment")){
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchFragment()).commit();
-                            binding.toolbarMain.setTitle(getString(R.string.search_nav));
+                            binding.titleToolbar.setText(R.string.search_nav);
                         }
                         break;
 
                     case R.id.nav_favourites:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("FavouritesFragment")){
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FavouritesFragment()).commit();
-                            binding.toolbarMain.setTitle(getString(R.string.favourites_nav));
+                            binding.titleToolbar.setText(R.string.favourites_nav);
                         }
                         break;
                     case R.id.nav_profile:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("ProfileFragment")){
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-                            binding.toolbarMain.setTitle("Profile");
+                            binding.titleToolbar.setText("Profile");
                         }
                         break;
                 }

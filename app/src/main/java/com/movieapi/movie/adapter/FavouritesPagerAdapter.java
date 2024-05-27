@@ -34,11 +34,11 @@ public class FavouritesPagerAdapter extends FragmentPagerAdapter {
         return 1;
     }
 
-    public CharSequence getPageTitle(int position){
+    /*public CharSequence getPageTitle(int position){
         switch (position){
             case 0:
                 return "Movies";
         }
         return null;
-    }
+    }*/
 }

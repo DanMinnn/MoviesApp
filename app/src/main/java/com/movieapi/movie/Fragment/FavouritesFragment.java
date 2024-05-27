@@ -27,10 +27,10 @@ public class FavouritesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
 
-        mSmartTabLayout = view.findViewById(R.id.tab_view_pager_fav);
+        //mSmartTabLayout = view.findViewById(R.id.tab_view_pager_fav);
         mViewPager = view.findViewById(R.id.view_pager_fav);
         mViewPager.setAdapter(new FavouritesPagerAdapter(getChildFragmentManager(), getContext()));
-        mSmartTabLayout.setViewPager(mViewPager);
+        //mSmartTabLayout.setViewPager(mViewPager);
 
         return view;
     }

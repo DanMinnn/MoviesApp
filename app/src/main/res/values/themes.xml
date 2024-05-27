@@ -28,4 +28,17 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
     </style>
+
+    <style name="MySwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/light_red</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/white
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#35383f</item>
+
+    </style>
 </resources>

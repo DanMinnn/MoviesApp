@@ -48,6 +48,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MainActivity;
+import com.movieapi.movie.activity.NotificationActivity;
 import com.movieapi.movie.activity.SignInActivity;
 import com.movieapi.movie.controller.interfaces.InformationInterface;
 import com.movieapi.movie.databinding.FragmentProfileBinding;
@@ -107,6 +108,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
 
         uploadAvt();
         Logout();
+        setNotification();
     }
 
     private void uploadAvt() {
@@ -211,6 +213,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
         });
     }
 
+    //Logout
     private void Logout(){
         binding.lnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,6 +246,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
         launcher.launch(intent);
     }
 
+    //Update avt
     public void chooseImageFromGallery() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION_CODE);
@@ -300,6 +304,17 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                 } else {
                     Toast.makeText(getActivity(), "Failed to update avatar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    //Notification
+    private void setNotification(){
+        binding.lnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iNoti = new Intent(getContext(), NotificationActivity.class);
+                startActivity(iNoti);
             }
         });
     }

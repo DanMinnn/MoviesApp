@@ -3,6 +3,7 @@ package com.movieapi.movie.utils;
 public class Constants {
     public static final String API_KEY = "9589b80fcae5df0a10cc849da5e78833";
     public static final String BASE_URL = "https://api.themoviedb.org/3/";
+    public static final String CHANNEL_ID = "movies_channel";
     public static final String MOVIE_STREAM_URL = "https://vidsrc.me/embed/";
     public static final String SERIES_STREAM_URL = "https://gomo.to/show/";
     public static final String YOUTUBE_API_KEY = "AIzaSyDwN0qABNpeQmxOyFtpXJOCkHc4Gf3yhNc";

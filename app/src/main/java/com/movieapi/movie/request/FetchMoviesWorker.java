@@ -38,7 +38,7 @@ public class FetchMoviesWorker extends Worker {
                 if (response.isSuccessful() && response.body() != null) {
                     NowShowingMoviesResponse movieResponse = response.body();
                     for (MovieBrief movie : movieResponse.getResults()) {
-                        sendNotification(movie.getTitle(), movie.getOverview());
+                        sendNotification(movie.getTitle());
                     }
                 } else {
                     Log.e("Error", "Response not successful: " + response.message());
@@ -56,11 +56,10 @@ public class FetchMoviesWorker extends Worker {
     }
 
     @SuppressLint("NotificationPermission")
-    private void sendNotification(String title, String message) {
+    private void sendNotification(String title) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_movie)
                 .setContentTitle(title)
-                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);

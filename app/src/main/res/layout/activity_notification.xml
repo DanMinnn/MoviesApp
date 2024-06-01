@@ -39,138 +39,150 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/lnNotification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        
+        <LinearLayout
+            android:id="@+id/lnGeneral"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="General Notification"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:fontFamily="@font/roboto_medium"
-            android:layout_weight="1"/>
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:padding="10dp">
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchGeneral"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General Notification"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchGeneral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:track="@drawable/track_switch"
+                android:thumb="@drawable/thumb_switch"
+                android:theme="@style/MySwitch"
+                android:tag="general"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnNewArrival"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:track="@drawable/track_switch"
-            android:thumb="@drawable/thumb_switch"
-            android:theme="@style/MySwitch"
-            android:layout_weight="1"/>
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Arrival"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchArrival"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:track="@drawable/track_switch"
+                android:thumb="@drawable/thumb_switch"
+                android:theme="@style/MySwitch"
+                android:tag="arrival"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Service Availabe"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:track="@drawable/track_switch"
+                android:thumb="@drawable/thumb_switch"
+                android:theme="@style/MySwitch"
+                android:tag="available"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnRelease"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Release Movie"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchRelease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:track="@drawable/track_switch"
+                android:thumb="@drawable/thumb_switch"
+                android:theme="@style/MySwitch"
+                android:tag="release"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Updates"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchUpdates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:track="@drawable/track_switch"
+                android:thumb="@drawable/thumb_switch"
+                android:theme="@style/MySwitch"
+                android:tag="update"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lnNewArrival"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Arrival"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:fontFamily="@font/roboto_medium"
-            android:layout_weight="1"/>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchArrival"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:track="@drawable/track_switch"
-            android:thumb="@drawable/thumb_switch"
-            android:theme="@style/MySwitch"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lnService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Service Availabe"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:fontFamily="@font/roboto_medium"
-            android:layout_weight="1"/>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchService"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:track="@drawable/track_switch"
-            android:thumb="@drawable/thumb_switch"
-            android:theme="@style/MySwitch"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lnRelease"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Release Movie"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:fontFamily="@font/roboto_medium"
-            android:layout_weight="1"/>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchRelease"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:track="@drawable/track_switch"
-            android:thumb="@drawable/thumb_switch"
-            android:theme="@style/MySwitch"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lnUpdate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="10dp"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Updates"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:fontFamily="@font/roboto_medium"
-            android:layout_weight="1"/>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switchUpdates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:track="@drawable/track_switch"
-            android:thumb="@drawable/thumb_switch"
-            android:theme="@style/MySwitch"
-            android:layout_weight="1"/>
-    </LinearLayout>
-
 </LinearLayout>

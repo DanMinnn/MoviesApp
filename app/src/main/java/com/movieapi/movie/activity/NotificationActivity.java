@@ -55,9 +55,18 @@ public class NotificationActivity extends AppCompatActivity {
         binding.switchGeneral.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean switchState = binding.switchGeneral.isChecked();
+
                 SharedPreferences.Editor editor = getSharedPreferences("SwitchNotic", MODE_PRIVATE).edit();
                 editor.putBoolean("SwitchState_" + binding.switchGeneral.getTag(), binding.switchGeneral.isChecked());
                 editor.commit();
+
+                if (switchState){
+                    WorkRequest workRequest = new OneTimeWorkRequest.Builder(FetchMoviesWorker.class).build();
+                    WorkManager.getInstance(NotificationActivity.this).enqueue(workRequest);
+                }else {
+                    WorkManager.getInstance(NotificationActivity.this).cancelAllWork();
+                }
             }
         });
 
@@ -83,12 +92,18 @@ public class NotificationActivity extends AppCompatActivity {
         binding.switchRelease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean switchState = binding.switchRelease.isChecked();
+
                 SharedPreferences.Editor editor = getSharedPreferences("SwitchNotic", MODE_PRIVATE).edit();
                 editor.putBoolean("SwitchState_" + binding.switchRelease.getTag(), binding.switchRelease.isChecked());
                 editor.commit();
 
-                WorkRequest workRequest = new OneTimeWorkRequest.Builder(FetchMoviesWorker.class).build();
-                WorkManager.getInstance(NotificationActivity.this).enqueue(workRequest);
+                if (switchState){
+                    WorkRequest workRequest = new OneTimeWorkRequest.Builder(FetchMoviesWorker.class).build();
+                    WorkManager.getInstance(NotificationActivity.this).enqueue(workRequest);
+                }else {
+                    WorkManager.getInstance(NotificationActivity.this).cancelAllWork();
+                }
             }
         });
 

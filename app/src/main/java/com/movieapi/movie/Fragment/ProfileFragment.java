@@ -47,6 +47,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.movieapi.movie.R;
+import com.movieapi.movie.activity.EditProfileActivity;
 import com.movieapi.movie.activity.MainActivity;
 import com.movieapi.movie.activity.NotificationActivity;
 import com.movieapi.movie.activity.SignInActivity;
@@ -63,7 +64,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
     Context context;
     DatabaseReference nodeRoot;
     FirebaseAuth mAuth;
-    String email, userId, avt;
+    String email, userId, avt, name;
     private static final int READ_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
     private ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -79,7 +80,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                 }
             }
         }
-    });;
+    });
 
     private InformationInterface anInterface;
 
@@ -109,6 +110,7 @@ public class ProfileFragment extends Fragment implements InformationInterface{
         uploadAvt();
         Logout();
         setNotification();
+        editPro5();
     }
 
     private void uploadAvt() {
@@ -150,8 +152,8 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                         String emailData = member.getEmail();
                         //c1
                         if (email.equals(emailData)){
-                            final String name = member.getName();
-                            final String linkAvt = member.getAvt();
+                            name = member.getName();
+                            avt = member.getAvt();
                                 if (isAdded()) {
                                     if (binding != null) {
                                         getActivity().runOnUiThread(new Runnable() {
@@ -160,7 +162,6 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                                                 if (name != null){
                                                     binding.txtNameUser.setVisibility(View.VISIBLE);
                                                     binding.txtNameUser.setText(name);
-                                                    avt = linkAvt;
                                                     setImageUser(binding.userImageView, avt);
                                                 }
                                                 else
@@ -315,6 +316,20 @@ public class ProfileFragment extends Fragment implements InformationInterface{
             public void onClick(View v) {
                 Intent iNoti = new Intent(getContext(), NotificationActivity.class);
                 startActivity(iNoti);
+            }
+        });
+    }
+
+    private void editPro5(){
+        binding.lnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iEdit = new Intent(getContext(), EditProfileActivity.class);
+                iEdit.putExtra("name", name);
+                iEdit.putExtra("avt", avt);
+                iEdit.putExtra("email", email);
+                iEdit.putExtra("userId", userId);
+                startActivity(iEdit);
             }
         });
     }

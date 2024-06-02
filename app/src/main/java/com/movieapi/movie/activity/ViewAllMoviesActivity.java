@@ -73,7 +73,7 @@ public class ViewAllMoviesActivity extends AppCompatActivity {
         mMoviesAdapter = new MovieBriefSmallAdapter(mMovies, ViewAllMoviesActivity.this);
         binding.viewMoviesRecView.setAdapter(mMoviesAdapter);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(ViewAllMoviesActivity.this, 3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(ViewAllMoviesActivity.this, 2);
         binding.viewMoviesRecView.setLayoutManager(gridLayoutManager);
 
         binding.viewMoviesRecView.addOnScrollListener(new RecyclerView.OnScrollListener() {

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.ViewAllMoviesActivity;
+import com.movieapi.movie.adapter.MainMovieAdapter;
 import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
 import com.movieapi.movie.adapter.MovieCarouselAdapter;
 import com.movieapi.movie.model.movie.MovieBrief;
@@ -54,12 +55,12 @@ public class MovieFragment extends Fragment {
     // popular
     RecyclerView popular_recView;
     List<MovieBrief> mPopularList;
-    MovieBriefSmallAdapter mPopularAdapter;
+    MainMovieAdapter mPopularAdapter;
 
     //top rated
     RecyclerView topRated_recView;
     List<MovieBrief> mTopRateMovie;
-    MovieBriefSmallAdapter mTopRatedAdapter;
+    MainMovieAdapter mTopRatedAdapter;
 
     private boolean mNowShowingMoviesLoaded;
     private boolean mPopularMoviesLoaded;
@@ -114,12 +115,12 @@ public class MovieFragment extends Fragment {
         carousel_recView.setAdapter(movieCarouselAdapter);
 
         // popular
-        mPopularAdapter = new MovieBriefSmallAdapter(mPopularList, getContext());
+        mPopularAdapter = new MainMovieAdapter(mPopularList, getContext());
         popular_recView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         popular_recView.setAdapter(mPopularAdapter);
 
         // top rated
-        mTopRatedAdapter = new MovieBriefSmallAdapter(mTopRateMovie, getContext());
+        mTopRatedAdapter = new MainMovieAdapter(mTopRateMovie, getContext());
         topRated_recView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         topRated_recView.setAdapter(mTopRatedAdapter);
 

@@ -23,50 +23,53 @@ public class AdBlocker {
     private static final String AD_HOSTS_FILE = "host.txt";
     private static final Set<String> AD_HOSTS = new HashSet<>();
 
-    public static void init(final Context context){
-        new AsyncTask<Void, Void, Void>(){
-
+    public static void init(final Context context) {
+        new Thread(new Runnable() {
             @Override
-            protected Void doInBackground(Void... params) {
+            public void run() {
                 try {
                     loadFromAssets(context);
                 } catch (IOException e) {
-                    //
+                    Log.e("AdBlocker", "Error loading ad hosts file", e);
                 }
-                return null;
             }
-        }.execute();
+        }).start();
     }
 
-    @WorkerThread
     private static void loadFromAssets(Context context) throws IOException {
         InputStream stream = context.getAssets().open(AD_HOSTS_FILE);
         InputStreamReader inputStreamReader = new InputStreamReader(stream);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         String line;
-        while ((line = bufferedReader.readLine()) != null) AD_HOSTS.add(line);
+        while ((line = bufferedReader.readLine()) != null) {
+            AD_HOSTS.add(line.trim());
+        }
         bufferedReader.close();
         inputStreamReader.close();
         stream.close();
+        Log.d("AdBlocker", "Ad hosts loaded: " + AD_HOSTS.size());
     }
 
     public static boolean isAd(String url) {
         try {
-            return isAdHost(getHost(url))||AD_HOSTS.contains(Uri.parse(url).getLastPathSegment());
+            String host = getHost(url);
+            return isAdHost(host);
         } catch (MalformedURLException e) {
-            Log.d("Ind", e.toString());
+            Log.d("AdBlocker", "Malformed URL: " + e.toString());
             return false;
         }
-
     }
 
     private static boolean isAdHost(String host) {
         if (TextUtils.isEmpty(host)) {
             return false;
         }
-        int index = host.indexOf(".");
-        return index >= 0 && (AD_HOSTS.contains(host) ||
-                index + 1 < host.length() && isAdHost(host.substring(index + 1)));
+        for (String adHost : AD_HOSTS) {
+            if (host.contains(adHost)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static String getHost(String url) throws MalformedURLException {
@@ -77,3 +80,4 @@ public class AdBlocker {
         return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream("".getBytes()));
     }
 }
+

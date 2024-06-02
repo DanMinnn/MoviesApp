@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
@@ -39,11 +41,19 @@ public class StreamMovieActivity extends AppCompatActivity {
         binding.webView.setWebViewClient(new Browser());
         binding.webView.setWebChromeClient(new ChromeClient());
         binding.webView.getSettings().setJavaScriptEnabled(true);
+        binding.webView.getSettings().setDomStorageEnabled(true);
+        binding.webView.getSettings().setMediaPlaybackRequiresUserGesture(false);   
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
 
         Intent recievedIntent = getIntent();
         String movieId = recievedIntent.getStringExtra("movie_id");
 
-        binding.webView.loadUrl(Constants.MOVIE_STREAM_URL + movieId);
+        String movieUrl = Constants.MOVIE_STREAM_URL + movieId;
+        Log.d("Movie URL", movieUrl);
+        binding.webView.loadUrl(movieUrl);
 
         binding.backBtnWebview.setOnClickListener(new View.OnClickListener() {
             @Override

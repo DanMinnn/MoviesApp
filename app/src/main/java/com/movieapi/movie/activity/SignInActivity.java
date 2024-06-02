@@ -57,7 +57,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
-        //mAuth.signOut();
+        mAuth.signOut();
 
         progressDialog = new ProgressDialog(this);
 
@@ -242,9 +242,5 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             startActivity(iMain);
             Toast.makeText(this, "Sign in success !", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void rememberMe(){
-
     }
 }

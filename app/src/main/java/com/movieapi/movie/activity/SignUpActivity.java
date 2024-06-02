@@ -64,29 +64,49 @@ public class SignUpActivity extends AppCompatActivity{
                 String email = binding.edEmailSignUp.getText().toString();
                 String password = binding.edPasswordSignUp.getText().toString();
 
+                boolean isValid = true;
+
                 if (nameUser.trim().length() == 0){
                     binding.txtEnterName.setVisibility(View.VISIBLE);
+                    isValid = false;
                     progressDialog.dismiss();
-                }
-                else if (email.trim().length() == 0) {
+                }else
+                    binding.txtEnterName.setVisibility(View.INVISIBLE);
+
+                if (email.trim().length() == 0) {
                     binding.txtEnterEmail.setVisibility(View.VISIBLE);
+                    isValid = false;
                     progressDialog.dismiss();
-                }else if (password.trim().length() == 0) {
-                    binding.txtEnterPass.setVisibility(View.VISIBLE);
-                    binding.txtErrorPassword.setVisibility(View.GONE);
-                    progressDialog.dismiss();
-                } else if (password.trim().length() < 6){
+                }else
+                    binding.txtEnterEmail.setVisibility(View.INVISIBLE);
+
+                if (password.trim().length() < 6) {
                     binding.txtEnterPass.setVisibility(View.GONE);
                     binding.txtErrorPassword.setVisibility(View.VISIBLE);
+                    if (password.trim().length() == 0){
+                        binding.txtEnterPass.setVisibility(View.VISIBLE);
+                        binding.txtErrorPassword.setVisibility(View.GONE);
+                    }
+                    isValid = false;
                     progressDialog.dismiss();
-                } else {
+                }else {
+                    binding.txtErrorPassword.setVisibility(View.GONE);
+                }
+
+                /*if (password.trim().length() < 6){
+
+                    isValid = false;
+                    progressDialog.dismiss();
+                }*/
+
+                if (isValid){
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 progressDialog.dismiss();
                                 Member member = new Member();
-                                member.setAvt("user.png");
+                                member.setAvt("user.jpg");
                                 member.setEmail(email);
                                 member.setName(nameUser);
                                 String uid = task.getResult().getUser().getUid();
@@ -101,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity{
                                 finish();
                             }
                             else
-                                Toast.makeText(SignUpActivity.this, "Sign up fail !", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUpActivity.this, "Sign up fail ! Please check your information", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

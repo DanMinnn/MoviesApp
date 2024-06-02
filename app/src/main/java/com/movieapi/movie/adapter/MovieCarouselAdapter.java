@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,7 +66,7 @@ public class MovieCarouselAdapter extends RecyclerView.Adapter<MovieCarouselAdap
         ImageView movie_imageView;
         TextView mTitle, mRating;
         CardView mCardView;
-        FloatingActionButton play_btn;
+        AppCompatButton play_btn;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);

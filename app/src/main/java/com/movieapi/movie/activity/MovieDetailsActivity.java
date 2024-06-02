@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -72,6 +73,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     CastAdapter castAdapter;
     Call<Movie> mMovieDetailsCall;
     Call<MovieCreditsResponse> mMovieCreditsResponseCall;
+    SharedPreferences prefUser;
+    String userId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +98,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         castAdapter = new CastAdapter(MovieDetailsActivity.this, mCast);
         binding.movieDetailsCast.setAdapter(castAdapter);
         binding.movieDetailsCast.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+
+        //get userId
+        prefUser = getSharedPreferences("sessionUser", MODE_PRIVATE);
+        userId = prefUser.getString("idUser", "");
 
         addEvents();
 
@@ -288,7 +295,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void setFavourite(final Integer movieId, final String posterPath, final String movieTitle, final Double voteAverage, final FavMovie mFavMovie) {
-        if (DatabaseHelper.isFavMovie(MovieDetailsActivity.this, movieId)) {
+        if (DatabaseHelper.isFavMovie(MovieDetailsActivity.this, movieId, userId)) {
             binding.movieDetailsFavouriteBtn.setTag(Constants.TAG_FAV);
             binding.movieDetailsFavouriteBtn.setImageResource(R.drawable.ic_favourite_filled);
             binding.movieDetailsFavouriteBtn.setColorFilter(Color.argb(1, 236, 116, 85));
@@ -305,7 +312,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        FavMovie favMovie = new FavMovie(movieId, movieTitle, posterPath, voteAverage);
+                        FavMovie favMovie = new FavMovie(movieId, movieTitle, posterPath, voteAverage, userId);
                         MovieDatabase.getInstance(getApplicationContext())
                                 .movieDao()
                                 .insertMovie(favMovie);
@@ -320,7 +327,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     protected Void doInBackground(Void... voids) {
                         MovieDatabase.getInstance(getApplicationContext())
                                 .movieDao()
-                                .deleteMovieById(movieId);
+                                .deleteMovieById(movieId, userId);
 
                         return null;
                     }

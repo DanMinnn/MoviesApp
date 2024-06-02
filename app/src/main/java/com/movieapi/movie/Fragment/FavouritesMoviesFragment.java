@@ -1,5 +1,7 @@
 package com.movieapi.movie.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,8 @@ import java.util.List;
 public class FavouritesMoviesFragment extends Fragment {
     RecyclerView favMoviesRecView;
     LinearLayout lnFavMovies;
+    SharedPreferences prefUser;
+    private String userId;
 
     public FavouritesMoviesFragment() {
     }
@@ -41,9 +45,12 @@ public class FavouritesMoviesFragment extends Fragment {
         favMoviesRecView = view.findViewById(R.id.fav_movies_recView);
         lnFavMovies = view.findViewById(R.id.ln_fav_movies);
 
+        prefUser = getActivity().getApplicationContext().getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
+        userId = prefUser.getString("idUser", "");
+
         final LiveData<List<FavMovie>> mFavMovies = MovieDatabase.getInstance(getContext())
                 .movieDao()
-                .getAllFavMovies();
+                .getAllFavMovies(userId);
 
         mFavMovies.observe(requireActivity(), new Observer<List<FavMovie>>() {
             @Override

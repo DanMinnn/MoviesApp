@@ -10,17 +10,22 @@ public class RecentSearch   {
     @PrimaryKey(autoGenerate = true)
     private int searchId;
 
+    @ColumnInfo(name = "user_id")
+    private String userId;
+
     @ColumnInfo(name = "search_name")
     private String search_name;
 
-    public RecentSearch(int searchId, String search_name) {
+    public RecentSearch(int searchId, String search_name, String userId) {
         this.searchId = searchId;
         this.search_name = search_name;
+        this.userId = userId;
     }
 
     @Ignore
-    public RecentSearch(String search_name) {
+    public RecentSearch(String search_name, String userId) {
         this.search_name = search_name;
+        this.userId = userId;
     }
 
     public int getSearchId() {
@@ -37,5 +42,13 @@ public class RecentSearch   {
 
     public void setSearch_name(String search_name) {
         this.search_name = search_name;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

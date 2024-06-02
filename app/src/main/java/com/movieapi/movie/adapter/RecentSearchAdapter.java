@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.movieapi.movie.Fragment.FavouritesMoviesFragment;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.SearchResultActivity;
 import com.movieapi.movie.database.search.RecentSearch;
@@ -24,6 +25,8 @@ import java.util.List;
 public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapter.SearchHolder> {
     Context context;
     List<RecentSearch> recentSearches;
+    private String userId;
+    FavouritesMoviesFragment fg;
 
     public RecentSearchAdapter(Context context, List<RecentSearch> recentSearches) {
         this.context = context;
@@ -45,7 +48,7 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
             @Override
             public void onClick(View v) {
                 DeleteSearch deleteSearch = new DeleteSearch();
-                deleteSearch.execute(recentSearches.get(position).getSearch_name());
+                deleteSearch.execute(recentSearches.get(position).getSearch_name(), recentSearches.get(position).getUserId());
             }
         });
     }
@@ -86,7 +89,7 @@ public class RecentSearchAdapter extends RecyclerView.Adapter<RecentSearchAdapte
         protected Void doInBackground(String... strings) {
             SearchDatabase.getInstance(context)
                     .searchDao()
-                    .deleteSearchesByName(strings[0]);
+                    .deleteSearchesByName(strings[0], strings[1]);
 
             return null;
         }

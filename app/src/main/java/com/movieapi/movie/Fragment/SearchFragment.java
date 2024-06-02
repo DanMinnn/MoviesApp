@@ -2,7 +2,9 @@ package com.movieapi.movie.Fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -53,11 +55,11 @@ public class SearchFragment extends Fragment{
     FloatingActionButton fabSearch;
     TextView searchRecent;
     RecyclerView recentSearchRecView, filterRecView;
-
     FilterAdapter adapter;
     private List<ButtonItem> buttonItemList;
-    private ShareModel viewModel;
     String query;
+    SharedPreferences prefUser;
+    private String userId;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,11 +78,12 @@ public class SearchFragment extends Fragment{
 
         buttonItemList = new ArrayList<>();
 
-        viewModel = new ViewModelProvider(requireActivity()).get(ShareModel.class);
+        prefUser = getActivity().getApplicationContext().getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
+        userId = prefUser.getString("idUser", "");
 
         LiveData<List<RecentSearch>> recentSearches = SearchDatabase.getInstance(requireContext())
                 .searchDao()
-                .getAllRecentSearch();
+                .getAllRecentSearch(userId);
 
         recentSearches.observe(requireActivity(), new Observer<List<RecentSearch>>() {
             @Override
@@ -103,8 +106,8 @@ public class SearchFragment extends Fragment{
                 @Override
                 protected Void doInBackground(Void... voids) {
                     query = edSearchView.getText().toString().trim().toLowerCase();
-                    if (!DatabaseHelper.isRecentSearch(requireContext(), query)){
-                        RecentSearch recentSearch = new RecentSearch(query);
+                    if (!DatabaseHelper.isRecentSearch(requireContext(), query, userId)){
+                        RecentSearch recentSearch = new RecentSearch(query,userId);
                         SearchDatabase.getInstance(requireContext())
                                 .searchDao()
                                 .insertSearch(recentSearch);

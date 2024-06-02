@@ -8,15 +8,15 @@ import com.movieapi.movie.database.search.RecentSearch;
 import com.movieapi.movie.database.search.SearchDatabase;
 
 public class DatabaseHelper {
-    public static boolean isFavMovie(Context context, Integer movieId){
+    public static boolean isFavMovie(Context context, Integer movieId, String userId){
         if (movieId == null) return false;
-        FavMovie f = MovieDatabase.getInstance(context).movieDao().getMovieById(movieId);
+        FavMovie f = MovieDatabase.getInstance(context).movieDao().getMovieById(movieId, userId);
         return f != null;
     }
 
-    public static boolean isRecentSearch(Context context, String name){
+    public static boolean isRecentSearch(Context context, String name, String userId){
         if (name == null) return false;
-        RecentSearch recentSearch = SearchDatabase.getInstance(context).searchDao().getSearchesByName(name);
+        RecentSearch recentSearch = SearchDatabase.getInstance(context).searchDao().getSearchesByName(name, userId);
         return recentSearch != null;
     }
 }

@@ -13,14 +13,14 @@ import retrofit2.http.Query;
 
 @Dao
 public interface MovieDao {
-    @androidx.room.Query("SELECT * FROM favMovies")
-    LiveData<List<FavMovie>> getAllFavMovies();
+    @androidx.room.Query("SELECT * FROM favMovies WHERE user_id = :userId")
+    LiveData<List<FavMovie>> getAllFavMovies(String userId);
 
-    @androidx.room.Query("SELECT * FROM favMovies WHERE movie_id = :id")
-    FavMovie getMovieById(int id);
+    @androidx.room.Query("SELECT * FROM favMovies WHERE movie_id = :id AND user_id = :userId")
+    FavMovie getMovieById(int id, String userId);
 
-    @androidx.room.Query("DELETE FROM favMovies WHERE movie_id = :id")
-    void deleteMovieById(int id);
+    @androidx.room.Query("DELETE FROM favMovies WHERE movie_id = :id AND user_id = :userId")
+    void deleteMovieById(int id, String userId);
 
     @Insert(onConflict = REPLACE)
     void insertMovie(FavMovie favMovie);

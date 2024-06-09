@@ -98,6 +98,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String fullName = binding.edFullName.getText().toString();
                 String phoneNumber = binding.edPhoneNumber.getText().toString();
+                String alias = binding.edNickName.getText().toString();
 
                 boolean isValid = true;
 
@@ -115,11 +116,18 @@ public class EditProfileActivity extends AppCompatActivity {
                     binding.txtEnterPhone.setVisibility(View.INVISIBLE);
                 }
 
+                if (alias.trim().length() == 0){
+                    binding.txtEnterAlias.setVisibility(View.VISIBLE);
+                    isValid = false;
+                }else {
+                    binding.txtEnterAlias.setVisibility(View.INVISIBLE);
+                }
+
                 if (isValid) {
                     DatabaseReference nodeUpdate = FirebaseDatabase.getInstance().getReference();
                     HashMap<String, Object> updates = new HashMap<>();
                     //updates.put("avt", avt);
-                    updates.put("name", name);
+                    updates.put("name", alias);
                     updates.put("email", email);
                     updates.put("fullName", fullName);
                     updates.put("phone", phoneNumber);

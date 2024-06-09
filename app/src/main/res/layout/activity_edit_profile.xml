@@ -104,8 +104,18 @@
             android:textColor="@color/white"
             android:textColorHint="@color/grey"
             android:background="@drawable/input_edit_pro5"
-            android:editable="false"
             android:maxLines="1"/>
+
+        <TextView
+            android:id="@+id/txtEnterAlias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please enter your username !"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="70dp"
+            android:textColor="#F30B0B"
+            android:textStyle="bold"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/edEmail_Edit"
@@ -116,7 +126,6 @@
             android:textSize="16sp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="25dp"
             android:textColor="@color/white"
             android:textColorHint="@color/grey"
             android:background="@drawable/input_edit_pro5"

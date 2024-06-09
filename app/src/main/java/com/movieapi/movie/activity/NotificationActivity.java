@@ -30,6 +30,8 @@ import com.movieapi.movie.utils.Constants;
 
 public class NotificationActivity extends AppCompatActivity {
     ActivityNotificationBinding binding;
+    SharedPreferences prefIdUser;
+    String idUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,9 @@ public class NotificationActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbarNotic);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        prefIdUser = getSharedPreferences("sessionUser", MODE_PRIVATE);
+        idUser = prefIdUser.getString("idUser", "");
 
         setSwitchStates(binding.lnNotification);
 
@@ -59,6 +64,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = getSharedPreferences("SwitchNotic", MODE_PRIVATE).edit();
                 editor.putBoolean("SwitchState_" + binding.switchGeneral.getTag(), binding.switchGeneral.isChecked());
+                editor.putString("idUser", idUser);
                 editor.commit();
 
                 if (switchState){
@@ -75,6 +81,7 @@ public class NotificationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences.Editor editor = getSharedPreferences("SwitchNotic", MODE_PRIVATE).edit();
                 editor.putBoolean("SwitchState_" + binding.switchArrival.getTag(), binding.switchArrival.isChecked());
+                editor.putString("idUser", idUser);
                 editor.commit();
             }
         });
@@ -84,6 +91,7 @@ public class NotificationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences.Editor editor = getSharedPreferences("SwitchNotic", MODE_PRIVATE).edit();
                 editor.putBoolean("SwitchState_" + binding.switchService.getTag(), binding.switchService.isChecked());
+                editor.putString("idUser", idUser);
                 editor.commit();
 
             }
@@ -96,6 +104,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = getSharedPreferences("SwitchNotic", MODE_PRIVATE).edit();
                 editor.putBoolean("SwitchState_" + binding.switchRelease.getTag(), binding.switchRelease.isChecked());
+                editor.putString("idUser", idUser);
                 editor.commit();
 
                 if (switchState){
@@ -112,6 +121,7 @@ public class NotificationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences.Editor editor = getSharedPreferences("SwitchNotic", MODE_PRIVATE).edit();
                 editor.putBoolean("SwitchState_" + binding.switchUpdates.getTag(), binding.switchUpdates.isChecked());
+                editor.putString("idUser", idUser);
                 editor.commit();
 
             }
@@ -129,8 +139,11 @@ public class NotificationActivity extends AppCompatActivity {
             if (child instanceof SwitchCompat) {
                 SwitchCompat switchCompat = (SwitchCompat) child;
                 String tag = (String) switchCompat.getTag();
-                Boolean switchState = prefs.getBoolean("SwitchState_" + tag, false);
-                switchCompat.setChecked(switchState);
+                String idUserSwitch = prefs.getString("idUser", "");
+                if (idUserSwitch == idUser){
+                    Boolean switchState = prefs.getBoolean("SwitchState_" + tag, false);
+                    switchCompat.setChecked(switchState);
+                }
             } else if (child instanceof ViewGroup) {
                 setSwitchStates((ViewGroup) child);
             }

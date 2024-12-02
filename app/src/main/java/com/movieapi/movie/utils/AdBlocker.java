@@ -20,60 +20,73 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AdBlocker {
-    private static final String AD_HOSTS_FILE = "host.txt";
-    private static final Set<String> AD_HOSTS = new HashSet<>();
+    private static final String[] ALLOWED_URL_CONTAINS = {
+            "vidsrc",
+            "cdnjs.cloudflare.com",
+            "s10.histats.com",
+            "capaciousdrewreligion.com",
+            "ajax.googleapis.com",
+            "image.tmdb.org",
+            "s4.histats.com",
+            "recordedthereby.com",
+            "e.dtscout.com",
+            "unseenreport.com",
+            "gstatic.com",
+            "tags.crwdcntrl.net",
+            "get.s-onetag.com",
+            "t.dtscout.com",
+            "pixel.onaudience.com",
+            "data-beacons.s-onetag.com",
+            "googletagmanager",
+            "pogothere",
+            "cloudfront",
+            "knowledconsideunden",
+            "getrunkhomuto",
+            "connect-metrics-collector",
+            "techtonicwave4",
+            "ap.lijit.com",
+            "um.simpli.fi",
+            ".link/content",
+            "favicon",
+            "proftrafficcounter",
+            "onetag-geo.s-onetag",
+            ".org/content",
+            "approveofchi",
+            "2embed",
+            "jsdelivr",
+            "certificatestainfranz"
+    };
 
     public static void init(final Context context) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    loadFromAssets(context);
-                } catch (IOException e) {
-                    Log.e("AdBlocker", "Error loading ad hosts file", e);
-                }
             }
         }).start();
     }
 
-    private static void loadFromAssets(Context context) throws IOException {
-        InputStream stream = context.getAssets().open(AD_HOSTS_FILE);
-        InputStreamReader inputStreamReader = new InputStreamReader(stream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            AD_HOSTS.add(line.trim());
-        }
-        bufferedReader.close();
-        inputStreamReader.close();
-        stream.close();
-        Log.d("AdBlocker", "Ad hosts loaded: " + AD_HOSTS.size());
-    }
-
     public static boolean isAd(String url) {
-        try {
-            String host = getHost(url);
-            return isAdHost(host);
-        } catch (MalformedURLException e) {
-            Log.d("AdBlocker", "Malformed URL: " + e.toString());
-            return false;
+        if (TextUtils.isEmpty(url)) return true;
+        Uri uri = Uri.parse(url);
+        String host = uri.getHost();
+        if (host == null) return true;
+
+        // Kiểm tra host trong danh sách được phép
+        for (String allowedUrl : ALLOWED_URL_CONTAINS) {
+            if (host.contains(allowedUrl)) {
+                return false; // URL hợp lệ
+            }
         }
+        return true; // Không hợp lệ => Quảng cáo
     }
 
-    private static boolean isAdHost(String host) {
-        if (TextUtils.isEmpty(host)) {
-            return false;
-        }
-        for (String adHost : AD_HOSTS) {
-            if (host.contains(adHost)) {
+    private static boolean isAllowedUrl(String url) throws MalformedURLException {
+        for (String allowedUrl : ALLOWED_URL_CONTAINS) {
+            if (url.contains(allowedUrl)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public static String getHost(String url) throws MalformedURLException {
-        return new URL(url).getHost();
     }
 
     public static WebResourceResponse createEmptyResource() {

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.ViewAllMoviesActivity;
+import com.movieapi.movie.activity.ViewAllTvSeriesActivity;
 import com.movieapi.movie.adapter.MainMovieAdapter;
 import com.movieapi.movie.adapter.MainSeriesAdapter;
 import com.movieapi.movie.adapter.SeriesCarouselAdapter;
@@ -140,7 +141,7 @@ public class SeriesFragment extends Fragment {
         binding.viewOnTheAir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iViewAllOnTheAir = new Intent(getContext(), ViewAllMoviesActivity.class);
+                Intent iViewAllOnTheAir = new Intent(getContext(), ViewAllTvSeriesActivity.class);
                 iViewAllOnTheAir.putExtra(Constants.VIEW_ALL_TV_SHOWS_TYPE, Constants.ON_THE_AIR_TV_SHOWS_TYPE);
                 startActivity(iViewAllOnTheAir);
             }
@@ -149,7 +150,7 @@ public class SeriesFragment extends Fragment {
         binding.viewSeriesPopular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iViewAllPopular = new Intent(getContext(), ViewAllMoviesActivity.class);
+                Intent iViewAllPopular = new Intent(getContext(), ViewAllTvSeriesActivity.class);
                 iViewAllPopular.putExtra(Constants.VIEW_ALL_TV_SHOWS_TYPE, Constants.POPULAR_TV_SHOWS_TYPE);
                 startActivity(iViewAllPopular);
             }
@@ -158,7 +159,7 @@ public class SeriesFragment extends Fragment {
         binding.viewTopRatedSeries.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iViewAllTop = new Intent(getContext(), ViewAllMoviesActivity.class);
+                Intent iViewAllTop = new Intent(getContext(), ViewAllTvSeriesActivity.class);
                 iViewAllTop.putExtra(Constants.VIEW_ALL_TV_SHOWS_TYPE, Constants.TOP_RATED_TV_SHOWS_TYPE);
                 startActivity(iViewAllTop);
             }

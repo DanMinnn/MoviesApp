@@ -45,7 +45,7 @@
         </provider>
 
         <activity
-            android:name=".activity.ViewAllCommentsActivity"
+            android:name=".activity.movies.ViewAllCommentsActivity"
             android:exported="false" />
         <activity
             android:name=".activity.SplashScreenActivity"
@@ -69,14 +69,14 @@
             android:name=".activity.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.MovieDetailsActivity"
+            android:name=".activity.movies.MovieDetailsActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.StreamMovieActivity"
+            android:name=".activity.movies.StreamMovieActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activity.ViewAllMoviesActivity"
+            android:name=".activity.movies.ViewAllMoviesActivity"
             android:exported="true" />
         <activity
             android:name=".activity.CastActivity"
@@ -84,12 +84,12 @@
         <activity
             android:name=".activity.SearchResultActivity"
             android:exported="true" />
-        <activity android:name=".activity.ViewAllTvSeriesActivity"
+        <activity android:name=".activity.series.ViewAllTvSeriesActivity"
             android:exported="true"/>
 
-        <activity android:name=".activity.SeriesStreamActivity"
+        <activity android:name=".activity.series.SeriesStreamActivity"
             android:exported="true"/>
-        <activity android:name=".activity.SeriesDetailsActivity"
+        <activity android:name=".activity.series.SeriesDetailsActivity"
             android:exported="true"/>
     </application>
 

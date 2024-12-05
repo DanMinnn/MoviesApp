@@ -1,4 +1,4 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.movies;
 
 import android.content.Context;
 
@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class PagerAdapter extends FragmentPagerAdapter {
+public class PagerMoviesAdapter extends FragmentPagerAdapter {
     Context context;
 
-    public PagerAdapter(@NonNull FragmentManager fm, Context context) {
+    public PagerMoviesAdapter(@NonNull FragmentManager fm, Context context) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.context = context;
     }
@@ -20,11 +20,11 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return new TrailerFragment();
+                return new TrailerMoviesFragment();
             case 1:
-                return new RecommendFragment();
+                return new RecommendMoviesFragment();
             case 2:
-                return new CommentsFragment();
+                return new CommentsMoviesFragment();
         }
         return null;
     }

@@ -1,4 +1,4 @@
-package com.movieapi.movie.adapter;
+package com.movieapi.movie.adapter.series;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
-import com.movieapi.movie.activity.SeriesStreamActivity;
+import com.movieapi.movie.activity.series.SeriesStreamActivity;
 import com.movieapi.movie.model.series.EpisodeBrief;
 import com.movieapi.movie.utils.Constants;
 

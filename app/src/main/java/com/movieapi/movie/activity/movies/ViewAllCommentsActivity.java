@@ -1,4 +1,4 @@
-package com.movieapi.movie.activity;
+package com.movieapi.movie.activity.movies;
 
 import android.content.Context;
 import android.content.Intent;

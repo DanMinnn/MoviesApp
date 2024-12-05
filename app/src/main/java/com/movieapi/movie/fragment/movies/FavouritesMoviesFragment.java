@@ -1,4 +1,4 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.movies;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.movieapi.movie.R;
-import com.movieapi.movie.adapter.FavMoviesAdapter;
+import com.movieapi.movie.adapter.movies.FavMoviesAdapter;
 import com.movieapi.movie.database.movies.FavMovie;
 import com.movieapi.movie.database.movies.MovieDatabase;
 

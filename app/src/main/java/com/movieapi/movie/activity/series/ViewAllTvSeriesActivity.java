@@ -1,4 +1,4 @@
-package com.movieapi.movie.activity;
+package com.movieapi.movie.activity.series;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.movieapi.movie.adapter.SeriesBriefSmallAdapter;
+import com.movieapi.movie.adapter.series.SeriesBriefSmallAdapter;
 import com.movieapi.movie.databinding.ActivityViewAllTvSeriesBinding;
 import com.movieapi.movie.model.series.OnTheAirSeriesResponse;
 import com.movieapi.movie.model.series.PopularSeriesResponse;

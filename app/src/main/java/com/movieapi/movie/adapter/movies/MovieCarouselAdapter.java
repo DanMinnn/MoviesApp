@@ -1,4 +1,4 @@
-package com.movieapi.movie.adapter;
+package com.movieapi.movie.adapter.movies;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,9 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.movieapi.movie.R;
-import com.movieapi.movie.activity.MovieDetailsActivity;
+import com.movieapi.movie.activity.movies.MovieDetailsActivity;
 import com.movieapi.movie.model.movie.MovieBrief;
 import com.movieapi.movie.utils.Constants;
 

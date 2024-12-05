@@ -1,4 +1,4 @@
-package com.movieapi.movie.activity;
+package com.movieapi.movie.activity.series;
 
 import androidx.appcompat.app.AppCompatActivity;
 

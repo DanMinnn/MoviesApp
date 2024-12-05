@@ -1,4 +1,4 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.series;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,19 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.movieapi.movie.R;
-import com.movieapi.movie.activity.ViewAllMoviesActivity;
-import com.movieapi.movie.activity.ViewAllTvSeriesActivity;
-import com.movieapi.movie.adapter.MainMovieAdapter;
-import com.movieapi.movie.adapter.MainSeriesAdapter;
-import com.movieapi.movie.adapter.SeriesCarouselAdapter;
-import com.movieapi.movie.databinding.FragmentProfileBinding;
-import com.movieapi.movie.databinding.FragmentSearchBinding;
+import com.movieapi.movie.activity.series.ViewAllTvSeriesActivity;
+import com.movieapi.movie.adapter.series.MainSeriesAdapter;
+import com.movieapi.movie.adapter.series.SeriesCarouselAdapter;
 import com.movieapi.movie.databinding.FragmentSeriesBinding;
-import com.movieapi.movie.model.movie.MovieBrief;
-import com.movieapi.movie.model.movie.NowShowingMoviesResponse;
-import com.movieapi.movie.model.movie.PopularMoviesResponse;
-import com.movieapi.movie.model.movie.TopRatedMoviesResponse;
 import com.movieapi.movie.model.series.AiringTodaySeriesResponse;
 import com.movieapi.movie.model.series.OnTheAirSeriesResponse;
 import com.movieapi.movie.model.series.PopularSeriesResponse;

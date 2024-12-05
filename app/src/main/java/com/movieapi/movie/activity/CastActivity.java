@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.movieapi.movie.adapter.MovieCastOfPersonAdapter;
+import com.movieapi.movie.adapter.movies.MovieCastOfPersonAdapter;
 import com.movieapi.movie.databinding.ActivityCastBinding;
 import com.movieapi.movie.model.cast.Person;
 import com.movieapi.movie.model.movie.MovieCastOfPerson;

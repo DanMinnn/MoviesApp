@@ -16,13 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
-import com.movieapi.movie.activity.MovieDetailsActivity;
+import com.movieapi.movie.activity.movies.MovieDetailsActivity;
 import com.movieapi.movie.model.search.SearchResult;
 import com.movieapi.movie.utils.Constants;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {

@@ -1,4 +1,4 @@
-package com.movieapi.movie.activity;
+package com.movieapi.movie.activity.series;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -19,6 +19,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -28,17 +29,14 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.movieapi.movie.R;
-import com.movieapi.movie.adapter.SeriesCastAdapter;
+import com.movieapi.movie.adapter.series.SeriesCastAdapter;
+import com.movieapi.movie.controller.SharedViewModel;
 import com.movieapi.movie.database.DatabaseHelper;
-import com.movieapi.movie.database.movies.FavMovie;
-import com.movieapi.movie.database.movies.MovieDatabase;
 import com.movieapi.movie.database.series.FavSeries;
 import com.movieapi.movie.database.series.SeriesDatabase;
 import com.movieapi.movie.databinding.ActivitySeriesDetailsBinding;
-import com.movieapi.movie.fragment.PagerAdapter;
-import com.movieapi.movie.model.movie.Movie;
-import com.movieapi.movie.model.movie.MovieCastBrief;
-import com.movieapi.movie.model.movie.MovieCreditsResponse;
+import com.movieapi.movie.fragment.movies.PagerMoviesAdapter;
+import com.movieapi.movie.fragment.series.PagerSeriesAdapter;
 import com.movieapi.movie.model.series.Genre;
 import com.movieapi.movie.model.series.Series;
 import com.movieapi.movie.model.series.SeriesCastBrief;
@@ -70,7 +68,7 @@ public class SeriesDetailsActivity extends AppCompatActivity {
     Call<SeriesCreditsResponse> seriesCreditsResponseCall;
     SharedPreferences prefUser;
     String userId;
-    int id_episode;
+    private int id_episode = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +83,7 @@ public class SeriesDetailsActivity extends AppCompatActivity {
 
         final FavSeries favSeries = (FavSeries) getIntent().getSerializableExtra("name");
 
-        binding.viewPagerSeriesDetails.setAdapter(new PagerAdapter(getSupportFragmentManager(), SeriesDetailsActivity.this));
+        binding.viewPagerSeriesDetails.setAdapter(new PagerSeriesAdapter(getSupportFragmentManager(), SeriesDetailsActivity.this));
         binding.tabViewPagerSeriesDetails.setViewPager(binding.viewPagerSeriesDetails);
 
         seriesCast = new ArrayList<>();
@@ -99,7 +97,6 @@ public class SeriesDetailsActivity extends AppCompatActivity {
 
         addEvents();
 
-        Log.d("id_episode", id_episode + "");
         loadActivity(favSeries);
     }
 
@@ -255,9 +252,12 @@ public class SeriesDetailsActivity extends AppCompatActivity {
                 setFavourite(response.body().getId(), response.body().getPosterPath(), response.body().getName(), favSeries);
                 setYear(response.body().getFirstAirDate());
                 setGenres(response.body().getGenres());
+                setSeasons(response.body().getNumberOfSeasons());
                 setCast();
 
                 id_episode = response.body().getId();
+                number_of_seasons = response.body().getNumberOfSeasons();
+                handleEpisodeId(id_episode, number_of_seasons);
             }
 
             @Override
@@ -266,6 +266,17 @@ public class SeriesDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void handleEpisodeId(int id, int number_of_seasons) {
+        // Xử lý id_episode sau khi được gán.
+        Log.d("handleEpisodeId", "Processed id_episode: " + id);
+
+        SharedViewModel viewModel= new ViewModelProvider(this).get(SharedViewModel.class);
+        viewModel.setIdEpisode(id);
+        viewModel.setNumberOfSeason(number_of_seasons);
+    }
+
+
     private void setFavourite(final Integer seriesId, final String posterPath, final String seriesName, final FavSeries favSeries) {
         if (DatabaseHelper.isFavMovie(SeriesDetailsActivity.this, seriesId, userId)) {
             binding.seriesDetailsFavouriteBtn.setTag(Constants.TAG_FAV);

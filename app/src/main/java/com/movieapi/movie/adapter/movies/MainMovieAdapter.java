@@ -1,4 +1,4 @@
-package com.movieapi.movie.adapter;
+package com.movieapi.movie.adapter.movies;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,51 +15,48 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
-import com.movieapi.movie.activity.MovieDetailsActivity;
-import com.movieapi.movie.activity.SeriesDetailsActivity;
-import com.movieapi.movie.model.series.SeriesBrief;
+import com.movieapi.movie.activity.movies.MovieDetailsActivity;
+import com.movieapi.movie.model.movie.MovieBrief;
 import com.movieapi.movie.utils.Constants;
 
 import java.util.List;
 
-public class MainSeriesAdapter extends RecyclerView.Adapter<MainSeriesAdapter.MainTVHolder> {
-
+public class MainMovieAdapter extends RecyclerView.Adapter<MainMovieAdapter.MovieViewHolder>{
+    List<MovieBrief> movieBriefs;
     Context context;
-    List<SeriesBrief> seriesBriefList;
 
-    public MainSeriesAdapter(Context context, List<SeriesBrief> seriesBriefList) {
+    public MainMovieAdapter(List<MovieBrief> movieBriefs, Context context) {
+        this.movieBriefs = movieBriefs;
         this.context = context;
-        this.seriesBriefList = seriesBriefList;
     }
 
     @NonNull
     @Override
-    public MainSeriesAdapter.MainTVHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MainSeriesAdapter.MainTVHolder(LayoutInflater.from(context).inflate(R.layout.item_popular_top_rated, parent, false));
+    public MainMovieAdapter.MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new MainMovieAdapter.MovieViewHolder(LayoutInflater.from(context).inflate(R.layout.item_popular_top_rated, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MainSeriesAdapter.MainTVHolder holder, int position) {
-        Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_1280 + seriesBriefList.get(position).getPosterPath())
+    public void onBindViewHolder(@NonNull MainMovieAdapter.MovieViewHolder holder, int position) {
+        Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_1280 + movieBriefs.get(position).getPosterPath())
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imvShowCard);
 
-        if (seriesBriefList.get(position).getVoteAverage() != 0)
-            holder.txtVoteAverage.setText(String.format("%.1f", seriesBriefList.get(position).getVoteAverage()));
+        if (movieBriefs.get(position).getVoteAverage() != 0)
+            holder.txtVoteAverage.setText(String.format("%.1f", movieBriefs.get(position).getVoteAverage()));
     }
 
     @Override
     public int getItemCount() {
-        return seriesBriefList.size();
+        return movieBriefs.size();
     }
 
-    public class MainTVHolder extends RecyclerView.ViewHolder {
-
+    public class MovieViewHolder extends RecyclerView.ViewHolder {
         CardView cardViewShow;
         ImageView imvShowCard;
         TextView txtVoteAverage;
-        public MainTVHolder(@NonNull View itemView) {
+        public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
 
             cardViewShow = itemView.findViewById(R.id.card_view_search);
@@ -72,8 +69,8 @@ public class MainSeriesAdapter extends RecyclerView.Adapter<MainSeriesAdapter.Ma
             cardViewShow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, SeriesDetailsActivity.class);
-                    intent.putExtra("series_id", seriesBriefList.get(getAdapterPosition()).getId());
+                    Intent intent = new Intent(context, MovieDetailsActivity.class);
+                    intent.putExtra("movie_id", movieBriefs.get(getAdapterPosition()).getId());
                     context.startActivity(intent);
                 }
             });

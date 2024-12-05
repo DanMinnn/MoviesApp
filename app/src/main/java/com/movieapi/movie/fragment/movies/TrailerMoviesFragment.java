@@ -1,4 +1,4 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.movies;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.SnapHelper;
 
-import com.movieapi.movie.activity.MovieDetailsActivity;
+import com.movieapi.movie.activity.movies.MovieDetailsActivity;
 import com.movieapi.movie.adapter.TrailerAdapter;
 import com.movieapi.movie.databinding.FragmentTrailerBinding;
 import com.movieapi.movie.model.videos.Trailer;
@@ -29,14 +29,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TrailerFragment extends Fragment {
+public class TrailerMoviesFragment extends Fragment {
     FragmentTrailerBinding binding;
     TrailerAdapter trailerAdapter;
     List<Trailer> trailerList;
     Call<TrailerResponse> mMovieTrailersCall;
     int movieId;
 
-    public TrailerFragment() {
+    public TrailerMoviesFragment() {
     }
 
     @Nullable

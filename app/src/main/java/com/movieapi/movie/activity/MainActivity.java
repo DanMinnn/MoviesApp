@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
-import com.movieapi.movie.fragment.FavouritesFragment;
-import com.movieapi.movie.fragment.MovieFragment;
+import com.movieapi.movie.fragment.movies.FavouritesFragment;
+import com.movieapi.movie.fragment.movies.MovieFragment;
 import com.movieapi.movie.fragment.ProfileFragment;
 import com.movieapi.movie.fragment.SearchFragment;
-import com.movieapi.movie.fragment.SeriesFragment;
+import com.movieapi.movie.fragment.series.SeriesFragment;
 import com.movieapi.movie.R;
 import com.movieapi.movie.databinding.ActivityMainBinding;
 

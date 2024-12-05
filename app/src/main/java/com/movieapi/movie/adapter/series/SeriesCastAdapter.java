@@ -1,4 +1,4 @@
-package com.movieapi.movie.adapter;
+package com.movieapi.movie.adapter.series;
 
 import android.content.Context;
 import android.content.Intent;

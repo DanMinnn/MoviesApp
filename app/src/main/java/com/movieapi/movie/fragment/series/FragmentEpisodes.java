@@ -1,6 +1,9 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.series;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +11,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.movieapi.movie.activity.SeriesDetailsActivity;
-import com.movieapi.movie.adapter.EpisodesAdapter;
+import com.movieapi.movie.activity.series.SeriesDetailsActivity;
+import com.movieapi.movie.adapter.series.EpisodesAdapter;
+import com.movieapi.movie.controller.SharedViewModel;
 import com.movieapi.movie.databinding.FragmentEpisodesBinding;
 import com.movieapi.movie.model.series.EpisodeBrief;
 import com.movieapi.movie.model.series.SeasonDetailsResponse;
@@ -32,8 +37,8 @@ public class FragmentEpisodes extends Fragment {
     List<EpisodeBrief> episodeBriefList;
     Call<SeasonDetailsResponse> seasonDetailsResponseCall;
     int seriesId;
-
     private Integer number_of_seasons = 0;
+    private int id = 0;
 
     public FragmentEpisodes(){}
 
@@ -58,7 +63,13 @@ public class FragmentEpisodes extends Fragment {
         binding.seriesDetailsEpisodes.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.seriesDetailsEpisodes.setAdapter(episodesAdapter);
 
-        setEpisodes(4);
+        SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.getIdEpisode().observe(getViewLifecycleOwner(), id -> {
+            setEpisodes(id);
+        });
+        viewModel.getNumberOfSeason().observe(getViewLifecycleOwner(), number -> {
+            number_of_seasons = number;
+        });
     }
 
 
@@ -72,7 +83,7 @@ public class FragmentEpisodes extends Fragment {
         ApiInterface apiInterface = ApiClient.getMovieApi();
 
         for (int seasonIndex = 1; seasonIndex <= season_number.size(); seasonIndex++){
-            seasonDetailsResponseCall = apiInterface.getSeasonDetails(seriesId, seasonIndex, Constants.API_KEY);
+            seasonDetailsResponseCall = apiInterface.getSeasonDetails(id, seasonIndex, Constants.API_KEY);
             seasonDetailsResponseCall.enqueue(new Callback<SeasonDetailsResponse>() {
                 @Override
                 public void onResponse(Call<SeasonDetailsResponse> call, Response<SeasonDetailsResponse> response) {

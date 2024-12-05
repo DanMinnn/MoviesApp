@@ -1,4 +1,4 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.movies;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.movieapi.movie.R;
-import com.movieapi.movie.activity.ViewAllMoviesActivity;
-import com.movieapi.movie.adapter.MainMovieAdapter;
-import com.movieapi.movie.adapter.MovieCarouselAdapter;
+import com.movieapi.movie.activity.movies.ViewAllMoviesActivity;
+import com.movieapi.movie.adapter.movies.MainMovieAdapter;
+import com.movieapi.movie.adapter.movies.MovieCarouselAdapter;
 import com.movieapi.movie.model.movie.MovieBrief;
 import com.movieapi.movie.model.movie.NowShowingMoviesResponse;
 import com.movieapi.movie.model.movie.PopularMoviesResponse;

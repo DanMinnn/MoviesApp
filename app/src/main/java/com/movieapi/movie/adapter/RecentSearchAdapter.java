@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.movieapi.movie.fragment.FavouritesMoviesFragment;
+import com.movieapi.movie.fragment.movies.FavouritesMoviesFragment;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.SearchResultActivity;
 import com.movieapi.movie.database.search.RecentSearch;

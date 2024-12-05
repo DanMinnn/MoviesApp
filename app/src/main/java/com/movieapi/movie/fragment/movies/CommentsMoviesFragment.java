@@ -1,4 +1,4 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.movies;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.movieapi.movie.R;
-import com.movieapi.movie.activity.MovieDetailsActivity;
-import com.movieapi.movie.activity.ViewAllCommentsActivity;
+import com.movieapi.movie.activity.movies.MovieDetailsActivity;
+import com.movieapi.movie.activity.movies.ViewAllCommentsActivity;
 import com.movieapi.movie.adapter.CommentAdapter;
 import com.movieapi.movie.controller.CommentController;
 import com.movieapi.movie.controller.interfaces.CommentItemListener;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CommentsFragment extends Fragment implements CommentItemListener {
+public class CommentsMoviesFragment extends Fragment implements CommentItemListener {
     FragmentCommentsBinding binding;
     int movieId;
     SharedPreferences prefUser;
@@ -51,7 +51,7 @@ public class CommentsFragment extends Fragment implements CommentItemListener {
     CommentItemListener commentItemListener;
     private ReportCommentModel reportCommentModel;
 
-    public CommentsFragment() {
+    public CommentsMoviesFragment() {
     }
 
     @Nullable

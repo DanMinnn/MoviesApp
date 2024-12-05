@@ -1,4 +1,4 @@
-package com.movieapi.movie.activity;
+package com.movieapi.movie.activity.movies;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.movieapi.movie.databinding.ActivityStreamMovieBinding;
 import com.movieapi.movie.utils.AdBlocker;
-import com.movieapi.movie.utils.Browser;
 import com.movieapi.movie.utils.Constants;
 
 public class StreamMovieActivity extends AppCompatActivity {

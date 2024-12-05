@@ -1,4 +1,4 @@
-package com.movieapi.movie.activity;
+package com.movieapi.movie.activity.movies;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
+import com.movieapi.movie.adapter.movies.MovieBriefSmallAdapter;
 import com.movieapi.movie.databinding.ActivityViewAllMoviesBinding;
 import com.movieapi.movie.model.movie.GenreMoviesResponse;
 import com.movieapi.movie.model.movie.MovieBrief;

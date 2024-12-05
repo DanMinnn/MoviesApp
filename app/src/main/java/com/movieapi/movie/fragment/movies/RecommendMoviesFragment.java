@@ -1,4 +1,4 @@
-package com.movieapi.movie.fragment;
+package com.movieapi.movie.fragment.movies;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,8 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.movieapi.movie.activity.MovieDetailsActivity;
-import com.movieapi.movie.adapter.MovieBriefSmallAdapter;
+import com.movieapi.movie.activity.movies.MovieDetailsActivity;
+import com.movieapi.movie.adapter.movies.MovieBriefSmallAdapter;
 import com.movieapi.movie.databinding.FragmentRecommendBinding;
 import com.movieapi.movie.model.movie.MovieBrief;
 import com.movieapi.movie.model.movie.SimilarMovieResponse;
@@ -26,13 +26,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecommendFragment extends Fragment {
+public class RecommendMoviesFragment extends Fragment {
     FragmentRecommendBinding binding;
     List<MovieBrief> mSimilarList;
     MovieBriefSmallAdapter mSimilarMovieAdapter;
     Call<SimilarMovieResponse> mSimilarMovieResponse;
     int movieId;
-    public RecommendFragment() {
+    public RecommendMoviesFragment() {
     }
 
     @Nullable

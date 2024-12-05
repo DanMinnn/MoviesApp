@@ -1,4 +1,4 @@
-package com.movieapi.movie.activity;
+package com.movieapi.movie.activity.movies;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -27,7 +27,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.movieapi.movie.fragment.PagerAdapter;
+import com.movieapi.movie.fragment.movies.PagerMoviesAdapter;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.CastAdapter;
 import com.movieapi.movie.database.DatabaseHelper;
@@ -78,7 +78,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         final FavMovie favMovie = (FavMovie) getIntent().getSerializableExtra("name");
 
-        binding.viewPagerMovieDetails.setAdapter(new PagerAdapter(getSupportFragmentManager(), MovieDetailsActivity.this));
+        binding.viewPagerMovieDetails.setAdapter(new PagerMoviesAdapter(getSupportFragmentManager(), MovieDetailsActivity.this));
         binding.tabViewPagerMovieDetails.setViewPager(binding.viewPagerMovieDetails);
 
         mCast = new ArrayList<>();

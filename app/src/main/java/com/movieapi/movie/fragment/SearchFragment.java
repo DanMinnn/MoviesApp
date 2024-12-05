@@ -1,4 +1,4 @@
-package com.movieapi.movie.Fragment;
+package com.movieapi.movie.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -16,17 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,17 +32,14 @@ import com.movieapi.movie.R;
 import com.movieapi.movie.activity.SearchResultActivity;
 import com.movieapi.movie.adapter.FilterAdapter;
 import com.movieapi.movie.adapter.RecentSearchAdapter;
-import com.movieapi.movie.controller.interfaces.ButtonListener;
 import com.movieapi.movie.database.DatabaseHelper;
 import com.movieapi.movie.database.search.RecentSearch;
 import com.movieapi.movie.database.search.SearchDatabase;
 import com.movieapi.movie.model.ButtonItem;
-import com.movieapi.movie.model.ShareModel;
 import com.movieapi.movie.utils.Constants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;

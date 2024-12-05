@@ -1,3 +1,4 @@
+
 package com.movieapi.movie.activity;
 
 import android.app.ProgressDialog;
@@ -30,15 +31,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.movieapi.movie.R;
 import com.movieapi.movie.database.SessionManager;
 import com.movieapi.movie.databinding.ActivitySignInBinding;
-import com.movieapi.movie.model.member.Member;
 
 import java.util.HashMap;
 
@@ -184,6 +179,8 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
+
+
     }
 
     @Override
@@ -244,3 +241,189 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 }
+
+/*
+package com.movieapi.movie.activity;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.common.api.ApiException;
+import com.movieapi.movie.R;
+import com.movieapi.movie.database.SessionManager;
+import com.movieapi.movie.databinding.ActivitySignInBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import java.util.HashMap;
+
+public class SignInActivity extends AppCompatActivity {
+
+    private static final int REQ_SIGN_IN = 20;
+    private ActivitySignInBinding binding;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient googleSignInClient;
+    private SharedPreferences sharedPreferences;
+    private ProgressDialog progressDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivitySignInBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+
+        progressDialog = new ProgressDialog(this);
+        sharedPreferences = getSharedPreferences("sessionUser", MODE_PRIVATE);
+
+        setupGoogleSignIn();
+        setupEventListeners();
+
+        // Check if Remember Me was selected
+        SessionManager sessionManager = new SessionManager(this, SessionManager.SESSION_REMEMBERME);
+        if (sessionManager.checkRememberMe()) {
+            HashMap<String, String> rememberDetails = sessionManager.getRememberMeFromSession();
+            binding.edEmailSignIn.setText(rememberDetails.get(SessionManager.KEY_EMAIL));
+            binding.edPasswordSignIn.setText(rememberDetails.get(SessionManager.KEY_PASSWORD));
+        }
+    }
+
+    private void setupGoogleSignIn() {
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+    }
+
+    private void setupEventListeners() {
+        binding.btnGoogleSignIn.setOnClickListener(view -> signInWithGoogle());
+        binding.txtSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
+        binding.btnSignIn.setOnClickListener(v -> signInWithEmail());
+        binding.txtForgotPassword.setOnClickListener(v -> startActivity(new Intent(this, ForgotPasswordActivity.class)));
+
+        binding.checkboxRememberme.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                String email = binding.edEmailSignIn.getText().toString();
+                String password = binding.edPasswordSignIn.getText().toString();
+                new SessionManager(this, SessionManager.SESSION_REMEMBERME).createRememberMeSession(email, password);
+            }
+        });
+
+        binding.imvShowpass.setOnClickListener(v -> togglePasswordVisibility());
+    }
+
+    private void signInWithGoogle() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, REQ_SIGN_IN);
+    }
+
+    private void signInWithEmail() {
+        String email = binding.edEmailSignIn.getText().toString().trim();
+        String password = binding.edPasswordSignIn.getText().toString().trim();
+
+        if (email.isEmpty()) {
+            binding.txtEnterEmailSignIn.setVisibility(View.VISIBLE);
+        } else {
+            binding.txtEnterEmailSignIn.setVisibility(View.INVISIBLE);
+        }
+
+        if (password.isEmpty()) {
+            binding.txtEnterPasswordSignIn.setVisibility(View.VISIBLE);
+        } else {
+            binding.txtEnterPasswordSignIn.setVisibility(View.INVISIBLE);
+        }
+
+        if (!email.isEmpty() && !password.isEmpty()) {
+            progressDialog.setMessage("Signing in...");
+            progressDialog.show();
+
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                progressDialog.dismiss();
+                if (task.isSuccessful()) {
+                    Toast.makeText(SignInActivity.this, "Sign in success!", Toast.LENGTH_SHORT).show();
+                    navigateToMainActivity();
+                } else {
+                    Toast.makeText(SignInActivity.this, "Sign in failed! Please check your email or password.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private void togglePasswordVisibility() {
+        if (binding.edPasswordSignIn.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
+            binding.imvShowpass.setImageResource(R.drawable.visible_password);
+            binding.edPasswordSignIn.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+        } else {
+            binding.imvShowpass.setImageResource(R.drawable.hide_password);
+            binding.edPasswordSignIn.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleGoogleSignInResult(task);
+        }
+    }
+
+    private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            if (account != null) {
+                firebaseAuthWithGoogle(account.getIdToken());
+            }
+        } catch (ApiException e) {
+            Log.w("SignInActivity", "Google sign-in failed", e);
+            Toast.makeText(this, "Google sign-in failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                navigateToMainActivity();
+            } else {
+                Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void navigateToMainActivity() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("idUser", user.getUid());
+            editor.putString("emailUser", user.getEmail());
+            editor.apply();
+
+            Intent mainIntent = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+            Toast.makeText(this, "Sign in success!", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+*/

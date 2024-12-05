@@ -1,10 +1,9 @@
-package com.movieapi.movie.Fragment;
+package com.movieapi.movie.fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;

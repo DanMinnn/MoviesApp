@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,8 +61,6 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent receiveIntent = getIntent();
         query = receiveIntent.getStringExtra("query");
         buttonItemList = (List<ButtonItem>) receiveIntent.getSerializableExtra("filterFilm");
-
-        //Log.d("ButtonList: ", buttonItemList.get(1).getButtonText() + "");
 
         if (query == null || query.trim().isEmpty()) finish();
         setTitle(query.trim());
@@ -150,6 +149,9 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     public List<SearchResult> filterResult(List<SearchResult> allRes, List<ButtonItem> filters){
+        
+        boolean hasActiveFilters = filters.stream().anyMatch(ButtonItem::isSelected);
+
         return allRes.stream()
                 .filter(result -> {
                     boolean matches = true;

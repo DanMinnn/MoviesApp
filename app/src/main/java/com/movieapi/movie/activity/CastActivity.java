@@ -1,5 +1,6 @@
 package com.movieapi.movie.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -163,6 +164,7 @@ public class CastActivity extends AppCompatActivity {
         ApiInterface apiService = ApiClient.getMovieApi();
         mCastsOfPersonResponsesCall = apiService.getMovieCastOfPerson(personId, Constants.API_KEY);
         mCastsOfPersonResponsesCall.enqueue(new Callback<MovieCastsOfPersonResponse>() {
+            @SuppressLint("SuspiciousIndentation")
             @Override
             public void onResponse(Call<MovieCastsOfPersonResponse> call, Response<MovieCastsOfPersonResponse> response) {
                 if (!response.isSuccessful()){

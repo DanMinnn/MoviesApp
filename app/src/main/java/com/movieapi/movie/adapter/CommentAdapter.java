@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.Layout;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,14 +22,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.movieapi.movie.Fragment.CommentsFragment;
 import com.movieapi.movie.R;
-import com.movieapi.movie.activity.MovieDetailsActivity;
 import com.movieapi.movie.controller.CommentController;
 import com.movieapi.movie.controller.interfaces.CommentItemListener;
 import com.movieapi.movie.model.member.CommentModel;
 import com.movieapi.movie.model.member.ReportCommentModel;
-import com.movieapi.movie.utils.Constants;
 
 import java.util.List;
 

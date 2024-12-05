@@ -1,4 +1,4 @@
-package com.movieapi.movie.Fragment;
+package com.movieapi.movie.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

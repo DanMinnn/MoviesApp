@@ -42,8 +42,22 @@ dependencies {
     implementation 'androidx.activity:activity:1.8.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    //espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+
+    //mockito
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+
+    //fragment test
+    def fragment_version = "1.8.3"
+
+    debugImplementation "androidx.fragment:fragment-testing-manifest:$fragment_version"
+
+    androidTestImplementation "androidx.fragment:fragment-testing:$fragment_version"
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -61,6 +75,14 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:2.4.1"
     annotationProcessor "androidx.room:room-compiler:2.4.1"
+
+    // test room
+    testImplementation "androidx.room:room-testing:2.4.1"
+    androidTestImplementation "androidx.room:room-testing:2.4.1"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
+    androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
+
+    testImplementation "androidx.test:core:1.5.0"
 
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:32.8.1')

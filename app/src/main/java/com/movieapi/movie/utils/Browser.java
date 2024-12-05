@@ -18,6 +18,7 @@ import java.util.Map;
 public class Browser extends WebViewClient {
     private Map<String, Boolean> loadedUrls = new HashMap<>();
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         if (url.startsWith("market://") || url.startsWith("intent://")) {

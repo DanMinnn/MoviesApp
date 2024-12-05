@@ -1,4 +1,4 @@
-package com.movieapi.movie.Fragment;
+package com.movieapi.movie.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.SnapHelper;
 
-import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
 import com.movieapi.movie.adapter.TrailerAdapter;
 import com.movieapi.movie.databinding.FragmentTrailerBinding;
@@ -86,11 +85,6 @@ public class TrailerFragment extends Fragment {
                     if (video != null && video.getSite() != null && video.getSite().equals("YouTube") && video.getType() != null && video.getType().equals("Trailer"))
                         trailerList.add(video);
                 }
-
-                /*if(!trailerList.isEmpty()) {
-                    binding.movieDetailsTrailerHeading.setVisibility(View.VISIBLE);
-                }
-*/
                 trailerAdapter.notifyDataSetChanged();
             }
 
@@ -98,7 +92,6 @@ public class TrailerFragment extends Fragment {
             public void onFailure(Call<TrailerResponse> call, Throwable t) {
 
             }
-
         });
     }
 }

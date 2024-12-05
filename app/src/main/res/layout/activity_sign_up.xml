@@ -125,7 +125,7 @@
             android:id="@+id/txtErrorPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password length is at least 6"
+            android:text="Password length must be greater than 6 and less than 12"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="70dp"

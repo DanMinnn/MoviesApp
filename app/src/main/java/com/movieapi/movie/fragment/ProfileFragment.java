@@ -1,4 +1,4 @@
-package com.movieapi.movie.Fragment;
+package com.movieapi.movie.fragment;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -32,7 +31,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,7 +46,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.EditProfileActivity;
-import com.movieapi.movie.activity.MainActivity;
 import com.movieapi.movie.activity.NotificationActivity;
 import com.movieapi.movie.activity.SignInActivity;
 import com.movieapi.movie.controller.interfaces.InformationInterface;
@@ -229,6 +226,8 @@ public class ProfileFragment extends Fragment implements InformationInterface{
                         mAuth.signOut();
                         Intent iSignIn = new Intent(getContext(), SignInActivity.class);
                         startActivity(iSignIn);
+
+                        getActivity().finish();
                     }
                 });
 

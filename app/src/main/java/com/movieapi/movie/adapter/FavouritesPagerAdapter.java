@@ -7,9 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.movieapi.movie.Fragment.FavouritesFragment;
-import com.movieapi.movie.Fragment.FavouritesMoviesFragment;
-import com.movieapi.movie.Fragment.TrailerFragment;
+import com.movieapi.movie.fragment.FavouritesMoviesFragment;
 
 public class FavouritesPagerAdapter extends FragmentPagerAdapter {
     Context context;

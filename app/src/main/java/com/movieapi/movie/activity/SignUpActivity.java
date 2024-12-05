@@ -80,7 +80,7 @@ public class SignUpActivity extends AppCompatActivity{
                 }else
                     binding.txtEnterEmail.setVisibility(View.INVISIBLE);
 
-                if (password.trim().length() < 6) {
+                if (password.trim().length() < 6 || password.trim().length() > 12) {
                     binding.txtEnterPass.setVisibility(View.GONE);
                     binding.txtErrorPassword.setVisibility(View.VISIBLE);
                     if (password.trim().length() == 0){

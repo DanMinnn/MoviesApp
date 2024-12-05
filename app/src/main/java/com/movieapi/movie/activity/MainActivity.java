@@ -3,19 +3,16 @@ package com.movieapi.movie.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
-import com.movieapi.movie.Fragment.FavouritesFragment;
-import com.movieapi.movie.Fragment.MovieFragment;
-import com.movieapi.movie.Fragment.ProfileFragment;
-import com.movieapi.movie.Fragment.SearchFragment;
-import com.movieapi.movie.Fragment.SeriesFragment;
+import com.movieapi.movie.fragment.FavouritesFragment;
+import com.movieapi.movie.fragment.MovieFragment;
+import com.movieapi.movie.fragment.ProfileFragment;
+import com.movieapi.movie.fragment.SearchFragment;
+import com.movieapi.movie.fragment.SeriesFragment;
 import com.movieapi.movie.R;
-import com.movieapi.movie.controller.interfaces.InformationInterface;
 import com.movieapi.movie.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,12 +38,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
 
-                    /*case R.id.nav_series:
+                    case R.id.nav_series:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("SeriesFragment")){
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SeriesFragment()).commit();
-                            binding.toolbarMain.setTitle(getString(R.string.series_nav));
+                            binding.titleToolbar.setText(getString(R.string.series_nav));
                         }
-                        break;*/
+                        break;
 
                     case R.id.nav_search:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("SearchFragment")){

@@ -84,6 +84,13 @@
         <activity
             android:name=".activity.SearchResultActivity"
             android:exported="true" />
+        <activity android:name=".activity.ViewAllTvSeriesActivity"
+            android:exported="true"/>
+
+        <activity android:name=".activity.SeriesStreamActivity"
+            android:exported="true"/>
+        <activity android:name=".activity.SeriesDetailsActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
+import com.movieapi.movie.activity.SeriesDetailsActivity;
 import com.movieapi.movie.model.series.SeriesBrief;
 import com.movieapi.movie.utils.Constants;
 
@@ -77,7 +78,7 @@ public class SeriesCarouselAdapter extends RecyclerView.Adapter<SeriesCarouselAd
             tvCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent iSeriesDetails = new Intent(context, MovieDetailsActivity.class);
+                    Intent iSeriesDetails = new Intent(context, SeriesDetailsActivity.class);
                     iSeriesDetails.putExtra("series_id", seriesBriefs.get(getAdapterPosition()).getId());
                     context.startActivity(iSeriesDetails);
                 }
@@ -86,7 +87,7 @@ public class SeriesCarouselAdapter extends RecyclerView.Adapter<SeriesCarouselAd
             play_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent iSeriesStream = new Intent(context, MovieDetailsActivity.class);
+                    Intent iSeriesStream = new Intent(context, SeriesDetailsActivity.class);
                     iSeriesStream.putExtra("series_id", seriesBriefs.get(getAdapterPosition()).getId());
                     context.startActivity(iSeriesStream);
                 }

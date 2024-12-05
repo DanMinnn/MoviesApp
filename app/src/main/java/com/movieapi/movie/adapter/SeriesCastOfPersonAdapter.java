@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.MovieDetailsActivity;
+import com.movieapi.movie.activity.SeriesDetailsActivity;
 import com.movieapi.movie.model.series.SeriesCastOfPerson;
 import com.movieapi.movie.utils.Constants;
 
@@ -80,7 +81,7 @@ public class SeriesCastOfPersonAdapter extends RecyclerView.Adapter<SeriesCastOf
             cardViewShowCast.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetailsActivity.class);
+                    Intent intent = new Intent(context, SeriesDetailsActivity.class);
                     intent.putExtra("series_id", tvCastList.get(getAdapterPosition()).getId());
                     context.startActivity(intent);
                 }

@@ -199,7 +199,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="10dp"
-                android:textColor="@color/grey"/>
+                android:textColor="@color/grey"
+                android:justificationMode="inter_word"/>
 
             <TextView
                 android:id="@+id/movie_details_cast_heading"
@@ -255,55 +256,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tab_view_pager_movie_details"/>
 
-            <!--<TextView
-                android:id="@+id/movie_details_trailer_heading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Trailer"
-                android:textColor="@color/light_red"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_details_cast"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginHorizontal="10dp"
-                android:fontFamily="@font/open_sans_condensed_bold"
-                android:visibility="gone"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movie_details_trailer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_details_trailer_heading"
-                android:overScrollMode="never"/>
-
-            <TextView
-                android:id="@+id/movie_details_recommend_heading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Recommended"
-                android:textColor="@color/light_red"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_details_trailer"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginHorizontal="10dp"
-                android:fontFamily="@font/open_sans_condensed_bold"
-                android:visibility="gone"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movie_details_recommend"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_details_recommend_heading"
-                android:overScrollMode="never"/>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

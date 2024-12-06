@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/black">
+    android:background="@color/bground">
 
     <ImageButton
         android:id="@+id/cast_back_btn"
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:text="Age"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/light_red"
                     android:layout_marginTop="8dp"/>
 
                 <TextView
@@ -80,7 +80,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="-" />
+                    android:text="-"
+                    android:textColor="@color/grey"/>
 
                 <TextView
                     android:id="@+id/cast_birthplace_heading"
@@ -88,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:text="Birthplace"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/light_red"
                     android:layout_marginTop="8dp"/>
 
                 <TextView
@@ -96,7 +97,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="-" />
+                    android:text="-"
+                    android:textColor="@color/grey"/>
 
             </LinearLayout>
 
@@ -119,7 +121,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="Biography"
-                    android:textColor="@color/white"
+                    android:textColor="@color/light_red"
+                    android:textStyle="bold"
                     android:textSize="20sp"
                     android:visibility="gone" />
 
@@ -129,7 +132,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:maxLines="7" />
+                    android:maxLines="7"
+                    android:textColor="@color/grey"
+                    android:justificationMode="inter_word"/>
 
                 <TextView
                     android:id="@+id/cast_readmore"
@@ -137,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:text="Read more"
                     android:textAlignment="center"
-                    android:textColor="@color/orange"
+                    android:textColor="@color/light_red"
                     android:visibility="gone" />
 
                 <TextView
@@ -149,7 +154,7 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="8dp"
                     android:text="Movie Cast"
-                    android:textColor="@color/white"
+                    android:textColor="@color/light_red"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -158,7 +163,31 @@
                     android:id="@+id/cast_movie_recView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false" />
+                    android:nestedScrollingEnabled="false"
+                    android:paddingLeft="10dp"
+                    android:background="@color/bground"/>
+
+                <TextView
+                    android:id="@+id/cast_tv_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="TV Cast"
+                    android:textColor="@color/light_red"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cast_tv_recView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingLeft="10dp"
+                    android:background="@color/bground"/>
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

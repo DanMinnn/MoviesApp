@@ -17,10 +17,13 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.movieapi.movie.adapter.movies.MovieCastOfPersonAdapter;
+import com.movieapi.movie.adapter.series.SeriesCastOfPersonAdapter;
 import com.movieapi.movie.databinding.ActivityCastBinding;
 import com.movieapi.movie.model.cast.Person;
 import com.movieapi.movie.model.movie.MovieCastOfPerson;
 import com.movieapi.movie.model.movie.MovieCastsOfPersonResponse;
+import com.movieapi.movie.model.series.SeriesCastOfPerson;
+import com.movieapi.movie.model.series.SeriesCastsOfPersonResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
@@ -41,12 +44,15 @@ public class CastActivity extends AppCompatActivity {
     int personId;
 
     List<MovieCastOfPerson> mCastOfPersonList;
+    List<SeriesCastOfPerson> seriesCastOfPersonList;
 
     MovieCastOfPersonAdapter movieCastOfPersonAdapter;
+    SeriesCastOfPersonAdapter seriesCastOfPersonAdapter;
 
     Call<Person> mPersonDetailsCall;
 
     Call<MovieCastsOfPersonResponse> mCastsOfPersonResponsesCall;
+    Call<SeriesCastsOfPersonResponse> seriesCastsOfPersonResponseCall;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +65,17 @@ public class CastActivity extends AppCompatActivity {
 
         if (personId == -1) finish();
 
+        // cast movie
         mCastOfPersonList = new ArrayList<>();
         movieCastOfPersonAdapter = new MovieCastOfPersonAdapter(CastActivity.this, mCastOfPersonList);
         binding.castMovieRecView.setAdapter(movieCastOfPersonAdapter);
         binding.castMovieRecView.setLayoutManager(new LinearLayoutManager(CastActivity.this, LinearLayoutManager.HORIZONTAL, false));
+
+        //cast series
+        seriesCastOfPersonList = new ArrayList<>();
+        seriesCastOfPersonAdapter = new SeriesCastOfPersonAdapter(CastActivity.this, seriesCastOfPersonList);
+        binding.castTvRecView.setLayoutManager(new LinearLayoutManager(CastActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        binding.castTvRecView.setAdapter(seriesCastOfPersonAdapter);
 
         loadActivity();
         binding.castBackBtn.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +130,7 @@ public class CastActivity extends AppCompatActivity {
                     binding.castBioHeading.setVisibility(View.VISIBLE);
                     binding.castBio.setText(response.body().getBiography());
 
-                    if (binding.castBio.getLineCount() == 7)
+                    if (binding.castBio.getLineCount() >= 7)
                         binding.castReadmore.setVisibility(View.VISIBLE);
                     else
                         binding.castReadmore.setVisibility(View.GONE);
@@ -137,6 +150,7 @@ public class CastActivity extends AppCompatActivity {
                 }
                 setAge(response.body().getDateOfBirth());
                 setMovieCast(response.body().getId());
+                setSeriesCast(response.body().getId());
             }
 
             @Override
@@ -190,6 +204,35 @@ public class CastActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void setSeriesCast(Integer personId){
+        ApiInterface apiService = ApiClient.getMovieApi();
+        seriesCastsOfPersonResponseCall = apiService.getTVCastsOfPerson(personId, Constants.API_KEY);
+        seriesCastsOfPersonResponseCall.enqueue(new Callback<SeriesCastsOfPersonResponse>() {
+            @Override
+            public void onResponse(Call<SeriesCastsOfPersonResponse> call, Response<SeriesCastsOfPersonResponse> response) {
+                if (!response.isSuccessful()) {
+                    seriesCastsOfPersonResponseCall = call.clone();
+                    seriesCastsOfPersonResponseCall.enqueue(this);
+                    return;
+                }
+
+                if (response.body() == null) return;
+                if (response.body().getCasts() == null) return;
+
+                for (SeriesCastOfPerson seriesCastOfPerson : response.body().getCasts()) {
+                    if (seriesCastOfPerson == null) return;
+                    if (seriesCastOfPerson.getName() != null && seriesCastOfPerson.getPosterPath() != null) {
+                        binding.castTvHeading.setVisibility(View.VISIBLE);
+                        seriesCastOfPersonList.add(seriesCastOfPerson);
+                    }
+                }
+                seriesCastOfPersonAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<SeriesCastsOfPersonResponse> call, Throwable t) {}
+        });
     }
 }

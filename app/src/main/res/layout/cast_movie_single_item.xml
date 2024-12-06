@@ -31,7 +31,8 @@
             android:layout_marginTop="8dp"
             android:textStyle="bold"
             android:ellipsize="end"
-            android:maxLines="2"/>
+            android:maxLines="2"
+            android:textColor="@color/white"/>
         
         <TextView
             android:id="@+id/movie_cast_character"
@@ -39,10 +40,10 @@
             android:layout_height="35dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
             android:maxLines="2"
             android:textStyle="bold"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

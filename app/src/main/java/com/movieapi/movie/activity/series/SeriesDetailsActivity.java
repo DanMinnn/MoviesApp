@@ -246,6 +246,24 @@ public class SeriesDetailsActivity extends AppCompatActivity {
                 if (response.body().getOverview() != null && !response.body().getOverview().trim().isEmpty()){
                     binding.seriesDetailsStorylineHeading.setVisibility(View.VISIBLE);
                     binding.seriesDetailsStorylineContent.setText(response.body().getOverview());
+
+                    if(binding.seriesDetailsStorylineContent.getLineCount() >= 5)
+                        binding.contentReadmore.setVisibility(View.VISIBLE);
+                    else
+                        binding.contentReadmore.setVisibility(View.GONE);
+
+                    binding.contentReadmore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (binding.contentReadmore.getText() == "Read more"){
+                                binding.seriesDetailsStorylineContent.setMaxLines(Integer.MAX_VALUE);
+                                binding.contentReadmore.setText("Read less");
+                            }else {
+                                binding.seriesDetailsStorylineContent.setMaxLines(7);
+                                binding.contentReadmore.setText("Read more");
+                            }
+                        }
+                    });
                 }else
                     binding.seriesDetailsStorylineContent.setText("");
 

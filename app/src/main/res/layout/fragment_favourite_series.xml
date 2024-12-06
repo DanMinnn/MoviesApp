@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bground">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_series_recView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/ln_fav_series"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_marginBottom="35dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/list_empty" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your List is Empty"
+            android:textAlignment="center"
+            android:textColor="@color/light_red"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="It seems that you haven't added any tv series to the list"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"/>
+    </LinearLayout>
+</FrameLayout>

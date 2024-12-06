@@ -17,21 +17,25 @@ public class FavSeries {
     private String still_path;
     @ColumnInfo(name = "name")
     private String name;
+    @ColumnInfo(name = "voteAverage")
+    private Double voteAverage;
 
-    public FavSeries(int id, String userId, Integer series_id, String still_path, String name) {
+    public FavSeries(int id, String userId, Integer series_id, String still_path, String name, double voteAverage) {
         this.id = id;
         this.userId = userId;
         this.series_id = series_id;
         this.still_path = still_path;
         this.name = name;
+        this.voteAverage = voteAverage;
     }
 
     @Ignore
-    public FavSeries(String userId, Integer series_id, String still_path, String name) {
+    public FavSeries(String userId, Integer series_id, String still_path, String name, double voteAverage) {
         this.userId = userId;
         this.series_id = series_id;
         this.still_path = still_path;
         this.name = name;
+        this.voteAverage = voteAverage;
     }
 
     public int getId() {
@@ -72,5 +76,13 @@ public class FavSeries {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 }

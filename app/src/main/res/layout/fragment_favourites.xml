@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/bground">
 
-    <!--<com.ogaclejapan.smarttablayout.SmartTabLayout
+    <com.ogaclejapan.smarttablayout.SmartTabLayout
         android:id="@+id/tab_view_pager_fav"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -20,7 +20,7 @@
         app:stl_indicatorInterpolation="smart"
         app:stl_indicatorThickness="1dp"
         app:stl_overlineThickness="0dp"
-        app:stl_underlineThickness="0dp" />-->
+        app:stl_underlineThickness="0dp" />
     
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_fav"

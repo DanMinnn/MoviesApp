@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.movieapi.movie.R;
-import com.movieapi.movie.adapter.CommentAdapter;
+import com.movieapi.movie.adapter.movies.CommentMovieAdapter;
 import com.movieapi.movie.controller.CommentController;
 import com.movieapi.movie.controller.interfaces.CommentItemListener;
 import com.movieapi.movie.databinding.ActivityViewAllCommentsBinding;
@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ViewAllCommentsActivity extends AppCompatActivity implements CommentItemListener {
+public class ViewAllCommentsMovieActivity extends AppCompatActivity implements CommentItemListener {
     ActivityViewAllCommentsBinding binding;
-    CommentAdapter commentAdapter;
+    CommentMovieAdapter commentAdapter;
     int movieId;
     String idMovie;
     DatabaseReference nodeRoot;
@@ -81,7 +81,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements Commen
                 DataSnapshot dataComments = snapshot.child("comments").child(idMovie);
                 List<CommentModel> commentModels = new ArrayList<>();
 
-                commentAdapter = new CommentAdapter(ViewAllCommentsActivity.this, commentModels, listener);
+                commentAdapter = new CommentMovieAdapter(ViewAllCommentsMovieActivity.this, commentModels, listener);
 
                 for (DataSnapshot valueComment : dataComments.getChildren()){
                     CommentModel commentModel = valueComment.getValue(CommentModel.class);
@@ -94,7 +94,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements Commen
                 }
 
                 commentAdapter.setMovieId(idMovie);
-                binding.commentsRecView.setLayoutManager(new LinearLayoutManager(ViewAllCommentsActivity.this, LinearLayoutManager.VERTICAL, false));
+                binding.commentsRecView.setLayoutManager(new LinearLayoutManager(ViewAllCommentsMovieActivity.this, LinearLayoutManager.VERTICAL, false));
                 binding.commentsRecView.setAdapter(commentAdapter);
 
                 if(commentModels.size() > 1){
@@ -124,7 +124,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements Commen
                 idMovie = String.valueOf(movieId);
 
                 if (contentCmt.trim().length() == 0){
-                    Toast.makeText(ViewAllCommentsActivity.this, "Please add your comments", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ViewAllCommentsMovieActivity.this, "Please add your comments", Toast.LENGTH_SHORT).show();
                 }
 
                 CommentModel commentModel = new CommentModel();
@@ -134,7 +134,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements Commen
 
                 commentController.InsertComment(idMovie, commentModel);
 
-                Toast.makeText(ViewAllCommentsActivity.this, "Comment success !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewAllCommentsMovieActivity.this, "Comment success !", Toast.LENGTH_SHORT).show();
 
                 binding.edAddComment.setText("");
             }
@@ -159,7 +159,7 @@ public class ViewAllCommentsActivity extends AppCompatActivity implements Commen
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.mnReportCmt){
-            Toast.makeText(ViewAllCommentsActivity.this, "Reported ! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ViewAllCommentsMovieActivity.this, "Reported ! ", Toast.LENGTH_SHORT).show();
             commentController.reportComments(reportCommentModel);
         }
         return super.onContextItemSelected(item);

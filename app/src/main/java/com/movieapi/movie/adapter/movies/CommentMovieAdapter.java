@@ -1,4 +1,4 @@
-package com.movieapi.movie.adapter;
+package com.movieapi.movie.adapter.movies;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,7 +30,7 @@ import com.movieapi.movie.model.member.ReportCommentModel;
 
 import java.util.List;
 
-public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentHolder> {
+public class CommentMovieAdapter extends RecyclerView.Adapter<CommentMovieAdapter.CommentHolder> {
     Context context;
     List<CommentModel> commentModelList;
     private String movieId;
@@ -44,7 +44,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         notifyDataSetChanged();
     }
 
-    public CommentAdapter(Context context, List<CommentModel> commentModelList, CommentItemListener listener) {
+    public CommentMovieAdapter(Context context, List<CommentModel> commentModelList, CommentItemListener listener) {
         this.context = context;
         this.commentModelList = commentModelList;
         this.listener =  listener;
@@ -52,12 +52,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
     @NonNull
     @Override
-    public CommentAdapter.CommentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CommentMovieAdapter.CommentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new CommentHolder(LayoutInflater.from(context).inflate(R.layout.item_comments, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentAdapter.CommentHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CommentMovieAdapter.CommentHolder holder, int position) {
         commentController = new CommentController();
 
         CommentModel commentModel = commentModelList.get(position);

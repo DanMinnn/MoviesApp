@@ -23,8 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.movies.MovieDetailsActivity;
-import com.movieapi.movie.activity.movies.ViewAllCommentsActivity;
-import com.movieapi.movie.adapter.CommentAdapter;
+import com.movieapi.movie.activity.movies.ViewAllCommentsMovieActivity;
+import com.movieapi.movie.adapter.movies.CommentMovieAdapter;
 import com.movieapi.movie.controller.CommentController;
 import com.movieapi.movie.controller.interfaces.CommentItemListener;
 import com.movieapi.movie.databinding.FragmentCommentsBinding;
@@ -43,7 +43,7 @@ public class CommentsMoviesFragment extends Fragment implements CommentItemListe
     SharedPreferences prefUser;
     String idUser;
     CommentController commentController;
-    CommentAdapter commentAdapter;
+    CommentMovieAdapter commentAdapter;
     String idMovie;
     DatabaseReference nodeRoot;
     ValueEventListener valueEventListener;
@@ -86,7 +86,7 @@ public class CommentsMoviesFragment extends Fragment implements CommentItemListe
         binding.seeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iViewAllComments = new Intent(getContext(), ViewAllCommentsActivity.class);
+                Intent iViewAllComments = new Intent(getContext(), ViewAllCommentsMovieActivity.class);
                 iViewAllComments.putExtra("movieId", movieId);
                 startActivity(iViewAllComments);
             }
@@ -128,7 +128,7 @@ public class CommentsMoviesFragment extends Fragment implements CommentItemListe
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 DataSnapshot dataComments = snapshot.child("comments").child(idMovie);
                 List<CommentModel> commentModels = new ArrayList<>();
-                commentAdapter = new CommentAdapter(getContext(), commentModels, commentItemListener);
+                commentAdapter = new CommentMovieAdapter(getContext(), commentModels, commentItemListener);
 
                 commentModels.clear();
 

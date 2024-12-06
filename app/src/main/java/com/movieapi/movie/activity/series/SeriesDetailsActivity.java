@@ -249,7 +249,7 @@ public class SeriesDetailsActivity extends AppCompatActivity {
                 }else
                     binding.seriesDetailsStorylineContent.setText("");
 
-                setFavourite(response.body().getId(), response.body().getPosterPath(), response.body().getName(), favSeries);
+                setFavourite(response.body().getId(), response.body().getPosterPath(), response.body().getName(), response.body().getVoteAverage(), favSeries);
                 setYear(response.body().getFirstAirDate());
                 setGenres(response.body().getGenres());
                 setSeasons(response.body().getNumberOfSeasons());
@@ -277,8 +277,8 @@ public class SeriesDetailsActivity extends AppCompatActivity {
     }
 
 
-    private void setFavourite(final Integer seriesId, final String posterPath, final String seriesName, final FavSeries favSeries) {
-        if (DatabaseHelper.isFavMovie(SeriesDetailsActivity.this, seriesId, userId)) {
+    private void setFavourite(final Integer seriesId, final String posterPath, final String seriesName, final Double vote, final FavSeries favSeries) {
+        if (DatabaseHelper.isFavSeries(SeriesDetailsActivity.this, seriesId, userId)) {
             binding.seriesDetailsFavouriteBtn.setTag(Constants.TAG_FAV);
             binding.seriesDetailsFavouriteBtn.setImageResource(R.drawable.ic_favourite_filled);
             binding.seriesDetailsFavouriteBtn.setColorFilter(Color.argb(1, 236, 116, 85));
@@ -291,11 +291,11 @@ public class SeriesDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                class SaveMovie extends AsyncTask<Void, Void, Void> {
+                class SaveSeries extends AsyncTask<Void, Void, Void> {
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        FavSeries favSeries = new FavSeries(userId, seriesId, posterPath, seriesName);
+                        FavSeries favSeries = new FavSeries(userId, seriesId, posterPath, seriesName, vote);
                         SeriesDatabase.getInstance(getApplicationContext())
                                 .seriesDao()
                                 .insertMovie(favSeries);
@@ -304,7 +304,7 @@ public class SeriesDetailsActivity extends AppCompatActivity {
                     }
                 }
 
-                class DeleteMovie extends AsyncTask<Void, Void, Void>{
+                class DeleteSeries extends AsyncTask<Void, Void, Void>{
 
                     @Override
                     protected Void doInBackground(Void... voids) {
@@ -320,14 +320,14 @@ public class SeriesDetailsActivity extends AppCompatActivity {
                 if ((int) binding.seriesDetailsFavouriteBtn.getTag() == Constants.TAG_FAV) {
                     binding.seriesDetailsFavouriteBtn.setTag(Constants.TAG_NOT_FAV);
                     binding.seriesDetailsFavouriteBtn.setImageResource(R.drawable.ic_favourite_outlined);
-                    DeleteMovie deleteMovie = new DeleteMovie();
-                    deleteMovie.execute();
+                    DeleteSeries deleteSeries = new DeleteSeries();
+                    deleteSeries.execute();
                 } else {
                     binding.seriesDetailsFavouriteBtn.setTag(Constants.TAG_FAV);
                     binding.seriesDetailsFavouriteBtn.setImageResource(R.drawable.ic_favourite_filled);
                     binding.seriesDetailsFavouriteBtn.setColorFilter(Color.argb(1, 236, 116, 85));
-                    SaveMovie saveMovie = new SaveMovie();
-                    saveMovie.execute();
+                    SaveSeries saveSeries = new SaveSeries();
+                    saveSeries.execute();
                 }
             }
         });

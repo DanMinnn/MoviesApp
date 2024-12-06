@@ -45,7 +45,7 @@
         </provider>
 
         <activity
-            android:name=".activity.movies.ViewAllCommentsActivity"
+            android:name=".activity.movies.ViewAllCommentsMovieActivity"
             android:exported="false" />
         <activity
             android:name=".activity.SplashScreenActivity"
@@ -89,7 +89,11 @@
 
         <activity android:name=".activity.series.SeriesStreamActivity"
             android:exported="true"/>
+
         <activity android:name=".activity.series.SeriesDetailsActivity"
+            android:exported="true"/>
+
+        <activity android:name=".activity.series.ViewAllCommentsSeriesActivity"
             android:exported="true"/>
     </application>
 

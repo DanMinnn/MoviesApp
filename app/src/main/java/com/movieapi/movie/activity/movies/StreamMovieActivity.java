@@ -41,8 +41,8 @@ public class StreamMovieActivity extends AppCompatActivity {
 
         binding.webView.setWebViewClient(new AdBlockingWebViewClient());
         binding.webView.setWebChromeClient(new ChromeClient());
-        binding.webView.getSettings().setJavaScriptEnabled(true);
-        binding.webView.getSettings().setDomStorageEnabled(true);
+        binding.webView.getSettings().setJavaScriptEnabled(false);
+        binding.webView.getSettings().setDomStorageEnabled(false);
         binding.webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

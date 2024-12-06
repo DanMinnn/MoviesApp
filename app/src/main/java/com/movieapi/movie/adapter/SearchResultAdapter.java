@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
+import com.movieapi.movie.activity.CastActivity;
 import com.movieapi.movie.activity.movies.MovieDetailsActivity;
+import com.movieapi.movie.activity.series.SeriesDetailsActivity;
 import com.movieapi.movie.model.search.SearchResult;
 import com.movieapi.movie.utils.Constants;
 
@@ -52,6 +54,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
             if (searchResults.get(position).getVoteAverage() != 0)
                 holder.txtVoteAverage.setText(String.format("%.1f", searchResults.get(position).getVoteAverage()));
+
 
         /*if (searchResults.get(position).getName() != null && !searchResults.get(position).getName().trim().isEmpty())
             holder.name.setText(searchResults.get(position).getName());
@@ -113,10 +116,19 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             cardViewResutlSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent iMovieDetails = new Intent(context, MovieDetailsActivity.class);
-                    iMovieDetails.putExtra("movie_id", searchResults.get(getAdapterPosition()).getId());
-                    Log.d("movieId_Search", searchResults.get(getAdapterPosition()).getId() + "");
-                    context.startActivity(iMovieDetails);
+                    if (searchResults.get(getAdapterPosition()).getMediaType().equals("movie")){
+                        Intent iMovieDetails = new Intent(context, MovieDetailsActivity.class);
+                        iMovieDetails.putExtra("movie_id", searchResults.get(getAdapterPosition()).getId());
+                        context.startActivity(iMovieDetails);
+                    } else if (searchResults.get(getAdapterPosition()).getMediaType().equals("tv")) {
+                        Intent iSeriesDetail = new Intent(context, SeriesDetailsActivity.class);
+                        iSeriesDetail.putExtra("series_id", searchResults.get(getAdapterPosition()).getId());
+                        context.startActivity(iSeriesDetail);
+                    } else if (searchResults.get(getAdapterPosition()).getMediaType().equals("person")) {
+                        Intent iCastDetail = new Intent(context, CastActivity.class);
+                        iCastDetail.putExtra("person_id", searchResults.get(getAdapterPosition()).getId());
+                        context.startActivity(iCastDetail);
+                    }
                 }
             });
         }

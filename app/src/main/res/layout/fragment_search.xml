@@ -1,52 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/bground">
 
-    <EditText
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/custom_input"
-        android:hint="Search"
-        android:textColorHint="@color/grey"
-        android:inputType="textPersonName"
-        android:padding="16dp"
-        android:drawableLeft="@drawable/ic_search"
-        android:drawablePadding="12dp"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/sort_filter_fab"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        >
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/sort_filter_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:src="@drawable/sort_filter_ic"
-        app:backgroundTint="#351C28"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="@+id/searchView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/searchView"
-        app:tint="@color/light_red" />
+        <EditText
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/custom_input"
+            android:hint="Search"
+            android:textColorHint="@color/grey"
+            android:inputType="textPersonName"
+            android:padding="16dp"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="12dp"
+            android:textColor="@color/white"
+            android:layout_weight="9"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="4dp"
+            android:clickable="true"
+            android:src="@drawable/ic_search"
+            app:backgroundTint="#351C28"
+            app:fabSize="mini"
+            app:tint="@color/light_red" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/sort_filter_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="4dp"
+            android:clickable="true"
+            android:src="@drawable/sort_filter_ic"
+            app:backgroundTint="#351C28"
+            app:fabSize="mini"
+            app:tint="@color/light_red" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/filter_recView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView"/>
+        android:visibility="gone"/>
 
 
     <TextView
@@ -59,19 +75,21 @@
         android:text="Recent"
         android:textColor="@color/white"
         android:textSize="17dp"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_recView" />
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recView_recents"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:overScrollMode="never"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filter_genre_movie_recView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:visibility="visible"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_recents_textView" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:overScrollMode="never"/>
+</LinearLayout>

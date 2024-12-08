@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +25,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,28 +35,47 @@ import com.movieapi.movie.R;
 import com.movieapi.movie.activity.SearchResultActivity;
 import com.movieapi.movie.adapter.FilterAdapter;
 import com.movieapi.movie.adapter.RecentSearchAdapter;
+import com.movieapi.movie.adapter.movies.MovieBriefSmallAdapter;
 import com.movieapi.movie.database.DatabaseHelper;
 import com.movieapi.movie.database.search.RecentSearch;
 import com.movieapi.movie.database.search.SearchDatabase;
 import com.movieapi.movie.model.ButtonItem;
+import com.movieapi.movie.model.ShareButtonList;
+import com.movieapi.movie.model.movie.GenreMoviesResponse;
+import com.movieapi.movie.model.movie.MovieBrief;
+import com.movieapi.movie.request.ApiClient;
+import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchFragment extends Fragment{
     EditText edSearchView;
-    FloatingActionButton fabSearch;
+    FloatingActionButton fabFilter, fabSearch;
     TextView searchRecent;
-    RecyclerView recentSearchRecView, filterRecView;
+    RecyclerView recentSearchRecView, filterRecView, filter_genre_movie_recView;
     FilterAdapter adapter;
     private List<ButtonItem> buttonItemList;
     String query;
     SharedPreferences prefUser;
     private String userId;
+    List<MovieBrief> filterMoviesList;
+    MovieBriefSmallAdapter filterMoviesAdapter;
+    Call<GenreMoviesResponse> mGenreMoviesResponse;
+    boolean pagesOver = false;
+    int presentPage = 1;
+    ShareButtonList shareButtonList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,13 +87,14 @@ public class SearchFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         edSearchView = view.findViewById(R.id.searchView);
-        fabSearch = view.findViewById(R.id.sort_filter_fab);
+        fabFilter = view.findViewById(R.id.sort_filter_fab);
+        fabSearch = view.findViewById(R.id.search_fab);
         searchRecent = view.findViewById(R.id.search_recents_textView);
         recentSearchRecView = view.findViewById(R.id.search_recView_recents);
         filterRecView = view.findViewById(R.id.filter_recView);
+        filter_genre_movie_recView = view.findViewById(R.id.filter_genre_movie_recView);
 
         buttonItemList = new ArrayList<>();
-
         prefUser = getActivity().getApplicationContext().getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
         userId = prefUser.getString("idUser", "");
 
@@ -87,10 +110,15 @@ public class SearchFragment extends Fragment{
                 recentSearchRecView.setAdapter(recentSearchAdapter);
                 recentSearchRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                if (recentSearches.isEmpty())
-                    searchRecent.setVisibility(View.INVISIBLE);
-                else
+                if (recentSearches.isEmpty()){
+                    searchRecent.setVisibility(View.GONE);
+                    recentSearchRecView.setVisibility(View.GONE);
+                }
+                else{
                     searchRecent.setVisibility(View.VISIBLE);
+                    recentSearchRecView.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
@@ -118,18 +146,19 @@ public class SearchFragment extends Fragment{
 
                 Intent iSearchResult = new Intent(getActivity(), SearchResultActivity.class);
                 iSearchResult.putExtra("query", query);
-                iSearchResult.putExtra("filterFilm", (Serializable) buttonItemList);
+                //iSearchResult.putExtra("filterFilm", (Serializable) buttonItemList);
                 startActivity(iSearchResult);
             }
         });
 
-        fabSearch.setOnLongClickListener(new View.OnLongClickListener() {
+        fabFilter.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 eventSortFilter();
-                return false;
             }
         });
+
+        shareButtonList = new ViewModelProvider(requireActivity()).get(ShareButtonList.class);
     }
 
     private void eventSortFilter(){
@@ -150,19 +179,15 @@ public class SearchFragment extends Fragment{
     }
 
     private void findViewById(Dialog dialog){
-        LinearLayout lnCate, lnRegions, lnGenre, lnTime,lnSort;
+        LinearLayout lnRegions, lnGenre, lnTime;
         Button btnReset, btnApply;
 
-        lnCate = dialog.findViewById(R.id.lnCategories);
-        for (int i = 0; i < lnCate.getChildCount(); i++){
-            View child = lnCate.getChildAt(i);
-            if (child instanceof Button){
-                Button button = (Button) child;
-                setToggleOnTouchListener(button);
-            }
-        }
-
         lnRegions = dialog.findViewById(R.id.lnRegions);
+        lnGenre = dialog.findViewById(R.id.lnGenre);
+        lnTime = dialog.findViewById(R.id.lnTime);
+
+        //buttonItemList.clear();
+
         for (int i = 0; i < lnRegions.getChildCount(); i++){
             View child = lnRegions.getChildAt(i);
             if (child instanceof Button){
@@ -171,7 +196,6 @@ public class SearchFragment extends Fragment{
             }
         }
 
-        lnGenre = dialog.findViewById(R.id.lnGenre);
         for (int i = 0; i < lnGenre.getChildCount(); i++){
             View child = lnGenre.getChildAt(i);
             if (child instanceof Button){
@@ -180,7 +204,7 @@ public class SearchFragment extends Fragment{
             }
         }
 
-        lnTime = dialog.findViewById(R.id.lnTime);
+
         for (int i = 0; i < lnTime.getChildCount(); i++){
             View child = lnTime.getChildAt(i);
             if (child instanceof Button){
@@ -189,29 +213,20 @@ public class SearchFragment extends Fragment{
             }
         }
 
-        /*lnSort = dialog.findViewById(R.id.lnSort);
-        for (int i = 0; i < lnSort.getChildCount(); i++){
-            View child = lnSort.getChildAt(i);
-            if (child instanceof Button){
-                Button button = (Button) child;
-                setToggleOnTouchListener(button);
-            }
-        }*/
-
         btnReset = dialog.findViewById(R.id.btnReset);
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LinearLayout lnCate, lnRegions, lnGenre, lnTime,lnSort;
 
-                lnCate = dialog.findViewById(R.id.lnCategories);
+                /*lnCate = dialog.findViewById(R.id.lnCategories);
                 for (int i = 0; i < lnCate.getChildCount(); i++){
                     View child = lnCate.getChildAt(i);
                     if (child instanceof Button){
                         Button button = (Button) child;
                         button.setPressed(false);
                     }
-                }
+                }*/
 
                 lnRegions = dialog.findViewById(R.id.lnRegions);
                 for (int i = 0; i < lnRegions.getChildCount(); i++){
@@ -256,6 +271,7 @@ public class SearchFragment extends Fragment{
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 adapter = new FilterAdapter(getContext(), buttonItemList);
                 filterRecView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
                 filterRecView.setAdapter(adapter);
@@ -263,6 +279,78 @@ public class SearchFragment extends Fragment{
 
                 filterRecView.setVisibility(View.VISIBLE);
                 dialog.dismiss();
+
+                CallApiGenres();
+
+            }
+        });
+    }
+
+    private void CallApiGenres(){
+
+        String region = "";
+
+        Map<String, String> regionMap = new HashMap<String, String>() {{
+            put("Viet Nam", "vi");
+            put("US", "en");
+            put("South Korean", "ko");
+            put("Japan", "ja");
+            put("Hong Kong", "zh");
+            put("France", "fr");
+        }};
+
+        Integer year = null;
+        List<Integer> genreNumbers = new ArrayList<>();
+
+        for (ButtonItem btn: buttonItemList){
+
+            String btnText = btn.getButtonText().toString();
+
+            if (regionMap.containsKey(btnText))
+                region = btn.getRegion();
+            else if (btnText.matches("\\d{4}")) {
+                year = Integer.parseInt(btnText);
+            } else if (btn.getIdGenre() != 0) {
+                genreNumbers.add(btn.getIdGenre());
+            }
+        }
+
+        Log.d("year - region - genres: ",  year + "-" + region + "-" + genreNumbers);
+
+        filterMoviesList = new ArrayList<>();
+        filterMoviesAdapter = new MovieBriefSmallAdapter(filterMoviesList, getContext());
+        filter_genre_movie_recView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        filter_genre_movie_recView.setAdapter(filterMoviesAdapter);
+
+        ApiInterface apiService = ApiClient.getMovieApi();
+        mGenreMoviesResponse = apiService.getMoviesByGenre(Constants.API_KEY, region, year, genreNumbers, presentPage);
+        mGenreMoviesResponse.enqueue(new Callback<GenreMoviesResponse>() {
+            @Override
+            public void onResponse(Call<GenreMoviesResponse> call, Response<GenreMoviesResponse> response) {
+                if (!response.isSuccessful()){
+                    mGenreMoviesResponse = call.clone();
+                    mGenreMoviesResponse.enqueue(this);
+                    return;
+                }
+
+                if (response.body() == null) return;
+                if (response.body().getResults() == null) return;
+
+                for (MovieBrief movieBrief : response.body().getResults()){
+                    if (movieBrief != null && movieBrief.getTitle() != null && movieBrief.getPosterPath() != null)
+                        filterMoviesList.add(movieBrief);
+                }
+
+                filterMoviesAdapter.notifyDataSetChanged();
+                if (response.body().getPage() == response.body().getTotalPages())
+                    pagesOver = true;
+                else
+                    presentPage++;
+            }
+
+            @Override
+            public void onFailure(Call<GenreMoviesResponse> call, Throwable t) {
+
             }
         });
     }
@@ -410,20 +498,20 @@ public class SearchFragment extends Fragment{
 
     private void setRegion(String region, ButtonItem buttonItem){
         switch (region){
+            case "Viet Nam":
+                buttonItem.setRegion("vi");
+                break;
             case "US":
                 buttonItem.setRegion("en");
-                break;
-            case "South Korea":
-                buttonItem.setRegion("kr");
                 break;
             case "Hong Kong":
                 buttonItem.setRegion("zh");
                 break;
             case "Japan":
-                buttonItem.setRegion("jp");
+                buttonItem.setRegion("ja");
                 break;
-            case "France":
-                buttonItem.setRegion("fr");
+            case "South Korea":
+                buttonItem.setRegion("ko");
                 break;
             default:
                 break;

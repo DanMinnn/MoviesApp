@@ -169,7 +169,7 @@ public class ViewAllMoviesActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            default:
+            /*default:
                 mGenreMoviesResponse = apiService.getMoviesByGenre(Constants.API_KEY, movieType, presentPage);
                 mGenreMoviesResponse.enqueue(new Callback<GenreMoviesResponse>() {
                     @Override
@@ -199,7 +199,7 @@ public class ViewAllMoviesActivity extends AppCompatActivity {
                     public void onFailure(Call<GenreMoviesResponse> call, Throwable t) {
 
                     }
-                });
+                });*/
         }
     }
 

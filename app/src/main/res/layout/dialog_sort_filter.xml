@@ -32,7 +32,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"/>
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Categories"
@@ -97,7 +97,7 @@
                 android:background="@drawable/custom_btn_sort_filter"
                 android:layout_marginRight="15dp"/>
         </LinearLayout>
-    </HorizontalScrollView>
+    </HorizontalScrollView>-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -129,6 +129,16 @@
                 android:layout_width="100dp"
                 android:layout_height="37dp"
                 android:text="All Regions"
+                android:textColor="@drawable/change_text_color_sort"
+                android:textAllCaps="false"
+                android:background="@drawable/custom_btn_sort_filter"
+                android:layout_marginRight="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_Vi"
+                android:layout_width="100dp"
+                android:layout_height="37dp"
+                android:text="Viet Nam"
                 android:textColor="@drawable/change_text_color_sort"
                 android:textAllCaps="false"
                 android:background="@drawable/custom_btn_sort_filter"

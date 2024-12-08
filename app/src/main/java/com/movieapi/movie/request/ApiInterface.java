@@ -20,6 +20,8 @@ import com.movieapi.movie.model.series.SimilarSeriesResponse;
 import com.movieapi.movie.model.series.TopRatedSeriesResponse;
 import com.movieapi.movie.model.videos.TrailerResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -45,7 +47,7 @@ public interface ApiInterface {
     Call<SimilarMovieResponse> getSimilarMovie(@Path("id") Integer movieId, @Query("api_key") String apiKey, @Query("page") Integer page);
 
     @GET("discover/movie")
-    Call<GenreMoviesResponse> getMoviesByGenre(@Query("api_key") String apiKey, @Query("with_genres") Integer genreNumber, @Query("page") Integer page);
+    Call<GenreMoviesResponse> getMoviesByGenre(@Query("api_key") String apiKey, @Query ("with_original_language") String region, @Query("primary_release_year") Integer year, @Query("with_genres") List<Integer> genreNumber, @Query("page") Integer page);
 
     //Cast
     @GET("person/{person_id}")

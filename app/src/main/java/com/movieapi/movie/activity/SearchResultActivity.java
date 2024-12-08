@@ -60,7 +60,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
         Intent receiveIntent = getIntent();
         query = receiveIntent.getStringExtra("query");
-        buttonItemList = (List<ButtonItem>) receiveIntent.getSerializableExtra("filterFilm");
+        //buttonItemList = (List<ButtonItem>) receiveIntent.getSerializableExtra("filterFilm");
 
         if (query == null || query.trim().isEmpty()) finish();
         setTitle(query.trim());
@@ -124,14 +124,18 @@ public class SearchResultActivity extends AppCompatActivity {
                         searchResultList.add(searchResult);
                 }
 
-                if (buttonItemList != null){
+                searchResultAdapter.updateSearchResults(searchResultList);
+                searchResultAdapter.notifyDataSetChanged();
+
+                /*if (buttonItemList != null){
                     filterRes = filterResult(searchResultList, buttonItemList);
                     searchResultAdapter.updateSearchResults(filterRes);
                     searchResultAdapter.notifyDataSetChanged();
                 }else{
                     searchResultAdapter.updateSearchResults(searchResultList);
                     searchResultAdapter.notifyDataSetChanged();
-                }
+                }*/
+
                 if (filterRes.isEmpty())
                     binding.lnNotFound.setVisibility(View.VISIBLE);
 
@@ -149,8 +153,6 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     public List<SearchResult> filterResult(List<SearchResult> allRes, List<ButtonItem> filters){
-        
-        boolean hasActiveFilters = filters.stream().anyMatch(ButtonItem::isSelected);
 
         return allRes.stream()
                 .filter(result -> {

@@ -1,5 +1,9 @@
 package com.movieapi.movie.request;
 
+import com.movieapi.movie.model.RatingBody;
+import com.movieapi.movie.model.SessionResponse;
+import com.movieapi.movie.model.TokenBody;
+import com.movieapi.movie.model.TokenResponse;
 import com.movieapi.movie.model.cast.Person;
 import com.movieapi.movie.model.movie.GenreMoviesResponse;
 import com.movieapi.movie.model.movie.Movie;
@@ -22,18 +26,24 @@ import com.movieapi.movie.model.videos.TrailerResponse;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
     @GET("movie/now_playing")
     Call<NowShowingMoviesResponse> getNowShowingMovies(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("region") String region);
+
     @GET("movie/popular")
     Call<PopularMoviesResponse> getPopularMovies(@Query("api_key") String api_Key, @Query("page") int page);
+
     @GET("movie/top_rated")
     Call<TopRatedMoviesResponse> getTopRatedMovies(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("region") String region);
+
     @GET("movie/{movie_id}")
     Call<Movie> getMovieDetails(@Path("movie_id") Integer movieId, @Query("api_key") String apiKey);
 
@@ -47,7 +57,7 @@ public interface ApiInterface {
     Call<SimilarMovieResponse> getSimilarMovie(@Path("id") Integer movieId, @Query("api_key") String apiKey, @Query("page") Integer page);
 
     @GET("discover/movie")
-    Call<GenreMoviesResponse> getMoviesByGenre(@Query("api_key") String apiKey, @Query ("with_original_language") String region, @Query("primary_release_year") Integer year, @Query("with_genres") List<Integer> genreNumber, @Query("page") Integer page);
+    Call<GenreMoviesResponse> getMoviesByGenre(@Query("api_key") String apiKey, @Query("with_original_language") String region, @Query("primary_release_year") Integer year, @Query("with_genres") List<Integer> genreNumber, @Query("page") Integer page);
 
     //Cast
     @GET("person/{person_id}")
@@ -86,4 +96,16 @@ public interface ApiInterface {
 
     @GET("tv/{id}/season/{season}")
     Call<SeasonDetailsResponse> getSeasonDetails(@Path("id") Integer id, @Path("season") Integer season_number, @Query("api_key") String apiKey);
+
+    @POST("movie/{movie_id}/rating")
+    Call<Void> addRating(@Path("movie_id") int movieId,
+                         @Query("api_key") String apiKey,
+                         @Query("session_id") String sessionId,
+                         @Body RequestBody rating);
+
+    @GET("authentication/token/new")
+    Call<TokenResponse> getRequestToken(@Query("api_key") String apiKey);
+
+    @POST("authentication/session/new")
+    Call<SessionResponse> createSession(@Query("api_key") String apiKey, @Body RequestBody body);
 }

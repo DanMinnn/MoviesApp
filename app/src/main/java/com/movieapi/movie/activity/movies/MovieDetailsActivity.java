@@ -1,5 +1,7 @@
 package com.movieapi.movie.activity.movies;
 
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,9 +18,12 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +32,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.gson.JsonObject;
 import com.movieapi.movie.fragment.movies.PagerMoviesAdapter;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.CastAdapter;
@@ -34,6 +40,10 @@ import com.movieapi.movie.database.DatabaseHelper;
 import com.movieapi.movie.database.movies.FavMovie;
 import com.movieapi.movie.database.movies.MovieDatabase;
 import com.movieapi.movie.databinding.ActivityMovieDetailsBinding;
+import com.movieapi.movie.model.RatingBody;
+import com.movieapi.movie.model.SessionResponse;
+import com.movieapi.movie.model.TokenBody;
+import com.movieapi.movie.model.TokenResponse;
 import com.movieapi.movie.model.movie.Genre;
 import com.movieapi.movie.model.movie.Movie;
 import com.movieapi.movie.model.movie.MovieCastBrief;
@@ -42,12 +52,15 @@ import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +73,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     CastAdapter castAdapter;
     Call<Movie> mMovieDetailsCall;
     Call<MovieCreditsResponse> mMovieCreditsResponseCall;
-    SharedPreferences prefUser;
+    SharedPreferences prefUser, token;
     String userId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,85 +123,137 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
 
-        binding.imvShare.setOnClickListener(new View.OnClickListener() {
+        binding.imvRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Dialog dialog = new Dialog(MovieDetailsActivity.this);
                 dialog.setCanceledOnTouchOutside(true);
-                dialog.setContentView(R.layout.dialog_share);
+                dialog.setContentView(R.layout.dialog_rating);
 
-                View cancel = dialog.findViewById(R.id.cancelDialog);
 
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                ImageView ins, fb, x, tiktok;
-
-                ins = dialog.findViewById(R.id.imv_ins);
-                ins.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String profilePath = "https://www.instagram.com/";
-                        String installPackageName = "com.instagram.android";
-                        toAnotherAppOpen(profilePath, installPackageName);
-                        /*File img = new File("/storage/emulated/0/Download/pho.jpg");
-                        if(img.exists()){
-                            Uri imageUri = FileProvider.getUriForFile(
-                                    MovieDetailsActivity.this,
-                                    "com.movieapi.movie.fileprovider",
-                                    img
-                            );
-                            shareToIns(imageUri);
-                        }*/
-
-                    }
-                });
-
-                fb = dialog.findViewById(R.id.imv_fb);
-                fb.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String profilePath = "https://www.facebook.com/";
-                        String installPackageName = "com.facebook.katana";
-                        toAnotherAppOpen(profilePath, installPackageName);
-                    }
-                });
-
-                x = dialog.findViewById(R.id.imv_x);
-                x.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String profilePath = "https://www.twitter.com/";
-                        String installPackageName = "com.twitter.android";
-                        toAnotherAppOpen(profilePath, installPackageName);
-                    }
-                });
-
-                tiktok = dialog.findViewById(R.id.imv_tiktok);
-                tiktok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String profilePath = "https://www.tiktok.com/";
-                        String installPackageName = "com.aweme.opensdk.action.stay.in.dy";
-                        toAnotherAppOpen(profilePath, installPackageName);
-                    }
-                });
+                findViewById(dialog);
 
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                dialog.getWindow().setGravity(Gravity.BOTTOM);
+                dialog.getWindow().setGravity(Gravity.CENTER);
                 dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 dialog.show();
             }
         });
+
+        binding.imvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareOnSocial();
+            }
+        });
     }
 
+    private void findViewById(Dialog dialog){
+        LinearLayout lnRatingBar;
+        lnRatingBar = dialog.findViewById(R.id.lnRatingBar);
+
+        for (int i = 0; i < lnRatingBar.getChildCount(); i++) {
+            final int starIndex = i + 1; // 1-based index
+            lnRatingBar.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    updateRating(lnRatingBar, starIndex);
+                }
+            });
+        }
+    }
+
+
+    private void updateRating(LinearLayout ratingLayout, int selectedRating) {
+        for (int i = 0; i < ratingLayout.getChildCount(); i++) {
+            ImageView star = (ImageView) ratingLayout.getChildAt(i);
+            if (i < selectedRating) {
+                star.setImageResource(R.drawable.ic_filled_star); // Highlighted star
+            } else {
+                star.setImageResource(R.drawable.ic_outline_star); // Unselected star
+            }
+        }
+    }
+
+
+    private void shareOnSocial(){
+
+        Dialog dialog = new Dialog(MovieDetailsActivity.this);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setContentView(R.layout.dialog_share);
+
+        View cancel = dialog.findViewById(R.id.cancelDialog);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        ImageView ins, fb, x, tiktok;
+
+        ins = dialog.findViewById(R.id.imv_ins);
+        ins.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String profilePath = "https://www.instagram.com/";
+                String installPackageName = "com.instagram.android";
+                toAnotherAppOpen(profilePath, installPackageName);
+                        /*File img = new File("/storage/emulated/0/Download/pho.jpg");
+                if(img.exists()){
+                    Uri imageUri = FileProvider.getUriForFile(
+                            MovieDetailsActivity.this,
+                            "com.movieapi.movie.fileprovider",
+                            img
+                    );
+                    shareToIns(imageUri);
+                }*/
+
+            }
+        });
+
+        fb = dialog.findViewById(R.id.imv_fb);
+        fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String profilePath = "https://www.facebook.com/";
+                String installPackageName = "com.facebook.katana";
+                toAnotherAppOpen(profilePath, installPackageName);
+            }
+        });
+
+        x = dialog.findViewById(R.id.imv_x);
+        x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String profilePath = "https://www.twitter.com/";
+                String installPackageName = "com.twitter.android";
+                toAnotherAppOpen(profilePath, installPackageName);
+            }
+        });
+
+        tiktok = dialog.findViewById(R.id.imv_tiktok);
+        tiktok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String profilePath = "https://www.tiktok.com/";
+                String installPackageName = "com.aweme.opensdk.action.stay.in.dy";
+                toAnotherAppOpen(profilePath, installPackageName);
+            }
+        });
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog.show();
+    }
     private void toAnotherAppOpen(String profilePath, String installPackageName) {
         String uri = String.valueOf(Uri.parse(profilePath));
         try {

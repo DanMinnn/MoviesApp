@@ -16,6 +16,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.movieapi.movie.R;
+import com.movieapi.movie.activity.movies.MovieDetailsActivity;
 import com.movieapi.movie.adapter.series.SeriesCastAdapter;
 import com.movieapi.movie.controller.SharedViewModel;
 import com.movieapi.movie.database.DatabaseHelper;
@@ -121,6 +123,52 @@ public class SeriesDetailsActivity extends AppCompatActivity {
                 share();
             }
         });
+
+        binding.imvRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(SeriesDetailsActivity.this);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setContentView(R.layout.dialog_rating);
+
+
+                findViewById(dialog);
+
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                dialog.getWindow().setGravity(Gravity.CENTER);
+                dialog.getWindow().setWindowAnimations(R.style.DialogAnimation);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                dialog.show();
+            }
+        });
+    }
+
+    private void findViewById(Dialog dialog){
+        LinearLayout lnRatingBar;
+        lnRatingBar = dialog.findViewById(R.id.lnRatingBar);
+
+        for (int i = 0; i < lnRatingBar.getChildCount(); i++) {
+            final int starIndex = i + 1; // 1-based index
+            lnRatingBar.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    updateRating(lnRatingBar, starIndex);
+                }
+            });
+        }
+    }
+
+    private void updateRating(LinearLayout ratingLayout, int selectedRating) {
+        for (int i = 0; i < ratingLayout.getChildCount(); i++) {
+            ImageView star = (ImageView) ratingLayout.getChildAt(i);
+            if (i < selectedRating) {
+                star.setImageResource(R.drawable.ic_filled_star); // Highlighted star
+            } else {
+                star.setImageResource(R.drawable.ic_outline_star); // Unselected star
+            }
+        }
     }
 
     public int getSeriesId(){

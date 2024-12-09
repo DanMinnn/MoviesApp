@@ -1,0 +1,169 @@
+
+-------- share on social ------
+        ImageView ins, fb, x, tiktok;
+
+                ins = dialog.findViewById(R.id.imv_ins);
+                ins.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.instagram.com/";
+                        String installPackageName = "com.instagram.android";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                        *//*File img = new File("/storage/emulated/0/Download/pho.jpg");
+                        if(img.exists()){
+                            Uri imageUri = FileProvider.getUriForFile(
+                                    MovieDetailsActivity.this,
+                                    "com.movieapi.movie.fileprovider",
+                                    img
+                            );
+                            shareToIns(imageUri);
+                        }*//*
+
+                    }
+                });
+
+                fb = dialog.findViewById(R.id.imv_fb);
+                fb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.facebook.com/";
+                        String installPackageName = "com.facebook.katana";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                    }
+                });
+
+                x = dialog.findViewById(R.id.imv_x);
+                x.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.twitter.com/";
+                        String installPackageName = "com.twitter.android";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                    }
+                });
+
+                tiktok = dialog.findViewById(R.id.imv_tiktok);
+                tiktok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String profilePath = "https://www.tiktok.com/";
+                        String installPackageName = "com.aweme.opensdk.action.stay.in.dy";
+                        toAnotherAppOpen(profilePath, installPackageName);
+                    }
+                });
+
+------------------ rating ---------------------
+    token = getSharedPreferences("requestToken", MODE_PRIVATE);
+
+private void fetchRequestToken(){
+
+        ApiInterface apiInterface = ApiClient.getMovieApi();
+        apiInterface.getRequestToken(Constants.API_KEY).enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    String requestToken = response.body().request_token;
+
+                    // Yêu cầu người dùng xác thực
+                    String authUrl = "https://www.themoviedb.org/authenticate/" + requestToken;
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl));
+                    startActivity(browserIntent);
+
+                    token.edit().putString("request_token", requestToken).apply();
+                    Log.d("TMDB", "Request Token: " + requestToken);
+                } else {
+                    Log.e("TMDB", "Failed to fetch request token.");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                Log.e("TMDB", "Error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void createSessionId(){
+
+        SharedPreferences getRequestToken = getSharedPreferences("requestToken", MODE_PRIVATE);
+        String requestToken = getRequestToken.getString("request_token", null);
+
+        if (requestToken != null){
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("request_token", requestToken);
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+            //TokenBody tokenBody = new TokenBody(requestToken);
+
+            Log.d("body", body + "");
+
+            ApiInterface apiInterface = ApiClient.getMovieApi();
+            apiInterface.createSession(Constants.API_KEY, body).enqueue(new Callback<SessionResponse>() {
+                @Override
+                public void onResponse(Call<SessionResponse> call, Response<SessionResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+
+                        String sessionId = response.body().session_id;
+                        token.edit().putString("session_id", sessionId).apply();
+
+                        Log.d("Session ID", sessionId);
+                    }else{
+                        try {
+                            // Lấy thông tin chi tiết về lỗi
+                            if (response.errorBody() != null) {
+                                String errorBody = response.errorBody().string();
+                                Log.e("TMDB", "Error: " + errorBody);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Log.e("TMDB", "Error parsing error body.");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SessionResponse> call, Throwable t) {
+                    Log.e("Error", t.getMessage());
+                }
+            });
+        }else
+            Log.e("TMDB", "Request token is null. Cannot create session.");
+
+    }
+
+private void sendRatingToTMDB(float rating) {
+
+        RatingBody ratingBody = new RatingBody(rating);
+
+        SharedPreferences getRequestToken = getSharedPreferences("requestToken", MODE_PRIVATE);
+        String sessionId = getRequestToken.getString("session_id", null);
+
+        if (sessionId == null) {
+            Toast.makeText(this, "Session ID not found. Please authenticate first.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("value", ratingBody.getValue());
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+
+        ApiInterface apiService = ApiClient.getMovieApi();
+        apiService.addRating(movieId, Constants.API_KEY, sessionId, body).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(MovieDetailsActivity.this, "Rating submitted successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    String errorMessage = "Error: " + response.code() + " - " + response.message();
+                    Toast.makeText(MovieDetailsActivity.this, "Failed to submit rating." + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MovieDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }

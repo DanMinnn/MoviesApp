@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.SearchResultActivity;
 import com.movieapi.movie.adapter.FilterAdapter;
@@ -48,6 +50,7 @@ import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -65,7 +68,7 @@ public class SearchFragment extends Fragment{
     TextView searchRecent;
     RecyclerView recentSearchRecView, filterRecView, filter_genre_movie_recView;
     FilterAdapter adapter;
-    private List<ButtonItem> buttonItemList;
+    private List<ButtonItem> buttonItemList, oldDataButtonList;
     String query;
     SharedPreferences prefUser;
     private String userId;
@@ -74,7 +77,7 @@ public class SearchFragment extends Fragment{
     Call<GenreMoviesResponse> mGenreMoviesResponse;
     boolean pagesOver = false;
     int presentPage = 1;
-    ShareButtonList shareButtonList;
+    private ShareButtonList shareButtonList;
 
     @Nullable
     @Override
@@ -95,6 +98,7 @@ public class SearchFragment extends Fragment{
         filter_genre_movie_recView = view.findViewById(R.id.filter_genre_movie_recView);
 
         buttonItemList = new ArrayList<>();
+
         prefUser = getActivity().getApplicationContext().getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
         userId = prefUser.getString("idUser", "");
 
@@ -158,7 +162,6 @@ public class SearchFragment extends Fragment{
             }
         });
 
-        shareButtonList = new ViewModelProvider(requireActivity()).get(ShareButtonList.class);
     }
 
     private void eventSortFilter(){
@@ -178,6 +181,12 @@ public class SearchFragment extends Fragment{
         dialog.show();
     }
 
+    private void setAdapterButtonList(){
+        adapter = new FilterAdapter(getContext(), buttonItemList);
+        filterRecView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        filterRecView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
     private void findViewById(Dialog dialog){
         LinearLayout lnRegions, lnGenre, lnTime;
         Button btnReset, btnApply;
@@ -186,7 +195,7 @@ public class SearchFragment extends Fragment{
         lnGenre = dialog.findViewById(R.id.lnGenre);
         lnTime = dialog.findViewById(R.id.lnTime);
 
-        //buttonItemList.clear();
+        buttonItemList.clear();
 
         for (int i = 0; i < lnRegions.getChildCount(); i++){
             View child = lnRegions.getChildAt(i);
@@ -217,16 +226,7 @@ public class SearchFragment extends Fragment{
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinearLayout lnCate, lnRegions, lnGenre, lnTime,lnSort;
-
-                /*lnCate = dialog.findViewById(R.id.lnCategories);
-                for (int i = 0; i < lnCate.getChildCount(); i++){
-                    View child = lnCate.getChildAt(i);
-                    if (child instanceof Button){
-                        Button button = (Button) child;
-                        button.setPressed(false);
-                    }
-                }*/
+                LinearLayout lnRegions, lnGenre, lnTime;
 
                 lnRegions = dialog.findViewById(R.id.lnRegions);
                 for (int i = 0; i < lnRegions.getChildCount(); i++){
@@ -254,16 +254,6 @@ public class SearchFragment extends Fragment{
                         button.setPressed(false);
                     }
                 }
-
-                /*lnSort = dialog.findViewById(R.id.lnSort);
-                for (int i = 0; i < lnSort.getChildCount(); i++){
-                    View child = lnSort.getChildAt(i);
-                    if (child instanceof Button){
-                        Button button = (Button) child;
-                        button.setPressed(false);
-                    }
-                }*/
-
             }
         });
 
@@ -272,10 +262,7 @@ public class SearchFragment extends Fragment{
             @Override
             public void onClick(View v) {
 
-                adapter = new FilterAdapter(getContext(), buttonItemList);
-                filterRecView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-                filterRecView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                setAdapterButtonList();
 
                 filterRecView.setVisibility(View.VISIBLE);
                 dialog.dismiss();
@@ -385,8 +372,8 @@ public class SearchFragment extends Fragment{
                         setRegion(buttonText, buttonItem);
 
                         buttonItemList.add(buttonItem);
-                    }
 
+                    }
                     button.setPressed(buttonItem.isSelected());
                 }
                 return true;

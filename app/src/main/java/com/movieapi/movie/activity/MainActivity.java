@@ -3,7 +3,11 @@ package com.movieapi.movie.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationBarView;
@@ -14,9 +18,20 @@ import com.movieapi.movie.fragment.SearchFragment;
 import com.movieapi.movie.fragment.series.SeriesFragment;
 import com.movieapi.movie.R;
 import com.movieapi.movie.databinding.ActivityMainBinding;
+import com.movieapi.movie.model.SessionResponse;
+import com.movieapi.movie.model.TokenBody;
+import com.movieapi.movie.model.TokenResponse;
+import com.movieapi.movie.request.ApiClient;
+import com.movieapi.movie.request.ApiInterface;
+import com.movieapi.movie.utils.Constants;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,4 +84,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -55,6 +55,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/white" />
 
+            <ImageView
+                android:id="@+id/imv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/rating"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/movie_details_title"
+                app:layout_constraintTop_toBottomOf="@id/movie_details_imv" />
+
             <TextView
                 android:id="@+id/movie_details_title"
                 android:layout_width="0dp"

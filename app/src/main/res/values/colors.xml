@@ -10,4 +10,5 @@
     <color name="light_red">#e21221</color>
     <color name="deep_red">#c1232f</color>
     <color name="light_gray">#25272d</color>
+    <color name="cancelBtn">#35383f</color>
 </resources>

@@ -1,6 +1,8 @@
 package com.movieapi.movie.request;
 
+import com.movieapi.movie.model.ApiResponse;
 import com.movieapi.movie.model.RatingBody;
+import com.movieapi.movie.model.RequestData;
 import com.movieapi.movie.model.SessionResponse;
 import com.movieapi.movie.model.TokenBody;
 import com.movieapi.movie.model.TokenResponse;
@@ -108,4 +110,6 @@ public interface ApiInterface {
 
     @POST("authentication/session/new")
     Call<SessionResponse> createSession(@Query("api_key") String apiKey, @Body RequestBody body);
+
+
 }

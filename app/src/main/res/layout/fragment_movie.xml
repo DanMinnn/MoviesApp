@@ -25,6 +25,44 @@
                 android:visibility="gone"/>
 
             <LinearLayout
+                android:id="@+id/for_u_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recommend"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/view_for_u"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_all"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/light_red"
+                    android:background="@android:color/transparent"
+                    android:layout_marginRight="20dp"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/for_u_recView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:visibility="gone"/>
+
+            <LinearLayout
                 android:id="@+id/popular_heading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,7 +146,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="280dp"
         android:indeterminateTint="@color/light_red"
         android:visibility="visible"/>
 
@@ -116,7 +154,7 @@
         android:id="@+id/txtErrorNetwork"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:text="Error network"
         android:textSize="20sp"
         android:layout_gravity="center"/>

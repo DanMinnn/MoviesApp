@@ -1,7 +1,5 @@
 package com.movieapi.movie.activity.movies;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -23,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -32,7 +29,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.google.gson.JsonObject;
 import com.movieapi.movie.fragment.movies.PagerMoviesAdapter;
 import com.movieapi.movie.R;
 import com.movieapi.movie.adapter.CastAdapter;
@@ -40,27 +36,25 @@ import com.movieapi.movie.database.DatabaseHelper;
 import com.movieapi.movie.database.movies.FavMovie;
 import com.movieapi.movie.database.movies.MovieDatabase;
 import com.movieapi.movie.databinding.ActivityMovieDetailsBinding;
+import com.movieapi.movie.model.ApiResponse;
 import com.movieapi.movie.model.RatingBody;
-import com.movieapi.movie.model.SessionResponse;
-import com.movieapi.movie.model.TokenBody;
-import com.movieapi.movie.model.TokenResponse;
+import com.movieapi.movie.model.RequestData;
 import com.movieapi.movie.model.movie.Genre;
 import com.movieapi.movie.model.movie.Movie;
 import com.movieapi.movie.model.movie.MovieCastBrief;
 import com.movieapi.movie.model.movie.MovieCreditsResponse;
+import com.movieapi.movie.request.ApiLocal;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
+import com.movieapi.movie.request.ApiServiceLocal;
 import com.movieapi.movie.utils.Constants;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -146,7 +140,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         binding.imvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareOnSocial();
+                //shareOnSocial();
+                sendDataToFlask();
             }
         });
     }
@@ -176,8 +171,62 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 star.setImageResource(R.drawable.ic_outline_star); // Unselected star
             }
         }
+        rating(selectedRating);
     }
 
+    private void rating(float rating){
+
+        RatingBody ratingBody = new RatingBody(userId, movieId, rating);
+        ApiServiceLocal apiService = ApiLocal.getApiLocal();
+        apiService.submitRating(ratingBody).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(MovieDetailsActivity.this, "Rating submitted successfully!", Toast.LENGTH_SHORT).show();
+                }else{
+                    String errorMessage = "Error: " + response.code() + " - " + response.message();
+                    Toast.makeText(MovieDetailsActivity.this, "Failed to submit rating." + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MovieDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void sendDataToFlask() {
+        // Dữ liệu gửi đi
+        RequestData requestData = new RequestData("Android User");
+
+        // Lấy instance của Retrofit và ApiService
+        ApiServiceLocal apiService = ApiLocal.getApiLocal();
+
+        // Gửi yêu cầu POST
+        apiService.sendData(requestData).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    // Phản hồi từ Flask
+                    String message = response.body().getMessage();
+                    Log.d("Retrofit", "Response: " + message);
+                    Toast.makeText(getApplicationContext(), "Success: " + message, Toast.LENGTH_SHORT).show();
+                } else {
+                    // Xử lý lỗi
+                    Log.e("Retrofit", "Error: " + response.code() + " - " + response.message());
+                    Toast.makeText(getApplicationContext(), "Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                // Lỗi kết nối
+                Log.e("Retrofit", "Failure: " + t.getMessage());
+                Toast.makeText(getApplicationContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void shareOnSocial(){
 

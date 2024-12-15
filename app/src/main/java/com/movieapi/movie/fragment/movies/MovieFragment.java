@@ -1,7 +1,10 @@
 package com.movieapi.movie.fragment.movies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +23,19 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.movies.ViewAllMoviesActivity;
+import com.movieapi.movie.adapter.movies.ForUAdapter;
 import com.movieapi.movie.adapter.movies.MainMovieAdapter;
 import com.movieapi.movie.adapter.movies.MovieCarouselAdapter;
+import com.movieapi.movie.model.Recommendation;
+import com.movieapi.movie.model.RecommendationsResponse;
 import com.movieapi.movie.model.movie.MovieBrief;
 import com.movieapi.movie.model.movie.NowShowingMoviesResponse;
 import com.movieapi.movie.model.movie.PopularMoviesResponse;
 import com.movieapi.movie.model.movie.TopRatedMoviesResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
+import com.movieapi.movie.request.ApiLocal;
+import com.movieapi.movie.request.ApiServiceLocal;
 import com.movieapi.movie.utils.Constants;
 
 import java.util.ArrayList;
@@ -41,9 +49,9 @@ import retrofit2.Response;
 
 public class MovieFragment extends Fragment {
     ProgressBar mProgressBar;
-    TextView view_popular, view_top_rated;
+    TextView view_popular, view_top_rated, view_for_u;
     NestedScrollView fragment_movie_scrollView;
-    LinearLayout popular_heading, top_rated_heading;
+    LinearLayout popular_heading, top_rated_heading, for_u_heading;
 
     // carousel
     LinearLayoutManager carouselLayoutManager;
@@ -69,6 +77,15 @@ public class MovieFragment extends Fragment {
     Call<PopularMoviesResponse> popularMoviesResponseCall;
     Call<TopRatedMoviesResponse> topRatedMoviesResponseCall;
 
+    //Recommendation
+    Call<RecommendationsResponse> recommendationsResponseCall;
+    SharedPreferences prefUser;
+    String userId;
+    RecyclerView for_u_recView;
+    List<Recommendation> forUMovies;
+    ForUAdapter forUAdapter;
+    private boolean forULoaded;
+
     Timer timer;
     TimerTask timerTask;
     int position;
@@ -89,29 +106,45 @@ public class MovieFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.movie_progressBar);
         view_popular = view.findViewById(R.id.view_popular);
         view_top_rated = view.findViewById(R.id.view_top_rated);
+        view_for_u = view.findViewById(R.id.view_for_u);
 
         fragment_movie_scrollView = view.findViewById(R.id.fragment_movie_scrollView);
 
         popular_heading = view.findViewById(R.id.popular_heading);
         top_rated_heading = view.findViewById(R.id.top_rated_heading);
+        for_u_heading = view.findViewById(R.id.for_u_heading);
 
         carousel_recView = view.findViewById(R.id.carousel_recView);
         popular_recView = view.findViewById(R.id.popular_recView);
         topRated_recView = view.findViewById(R.id.top_rated_recView);
+        for_u_recView = view.findViewById(R.id.for_u_recView);
 
         mNowShowingMoviesLoaded = false;
         mPopularMoviesLoaded = false;
         mTopRatedMoviesLoad = false;
+        forULoaded = false;
 
         mNowShowingMovie = new ArrayList<>();
         mPopularList = new ArrayList<>();
         mTopRateMovie = new ArrayList<>();
+        forUMovies = new ArrayList<>();
+
+        //user id
+        prefUser = getContext().getApplicationContext().getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
+        userId = prefUser.getString("idUser", "");
+
+        Log.d("userId", userId);
 
         // carousel
         movieCarouselAdapter = new MovieCarouselAdapter(mNowShowingMovie, getContext());
         carouselLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         carousel_recView.setLayoutManager(carouselLayoutManager);
         carousel_recView.setAdapter(movieCarouselAdapter);
+
+        //for u
+        forUAdapter = new ForUAdapter(forUMovies, getContext());
+        for_u_recView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        for_u_recView.setAdapter(forUAdapter);
 
         // popular
         mPopularAdapter = new MainMovieAdapter(mPopularList, getContext());
@@ -133,9 +166,9 @@ public class MovieFragment extends Fragment {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if(newState == 1)
+                if (newState == 1)
                     stopAutoScrollCarousel();
-                else if (newState == 0){
+                else if (newState == 0) {
                     position = carouselLayoutManager.findFirstCompletelyVisibleItemPosition();
                     runAutoScrollingCarousel();
                 }
@@ -163,8 +196,8 @@ public class MovieFragment extends Fragment {
         initViews();
     }
 
-    private void stopAutoScrollCarousel(){
-        if (timer != null && timerTask != null){
+    private void stopAutoScrollCarousel() {
+        if (timer != null && timerTask != null) {
             timerTask.cancel();
             timer.cancel();
             timer = null;
@@ -173,13 +206,13 @@ public class MovieFragment extends Fragment {
         }
     }
 
-    private void runAutoScrollingCarousel(){
-        if(timer == null && timerTask == null){
+    private void runAutoScrollingCarousel() {
+        if (timer == null && timerTask == null) {
             timer = new Timer();
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    if (position == mNowShowingMovie.size() - 1){
+                    if (position == mNowShowingMovie.size() - 1) {
                         carousel_recView.post(new Runnable() {
                             @Override
                             public void run() {
@@ -188,7 +221,7 @@ public class MovieFragment extends Fragment {
                                 carousel_recView.smoothScrollBy(5, 0);
                             }
                         });
-                    }else {
+                    } else {
                         position++;
                         carousel_recView.smoothScrollToPosition(position);
                     }
@@ -198,35 +231,79 @@ public class MovieFragment extends Fragment {
         }
     }
 
-    private void initViews(){
+    private void initViews() {
         loadNowShowingMovies();
         loadPopularMovie();
         loadTopRatedMovie();
+
+        loadRecommendation(userId);
     }
 
-    private void loadNowShowingMovies(){
+    private void loadRecommendation(String userId) {
+
+        ApiServiceLocal apiService = ApiLocal.getApiLocal();
+        recommendationsResponseCall = apiService.getRecommendations(userId);
+        recommendationsResponseCall.enqueue(new Callback<RecommendationsResponse>() {
+            @Override
+            public void onResponse(Call<RecommendationsResponse> call, Response<RecommendationsResponse> response) {
+                if (!response.isSuccessful()) {
+                    recommendationsResponseCall = call.clone();
+                    recommendationsResponseCall.enqueue(this);
+                    return;
+                }
+
+                if (response.body() == null) return;
+                if (response.body().getRecommendations() == null) return;
+
+                for (Recommendation movie : response.body().getRecommendations()){
+                    if (movie.getMovie_id() != 0 && movie.getPredicted_rating() != 0){
+                        forUMovies.add(movie);
+                    }
+                }
+
+                forULoaded = true;
+                forUAdapter.notifyDataSetChanged();
+                checkAllDataLoad();
+
+
+                    /*Log.d("recommendations", recommendations.toString());
+                } else {
+                    Log.e("Retrofit", "Error: " + response.code() + " - " + response.message());
+                    Toast.makeText(getContext(), "Failed: " + response.message(), Toast.LENGTH_SHORT).show();
+                }*/
+            }
+
+            @Override
+            public void onFailure(Call<RecommendationsResponse> call, Throwable t) {
+                Log.e("Error", "Network request failed in fragment: " + t.getMessage());
+            }
+        });
+    }
+
+    private void loadNowShowingMovies() {
         ApiInterface apiInterface = ApiClient.getMovieApi();
         nowShowingMoviesResponseCall = apiInterface.getNowShowingMovies(Constants.API_KEY, 1, "US");
         nowShowingMoviesResponseCall.enqueue(new Callback<NowShowingMoviesResponse>() {
             @Override
             public void onResponse(Call<NowShowingMoviesResponse> call, Response<NowShowingMoviesResponse> response) {
-                if(!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     nowShowingMoviesResponseCall = call.clone();
                     nowShowingMoviesResponseCall.enqueue(this);
                     return;
                 }
 
-                if(response.body() == null) return;
+                if (response.body() == null) return;
                 if (response.body().getResults() == null) return;
 
-                for (MovieBrief movieBrief : response.body().getResults()){
+                for (MovieBrief movieBrief : response.body().getResults()) {
                     if (movieBrief != null && movieBrief.getBackdropPath() != null)
                         mNowShowingMovie.add(movieBrief);
                 }
                 movieCarouselAdapter.notifyDataSetChanged();
                 mNowShowingMoviesLoaded = true;
                 checkAllDataLoad();
-             }
+            }
+
             @Override
             public void onFailure(Call<NowShowingMoviesResponse> call, Throwable t) {
 
@@ -234,22 +311,22 @@ public class MovieFragment extends Fragment {
         });
     }
 
-    private void loadPopularMovie(){
+    private void loadPopularMovie() {
         ApiInterface apiInterface = ApiClient.getMovieApi();
         popularMoviesResponseCall = apiInterface.getPopularMovies(Constants.API_KEY, 1);
         popularMoviesResponseCall.enqueue(new Callback<PopularMoviesResponse>() {
             @Override
             public void onResponse(Call<PopularMoviesResponse> call, Response<PopularMoviesResponse> response) {
-                if(!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     popularMoviesResponseCall = call.clone();
                     popularMoviesResponseCall.enqueue(this);
                     return;
                 }
 
-                if(response.body() == null) return;
+                if (response.body() == null) return;
                 if (response.body().getResults() == null) return;
 
-                for (MovieBrief movieBrief : response.body().getResults()){
+                for (MovieBrief movieBrief : response.body().getResults()) {
                     if (movieBrief != null && movieBrief.getBackdropPath() != null)
                         mPopularList.add(movieBrief);
                 }
@@ -265,13 +342,13 @@ public class MovieFragment extends Fragment {
         });
     }
 
-    private void loadTopRatedMovie(){
+    private void loadTopRatedMovie() {
         ApiInterface apiService = ApiClient.getMovieApi();
         topRatedMoviesResponseCall = apiService.getTopRatedMovies(Constants.API_KEY, 1, "US");
         topRatedMoviesResponseCall.enqueue(new Callback<TopRatedMoviesResponse>() {
             @Override
             public void onResponse(Call<TopRatedMoviesResponse> call, Response<TopRatedMoviesResponse> response) {
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     topRatedMoviesResponseCall = call.clone();
                     topRatedMoviesResponseCall.enqueue(this);
                     return;
@@ -280,7 +357,7 @@ public class MovieFragment extends Fragment {
                 if (response.body() == null) return;
                 if (response.body().getResults() == null) return;
 
-                for(MovieBrief movieBrief : response.body().getResults()){
+                for (MovieBrief movieBrief : response.body().getResults()) {
                     if (movieBrief != null && movieBrief.getPosterPath() != null)
                         mTopRateMovie.add(movieBrief);
                 }
@@ -298,13 +375,19 @@ public class MovieFragment extends Fragment {
     }
 
     private void checkAllDataLoad() {
-        if(mNowShowingMoviesLoaded && mPopularMoviesLoaded && mTopRatedMoviesLoad){
+        if (mNowShowingMoviesLoaded && mPopularMoviesLoaded && mTopRatedMoviesLoad && forULoaded) {
             mProgressBar.setVisibility(View.GONE);
             carousel_recView.setVisibility(View.VISIBLE);
+
             popular_heading.setVisibility(View.VISIBLE);
             popular_recView.setVisibility(View.VISIBLE);
+
             top_rated_heading.setVisibility(View.VISIBLE);
             topRated_recView.setVisibility(View.VISIBLE);
+
+            for_u_heading.setVisibility(View.VISIBLE);
+            for_u_recView.setVisibility(View.VISIBLE);
+
         }
     }
 

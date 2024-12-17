@@ -83,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        binding.chatBox.setOnClickListener(v -> {
+            ChatPanelDialog chatPanelDialog = new ChatPanelDialog(this);
+            chatPanelDialog.show();
+        });
     }
 
 }

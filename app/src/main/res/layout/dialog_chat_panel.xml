@@ -1,0 +1,75 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/bground">
+
+    <!-- Chat Panel Header -->
+    <!--<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_red"
+        android:padding="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <ImageButton
+            android:id="@+id/closeChatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="Đóng" />
+    </LinearLayout>-->
+
+    <!-- Chat Messages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="20dp" />
+
+    <!-- Input Message -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <EditText
+            android:id="@+id/edAddMessage"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:hint="Enter message"
+            android:textColorHint="@color/grey"
+            android:padding="15dp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:maxLines="3"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/send_message"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/send_comment_ic"
+            android:padding="15dp"
+            android:background="@drawable/default_send_button_cmt"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:foreground="?android:attr/selectableItemBackground"/>/>
+    </LinearLayout>
+</LinearLayout>

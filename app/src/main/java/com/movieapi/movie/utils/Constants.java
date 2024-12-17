@@ -4,6 +4,7 @@ public class Constants {
     public static final String API_KEY = "9589b80fcae5df0a10cc849da5e78833";
     public static final String BASE_URL = "https://api.themoviedb.org/3/";
     public static final String LOCAL_URL = "http://192.168.1.15:5000";
+    public static final String GPT_URL = "API_KEY_GPT";
     public static final String CHANNEL_ID = "movies_channel";
     public static final String MOVIE_STREAM_URL = "https://vidsrc.me/embed/";
     public static final String SERIES_STREAM_URL = "https://vidsrc.me/embed/";

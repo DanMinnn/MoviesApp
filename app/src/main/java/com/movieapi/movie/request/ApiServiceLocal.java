@@ -1,9 +1,9 @@
 package com.movieapi.movie.request;
 
-import com.movieapi.movie.model.ApiResponse;
-import com.movieapi.movie.model.RatingBody;
-import com.movieapi.movie.model.RecommendationsResponse;
-import com.movieapi.movie.model.RequestData;
+import com.movieapi.movie.model.test.ApiResponse;
+import com.movieapi.movie.model.recommend.RatingBody;
+import com.movieapi.movie.model.recommend.RecommendationsResponse;
+import com.movieapi.movie.model.test.RequestData;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -1,4 +1,4 @@
-package com.movieapi.movie.model;
+package com.movieapi.movie.model.test;
 
 public class RequestData {
 

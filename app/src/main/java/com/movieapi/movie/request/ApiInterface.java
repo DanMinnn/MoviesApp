@@ -1,11 +1,7 @@
 package com.movieapi.movie.request;
 
-import com.movieapi.movie.model.ApiResponse;
-import com.movieapi.movie.model.RatingBody;
-import com.movieapi.movie.model.RequestData;
-import com.movieapi.movie.model.SessionResponse;
-import com.movieapi.movie.model.TokenBody;
-import com.movieapi.movie.model.TokenResponse;
+import com.movieapi.movie.model.test.SessionResponse;
+import com.movieapi.movie.model.test.TokenResponse;
 import com.movieapi.movie.model.cast.Person;
 import com.movieapi.movie.model.movie.GenreMoviesResponse;
 import com.movieapi.movie.model.movie.Movie;

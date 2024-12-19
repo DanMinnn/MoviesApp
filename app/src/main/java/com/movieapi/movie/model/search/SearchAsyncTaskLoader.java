@@ -81,7 +81,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                     case "movie":
                         searchResult.setId(result.getInt("id"));
                         searchResult.setPosterPath(result.getString("poster_path"));
-                        searchResult.setName(result.getString("title"));
+                        searchResult.setTitle(result.getString("title"));
                         searchResult.setMediaType("movie");
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
@@ -114,7 +114,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                     case "tv":
                         searchResult.setId(result.getInt("id"));
                         searchResult.setPosterPath(result.getString("poster_path"));
-                        searchResult.setName(result.getString("name"));
+                        searchResult.setTitle(result.getString("title"));
                         searchResult.setMediaType("tv");
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));
@@ -144,7 +144,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                     case "person":
                         searchResult.setId(result.getInt("id"));
                         searchResult.setPosterPath(result.getString("profile_path"));
-                        searchResult.setName(result.getString("name"));
+                        searchResult.setTitle(result.getString("name"));
                         searchResult.setMediaType("person");
                         searchResult.setOverview(null);
                         searchResult.setReleaseDate(null);

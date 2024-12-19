@@ -3,12 +3,12 @@ package com.movieapi.movie.model.recommend;
 public class RatingBody {
 
     private String user_id;
-    private int movie_id;
+    private int item_id;
     private float rating;
 
     public RatingBody(String user_id, int movie_id, float rating) {
         this.user_id = user_id;
-        this.movie_id = movie_id;
+        this.item_id = movie_id;
         this.rating = rating;
     }
 
@@ -20,12 +20,12 @@ public class RatingBody {
         this.user_id = user_id;
     }
 
-    public int getMovie_id() {
-        return movie_id;
+    public int getItem_id() {
+        return item_id;
     }
 
-    public void setMovie_id(int movie_id) {
-        this.movie_id = movie_id;
+    public void setItem_id(int item_id) {
+        this.item_id = item_id;
     }
 
     public float getRating() {

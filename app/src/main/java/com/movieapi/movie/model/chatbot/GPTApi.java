@@ -15,7 +15,7 @@ import okhttp3.RequestBody;
 
 public class GPTApi {
 
-    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+    private static final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private final OkHttpClient client;
@@ -31,7 +31,7 @@ public class GPTApi {
         MessageAPI message = new MessageAPI("user", userMessage);
 
         // Tạo GPTRequest
-        GPTRequest request = new GPTRequest("gpt-4o-mini", Collections.singletonList(message));
+        GPTRequest request = new GPTRequest("llama3-8b-8192", Collections.singletonList(message));
 
         // Chuyển request thành JSON
         String jsonRequest = gson.toJson(request);

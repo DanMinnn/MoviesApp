@@ -3,8 +3,14 @@ package com.movieapi.movie.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.movieapi.movie.fragment.movies.FavouritesFragment;
@@ -72,6 +78,23 @@ public class MainActivity extends AppCompatActivity {
 
         binding.chatBox.setOnClickListener(v -> {
             ChatPanelDialog chatPanelDialog = new ChatPanelDialog(this);
+            chatPanelDialog.setCancelable(true);
+
+            /*// Đặt kích thước cụ thể
+            Window window = chatPanelDialog.getWindow();
+            if (window != null) {
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Background trong suốt
+                window.setLayout(600, 800); // Kích thước cố định: width = 600px, height = 800px
+                window.setGravity(Gravity.END | Gravity.BOTTOM); // Hiển thị ở góc dưới bên phải
+
+                WindowManager.LayoutParams params = window.getAttributes();
+                params.x = 50; // Khoảng cách từ mép phải
+                params.y = 50; // Khoảng cách từ mép dưới
+                window.setAttributes(params);
+
+                window.setWindowAnimations(R.style.DialogAnimation); // Hiệu ứng animation
+            }*/
+
             chatPanelDialog.show();
         });
     }

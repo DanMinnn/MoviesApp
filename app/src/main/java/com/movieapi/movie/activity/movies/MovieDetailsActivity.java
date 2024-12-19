@@ -178,7 +178,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         RatingBody ratingBody = new RatingBody(userId, movieId, rating);
         ApiServiceLocal apiService = ApiLocal.getApiLocal();
-        apiService.submitRating(ratingBody).enqueue(new Callback<Void>() {
+        apiService.submitRatingMovie(ratingBody).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if(response.isSuccessful()){

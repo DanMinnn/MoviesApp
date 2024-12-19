@@ -256,7 +256,7 @@ public class MovieFragment extends Fragment {
                 if (response.body().getRecommendations() == null) return;
 
                 for (Recommendation movie : response.body().getRecommendations()){
-                    if (movie.getMovie_id() != 0 && movie.getPredicted_rating() != 0){
+                    if (movie.getItem_id() != 0 && movie.getPredicted_rating() != 0){
                         forUMovies.add(movie);
                     }
                 }

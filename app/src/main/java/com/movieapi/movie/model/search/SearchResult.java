@@ -7,7 +7,7 @@ import java.util.List;
 public class SearchResult {
     private Integer id;
     private String posterPath;
-    private String name;
+    private String title;
     private String mediaType;
     private String overview;
     private String releaseDate;
@@ -24,7 +24,7 @@ public class SearchResult {
     public SearchResult(Integer id, String posterPath, String name, String mediaType, String overview, String releaseDate, double voteAverage, List<Genre> genreList) {
         this.id = id;
         this.posterPath = posterPath;
-        this.name = name;
+        this.title = name;
         this.mediaType = mediaType;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -48,12 +48,12 @@ public class SearchResult {
         this.posterPath = posterPath;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getMediaType() {

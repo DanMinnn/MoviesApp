@@ -1,35 +1,40 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="400dp"
     android:orientation="vertical"
-    android:background="@color/bground">
+    android:background="@drawable/bg_chat_bot"
+    android:layout_margin="15dp">
 
     <!-- Chat Panel Header -->
-    <!--<LinearLayout
+   <!-- <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_red"
         android:padding="8dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text=""
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-medium" />
 
-        <ImageButton
-            android:id="@+id/closeChatButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="Đóng" />
+
     </LinearLayout>-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AI Support"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-medium"
+        android:padding="10dp"
+        android:gravity="center"/>
+
+    <View
+        android:id="@+id/cancelDialog"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#343740"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"/>
 
     <!-- Chat Messages -->
     <androidx.recyclerview.widget.RecyclerView
@@ -57,7 +62,7 @@
             android:textColor="@color/white"
             android:textSize="15sp"
             android:maxLines="3"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
             android:layout_gravity="center"/>
 

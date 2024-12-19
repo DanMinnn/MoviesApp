@@ -1,4 +1,4 @@
-package com.movieapi.movie.adapter.movies;
+package com.movieapi.movie.adapter.series;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +17,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.movieapi.movie.R;
 import com.movieapi.movie.activity.movies.MovieDetailsActivity;
-import com.movieapi.movie.model.recommend.Recommendation;
+import com.movieapi.movie.activity.series.SeriesDetailsActivity;
 import com.movieapi.movie.model.movie.Movie;
+import com.movieapi.movie.model.recommend.Recommendation;
+import com.movieapi.movie.model.series.Series;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
 import com.movieapi.movie.utils.Constants;
@@ -29,13 +31,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ForUAdapter extends RecyclerView.Adapter<ForUAdapter.ForUHolder> {
+public class RecommendSeriesAdapter extends RecyclerView.Adapter<RecommendSeriesAdapter.ForUHolder> {
 
     private List<Recommendation> recommendations;
     private Context context;
     private ApiInterface apiInterface;
 
-    public ForUAdapter(List<Recommendation> recommendations, Context context) {
+    public RecommendSeriesAdapter(List<Recommendation> recommendations, Context context) {
         this.recommendations = recommendations;
         this.context = context;
         this.apiInterface = ApiClient.getMovieApi();
@@ -43,12 +45,12 @@ public class ForUAdapter extends RecyclerView.Adapter<ForUAdapter.ForUHolder> {
 
     @NonNull
     @Override
-    public ForUAdapter.ForUHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ForUAdapter.ForUHolder(LayoutInflater.from(context).inflate(R.layout.item_popular_top_rated, parent, false));
+    public RecommendSeriesAdapter.ForUHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new RecommendSeriesAdapter.ForUHolder(LayoutInflater.from(context).inflate(R.layout.item_popular_top_rated, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ForUAdapter.ForUHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecommendSeriesAdapter.ForUHolder holder, int position) {
         Recommendation recommendation = recommendations.get(position);
 
         if (recommendation.getItem_id() == 0) {
@@ -56,25 +58,25 @@ public class ForUAdapter extends RecyclerView.Adapter<ForUAdapter.ForUHolder> {
             return;
         }
 
-        apiInterface.getMovieDetails(recommendation.getItem_id(), Constants.API_KEY).enqueue(new Callback<Movie>() {
+        apiInterface.getSeries(recommendation.getItem_id(), Constants.API_KEY).enqueue(new Callback<Series>() {
             @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
+            public void onResponse(Call<Series> call, Response<Series> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    Movie movie = response.body();
+                    Series series = response.body();
 
-                    Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_1280 + movie.getPoster_path())
+                    Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_1280 + series.getBackdropPath())
                             .centerCrop()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(holder.imvShowCard);
 
-                    if (movie.getVote_average() != 0)
-                        holder.txtVoteAverage.setText(String.format("%.1f", movie.getVote_average()));
+                    if (series.getVoteAverage() != 0)
+                        holder.txtVoteAverage.setText(String.format("%.1f", series.getVoteAverage()));
                 }else
                     Log.e("Error", "Failed to fetch movie details for ID: " + recommendation.getItem_id());
             }
 
             @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
+            public void onFailure(Call<Series> call, Throwable t) {
                 Log.e("Error", "Network request failed in adapter: " + t.getMessage());
             }
         });
@@ -90,6 +92,7 @@ public class ForUAdapter extends RecyclerView.Adapter<ForUAdapter.ForUHolder> {
         CardView cardViewShow;
         ImageView imvShowCard;
         TextView txtVoteAverage;
+
         public ForUHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -103,8 +106,8 @@ public class ForUAdapter extends RecyclerView.Adapter<ForUAdapter.ForUHolder> {
             cardViewShow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetailsActivity.class);
-                    intent.putExtra("movie_id", recommendations.get(getAdapterPosition()).getItem_id());
+                    Intent intent = new Intent(context, SeriesDetailsActivity.class);
+                    intent.putExtra("series_id", recommendations.get(getAdapterPosition()).getItem_id());
                     context.startActivity(intent);
                 }
             });

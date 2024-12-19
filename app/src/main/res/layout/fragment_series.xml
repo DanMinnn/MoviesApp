@@ -25,7 +25,7 @@
                 android:visibility="gone"/>
 
             <LinearLayout
-                android:id="@+id/on_the_air_heading"
+                android:id="@+id/for_u_heading_series"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -34,7 +34,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ontheair"
+                    android:text="@string/recommend"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:textSize="20sp"
@@ -44,7 +44,7 @@
                     android:layout_weight="1"/>
 
                 <TextView
-                    android:id="@+id/view_on_the_air"
+                    android:id="@+id/view_all_for_u"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/view_all"
@@ -55,7 +55,7 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ontheair_series_recView"
+                android:id="@+id/for_u_series_recView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -147,7 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="320dp"
+        android:layout_marginTop="280dp"
         android:indeterminateTint="@color/light_red"
         android:visibility="visible"/>
 
@@ -155,7 +155,7 @@
         android:id="@+id/txtErrorNetwork"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:text="Error network"
         android:textSize="20sp"
         android:layout_gravity="center"/>

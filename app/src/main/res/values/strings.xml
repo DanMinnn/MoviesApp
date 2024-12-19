@@ -12,4 +12,5 @@
     <string name="default_web_client_id">1080754709997-r0v3633hqrm3mqf8j3i6ld9gp7a9sim7.apps.googleusercontent.com</string>
     <string name="keyword_not_found">Sorry, the keyword you entered could not be found. Try to check again or search with orther keywords.</string>
     <string name="network_error">Network error</string>
+    <string name="welcome">Hi, I\'m here to help you. If you have any questions, feel free to ask.</string>
 </resources>

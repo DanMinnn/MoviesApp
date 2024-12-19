@@ -1,5 +1,6 @@
 package com.movieapi.movie.request;
 
+import com.movieapi.movie.model.search.SearchResponse;
 import com.movieapi.movie.model.test.SessionResponse;
 import com.movieapi.movie.model.test.TokenResponse;
 import com.movieapi.movie.model.cast.Person;
@@ -83,6 +84,9 @@ public interface ApiInterface {
     @GET("tv/{id}")
     Call<Series> getSeriesDetails(@Path("id") Integer tvShowId, @Query("api_key") String apiKey, @Query("append_to_response") String append_to_response);
 
+    @GET("tv/{id}")
+    Call<Series> getSeries(@Path("id") Integer tvShowId, @Query("api_key") String apiKey);
+
     @GET("tv/{id}/videos")
     Call<TrailerResponse> getSeriesVideos(@Path("id") Integer movieId, @Query("api_key") String apiKey);
 
@@ -107,5 +111,6 @@ public interface ApiInterface {
     @POST("authentication/session/new")
     Call<SessionResponse> createSession(@Query("api_key") String apiKey, @Body RequestBody body);
 
-
+    @GET("search/multi")
+    Call<SearchResponse> searchWithBot(@Query("api_key") String apiKey, @Query("query") String query);
 }

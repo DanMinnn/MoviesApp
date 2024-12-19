@@ -1,10 +1,14 @@
 package com.movieapi.movie.fragment.series;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.movieapi.movie.activity.series.ViewAllTvSeriesActivity;
 import com.movieapi.movie.adapter.series.MainSeriesAdapter;
+import com.movieapi.movie.adapter.series.RecommendSeriesAdapter;
 import com.movieapi.movie.adapter.series.SeriesCarouselAdapter;
 import com.movieapi.movie.databinding.FragmentSeriesBinding;
+import com.movieapi.movie.model.recommend.Recommendation;
+import com.movieapi.movie.model.recommend.RecommendationsResponse;
 import com.movieapi.movie.model.series.AiringTodaySeriesResponse;
 import com.movieapi.movie.model.series.OnTheAirSeriesResponse;
 import com.movieapi.movie.model.series.PopularSeriesResponse;
@@ -23,6 +30,8 @@ import com.movieapi.movie.model.series.SeriesBrief;
 import com.movieapi.movie.model.series.TopRatedSeriesResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
+import com.movieapi.movie.request.ApiLocal;
+import com.movieapi.movie.request.ApiServiceLocal;
 import com.movieapi.movie.utils.Constants;
 
 import java.util.ArrayList;
@@ -64,6 +73,14 @@ public class SeriesFragment extends Fragment {
     Call<PopularSeriesResponse> popularSeriesResponseCall;
     Call<TopRatedSeriesResponse> topRatedSeriesResponseCall;
 
+    //Recommendation
+    Call<RecommendationsResponse> recommendationsResponseCall;
+    SharedPreferences prefUser;
+    String userId;
+    List<Recommendation> forUSeries;
+    RecommendSeriesAdapter forUAdapter;
+    private boolean forULoaded;
+
     Timer timer;
     TimerTask timerTask;
     int position;
@@ -88,11 +105,17 @@ public class SeriesFragment extends Fragment {
         tvOnTheAirLoaded = false;
         tvPopularLoaded = false;
         tvTopRateLoaded = false;
+        forULoaded = false;
 
         tvAirTodayList = new ArrayList<>();
         tvOnTheAirList = new ArrayList<>();
         tvPopularList = new ArrayList<>();
         tvTopRatedList = new ArrayList<>();
+        forUSeries = new ArrayList<>();
+
+        //user id
+        prefUser = getContext().getApplicationContext().getSharedPreferences("sessionUser", Context.MODE_PRIVATE);
+        userId = prefUser.getString("idUser", "");
 
         //carousel
         seriesCarouselAdapter = new SeriesCarouselAdapter(getContext(), tvAirTodayList);
@@ -101,9 +124,9 @@ public class SeriesFragment extends Fragment {
         binding.carouselSeriesRecView.setAdapter(seriesCarouselAdapter);
 
         //on the air
-        tvOnTheAirAdapter = new MainSeriesAdapter(getContext(), tvOnTheAirList);
-        binding.ontheairSeriesRecView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.ontheairSeriesRecView.setAdapter(tvOnTheAirAdapter);
+        forUAdapter = new RecommendSeriesAdapter(forUSeries, getContext());
+        binding.forUSeriesRecView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.forUSeriesRecView.setAdapter(forUAdapter);
 
         // popular
         tvPopularAdapter = new MainSeriesAdapter(getContext(), tvPopularList);
@@ -129,7 +152,7 @@ public class SeriesFragment extends Fragment {
             }
         });
 
-        binding.viewOnTheAir.setOnClickListener(new View.OnClickListener() {
+        binding.viewAllForU.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent iViewAllOnTheAir = new Intent(getContext(), ViewAllTvSeriesActivity.class);
@@ -196,7 +219,7 @@ public class SeriesFragment extends Fragment {
 
     private void initViews() {
         loadOnAirTodaySeries();
-        loadOnTheAir();
+        loadRecommendation(userId);
         loadPopularMovie();
         loadTopRatedMovie();
     }
@@ -231,33 +254,39 @@ public class SeriesFragment extends Fragment {
         });
     }
 
-    private void loadOnTheAir(){
-        ApiInterface apiInterface = ApiClient.getMovieApi();
-        onTheAirSeriesResponseCall = apiInterface.getOnTheAirSeries(Constants.API_KEY, 1);
-        onTheAirSeriesResponseCall.enqueue(new Callback<OnTheAirSeriesResponse>() {
+    private void loadRecommendation(String userId){
+
+        ApiServiceLocal apiService = ApiLocal.getApiLocal();
+        recommendationsResponseCall = apiService.getRecommendationsSeries(userId);
+        recommendationsResponseCall.enqueue(new Callback<RecommendationsResponse>() {
             @Override
-            public void onResponse(Call<OnTheAirSeriesResponse> call, Response<OnTheAirSeriesResponse> response) {
-                if(!response.isSuccessful()){
-                    onTheAirSeriesResponseCall = call.clone();
-                    onTheAirSeriesResponseCall.enqueue(this);
+            public void onResponse(Call<RecommendationsResponse> call, Response<RecommendationsResponse> response) {
+                if (!response.isSuccessful()) {
+                    recommendationsResponseCall = call.clone();
+                    recommendationsResponseCall.enqueue(this);
+
+                    Log.e("Retrofit", "Error: " + response.code() + " - " + response.message());
+                    Toast.makeText(getContext(), "Failed: " + response.message(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (response.body() == null) return;
-                if (response.body().getResults() == null) return;
+                if (response.body().getRecommendations() == null) return;
 
-                for (SeriesBrief seriesBrief : response.body().getResults()){
-                    if (seriesBrief != null && seriesBrief.getBackdropPath() != null)
-                        tvOnTheAirList.add(seriesBrief);
+                for (Recommendation series : response.body().getRecommendations()){
+                    if (series.getItem_id() != 0 && series.getPredicted_rating() != 0){
+                        forUSeries.add(series);
+                    }
                 }
-                tvOnTheAirAdapter.notifyDataSetChanged();
-                tvOnTheAirLoaded = true;
+
+                forULoaded = true;
+                forUAdapter.notifyDataSetChanged();
                 checkAllDataLoad();
             }
 
             @Override
-            public void onFailure(Call<OnTheAirSeriesResponse> call, Throwable t) {
-
+            public void onFailure(Call<RecommendationsResponse> call, Throwable t) {
+                Log.e("Error", "Network request failed in fragment: " + t.getMessage());
             }
         });
     }
@@ -326,13 +355,13 @@ public class SeriesFragment extends Fragment {
     }
 
     private void checkAllDataLoad() {
-        if(tvOnTheAirLoaded && tvOnAirTodayLoaded && tvPopularLoaded && tvTopRateLoaded){
+        if(tvOnAirTodayLoaded && forULoaded && tvPopularLoaded && tvTopRateLoaded){
 
             binding.movieProgressBar.setVisibility(View.GONE);
             binding.carouselSeriesRecView.setVisibility(View.VISIBLE);
 
-            binding.onTheAirHeading.setVisibility(View.VISIBLE);
-            binding.ontheairSeriesRecView.setVisibility(View.VISIBLE);
+            binding.forUHeadingSeries.setVisibility(View.VISIBLE);
+            binding.forUSeriesRecView.setVisibility(View.VISIBLE);
 
             binding.popularSeriesHeading.setVisibility(View.VISIBLE);
             binding.popularSeriesRecView.setVisibility(View.VISIBLE);

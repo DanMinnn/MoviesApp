@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,12 +40,15 @@ import com.movieapi.movie.database.series.SeriesDatabase;
 import com.movieapi.movie.databinding.ActivitySeriesDetailsBinding;
 import com.movieapi.movie.fragment.movies.PagerMoviesAdapter;
 import com.movieapi.movie.fragment.series.PagerSeriesAdapter;
+import com.movieapi.movie.model.recommend.RatingBody;
 import com.movieapi.movie.model.series.Genre;
 import com.movieapi.movie.model.series.Series;
 import com.movieapi.movie.model.series.SeriesCastBrief;
 import com.movieapi.movie.model.series.SeriesCreditsResponse;
 import com.movieapi.movie.request.ApiClient;
 import com.movieapi.movie.request.ApiInterface;
+import com.movieapi.movie.request.ApiLocal;
+import com.movieapi.movie.request.ApiServiceLocal;
 import com.movieapi.movie.utils.Constants;
 
 import java.text.ParseException;
@@ -124,7 +128,7 @@ public class SeriesDetailsActivity extends AppCompatActivity {
             }
         });
 
-        binding.imvRating.setOnClickListener(new View.OnClickListener() {
+        binding.imvRatingSeries.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Dialog dialog = new Dialog(SeriesDetailsActivity.this);
@@ -169,6 +173,29 @@ public class SeriesDetailsActivity extends AppCompatActivity {
                 star.setImageResource(R.drawable.ic_outline_star); // Unselected star
             }
         }
+        rating(selectedRating);
+    }
+
+    private void rating(float rating){
+
+        RatingBody ratingBody = new RatingBody(userId, seriesId, rating);
+        ApiServiceLocal apiService = ApiLocal.getApiLocal();
+        apiService.submitRatingSeries(ratingBody).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(SeriesDetailsActivity.this, "Rating submitted successfully!", Toast.LENGTH_SHORT).show();
+                }else{
+                    String errorMessage = "Error: " + response.code() + " - " + response.message();
+                    Toast.makeText(SeriesDetailsActivity.this, "Failed to submit rating." + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(SeriesDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public int getSeriesId(){

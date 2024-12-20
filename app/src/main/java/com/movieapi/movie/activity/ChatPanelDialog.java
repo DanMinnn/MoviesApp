@@ -27,6 +27,7 @@ import com.movieapi.movie.model.chatbot.ChatViewModel;
 import com.movieapi.movie.model.chatbot.GPTApi;
 import com.movieapi.movie.model.chatbot.GPTResponse;
 import com.movieapi.movie.model.chatbot.Message;
+import com.movieapi.movie.model.chatbot.analyze.SendQuestion;
 import com.movieapi.movie.model.movie.MovieBrief;
 import com.movieapi.movie.model.movie.PopularMoviesResponse;
 import com.movieapi.movie.model.search.SearchResponse;
@@ -38,6 +39,7 @@ import com.movieapi.movie.utils.Constants;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -139,7 +141,7 @@ public class ChatPanelDialog extends BottomSheetDialog {
                 setSendButtonState(true), REQUEST_DELAY_MS - (currentTime - lastRequestTime));
 
         //find movie
-        if (userMessage.toLowerCase().startsWith("find movie")){
+        /*if (userMessage.toLowerCase().startsWith("find movie")){
             String movieName = userMessage.replaceFirst("(?i)find movie", "").trim();
             if (!movieName.isEmpty())
                 searchMovie(movieName);
@@ -149,7 +151,35 @@ public class ChatPanelDialog extends BottomSheetDialog {
             suggestMovie();
         }else {
             callChatBot(userMessage);
-        }
+        }*/
+        SendQuestion.analyzeQuestion(userMessage, new SendQuestion.AnalyzeCallback() {
+            @Override
+            public void onSuccess(String intent, Map<String, String> entities) {
+                if ("find_movie".equals(intent) || "search_movie".equals(intent)) {
+                    //String movieName = entities.getOrDefault("MOVIE", "unknown");
+                    String key = entities.keySet().iterator().next();
+                    String movieName = entities.get(key);
+
+                    chatViewModel.addMessage(new Message("Searching for movie: " + movieName, false));
+                    // Gọi TMDB API để tìm kiếm phim
+                    searchMovie(movieName);
+                } else if ("suggest_movie".equals(intent) || "recommend_movie".equals(intent)) {
+                    chatViewModel.addMessage(new Message("Suggesting movies...", false));
+                    // Gợi ý phim
+                    suggestMovie("popular");
+                }else if ("best_movies".equals(intent)){
+                    chatViewModel.addMessage(new Message("Some best movies for u...", false));
+                    suggestMovie("top_rated");
+                }else {
+                    callChatBot(userMessage);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                chatViewModel.addMessage(new Message("Error: " + error, false));
+            }
+        });
 
     }
 
@@ -196,9 +226,9 @@ public class ChatPanelDialog extends BottomSheetDialog {
         });
     }
 
-    private void suggestMovie(){
+    private void suggestMovie(String category){
         ApiInterface popularMovie = ApiClient.getMovieApi();
-        popularMoviesResponse = popularMovie.getPopularMovies(Constants.API_KEY, 1);
+        popularMoviesResponse = popularMovie.getCategory(category, Constants.API_KEY, 1);
         popularMoviesResponse.enqueue(new retrofit2.Callback<PopularMoviesResponse>() {
             @Override
             public void onResponse(retrofit2.Call<PopularMoviesResponse> call, retrofit2.Response<PopularMoviesResponse> response) {
@@ -212,7 +242,7 @@ public class ChatPanelDialog extends BottomSheetDialog {
 
                 movieBriefList = response.body().getResults();
                 if (!movieBriefList.isEmpty()){
-                    StringBuilder botResponse = new StringBuilder("Popular movies:\n");
+                    StringBuilder botResponse = new StringBuilder("I found some movies:\n");
                     for (int i = 0; i < Math.min(5, movieBriefList.size()); i++){
                         MovieBrief movie = movieBriefList.get(i);
                         botResponse.append("\n- ")

@@ -40,6 +40,9 @@ public interface ApiInterface {
     @GET("movie/popular")
     Call<PopularMoviesResponse> getPopularMovies(@Query("api_key") String api_Key, @Query("page") int page);
 
+    @GET("movie/{category}")
+    Call<PopularMoviesResponse> getCategory(@Path("category") String category, @Query("api_key") String api_Key, @Query("page") int page);
+
     @GET("movie/top_rated")
     Call<TopRatedMoviesResponse> getTopRatedMovies(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("region") String region);
 

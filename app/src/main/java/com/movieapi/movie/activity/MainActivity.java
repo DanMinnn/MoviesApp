@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MovieFragment()).commit();
-        binding.titleToolbar.setText(R.string.home_nav);
+        binding.titleToolbar.setText(R.string.movie_nav);
 
         binding.bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_movie:
                         if(!getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("MovieFragment")){
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MovieFragment()).commit();
-                            binding.titleToolbar.setText(R.string.home_nav);
+                            binding.titleToolbar.setText(R.string.movie_nav);
                         }
                         break;
 

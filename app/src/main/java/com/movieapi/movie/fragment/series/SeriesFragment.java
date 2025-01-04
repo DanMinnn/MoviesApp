@@ -152,14 +152,14 @@ public class SeriesFragment extends Fragment {
             }
         });
 
-        binding.viewAllForU.setOnClickListener(new View.OnClickListener() {
+        /*binding.viewAllForU.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent iViewAllOnTheAir = new Intent(getContext(), ViewAllTvSeriesActivity.class);
                 iViewAllOnTheAir.putExtra(Constants.VIEW_ALL_TV_SHOWS_TYPE, Constants.ON_THE_AIR_TV_SHOWS_TYPE);
                 startActivity(iViewAllOnTheAir);
             }
-        });
+        });*/
 
         binding.viewSeriesPopular.setOnClickListener(new View.OnClickListener() {
             @Override

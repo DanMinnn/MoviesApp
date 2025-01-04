@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/txtUserMessage"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
         android:text="from to now, do u know I asked u how many request ? "

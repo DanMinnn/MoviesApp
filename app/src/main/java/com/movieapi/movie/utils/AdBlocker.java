@@ -23,6 +23,7 @@ public class AdBlocker {
     private static final String[] ALLOWED_URL_CONTAINS = {
             "vidsrc",
             "cdnjs.cloudflare.com",
+            "gomo.to",
             "s10.histats.com",
             "capaciousdrewreligion.com",
             "ajax.googleapis.com",
@@ -54,7 +55,12 @@ public class AdBlocker {
             "approveofchi",
             "2embed",
             "jsdelivr",
-            "certificatestainfranz"
+            "certificatestainfranz",
+            "www.google-analytics.com",
+            "p.dtsan.net",
+            "embedwish.com",
+            "t.dtscdn.com",
+            "rvlzhfoat7kb.cdn-centaurus.com"
     };
 
     public static void init(final Context context) {
@@ -67,9 +73,14 @@ public class AdBlocker {
 
     public static boolean isAd(String url) {
         if (TextUtils.isEmpty(url)) return true;
+
         Uri uri = Uri.parse(url);
         String host = uri.getHost();
         if (host == null) return true;
+
+        if (url.contains(".m3u8") || url.contains(".ts") || url.contains(".dtsan")) {
+            return false;
+        }
 
         // Kiểm tra host trong danh sách được phép
         for (String allowedUrl : ALLOWED_URL_CONTAINS) {

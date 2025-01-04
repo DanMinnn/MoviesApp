@@ -22,7 +22,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SendQuestion {
-    private static final String BACKEND_URL = Constants.LOCAL_URL + "/analyze-question";
+    private static final String BACKEND_URL = Constants.LOCAL_URL + "analyze-question";
 
     public interface AnalyzeCallback {
         void onSuccess(String intent, Map<String, String> entities);

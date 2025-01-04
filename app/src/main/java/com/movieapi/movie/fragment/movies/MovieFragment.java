@@ -106,7 +106,7 @@ public class MovieFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.movie_progressBar);
         view_popular = view.findViewById(R.id.view_popular);
         view_top_rated = view.findViewById(R.id.view_top_rated);
-        view_for_u = view.findViewById(R.id.view_for_u);
+        //view_for_u = view.findViewById(R.id.view_for_u);
 
         fragment_movie_scrollView = view.findViewById(R.id.fragment_movie_scrollView);
 

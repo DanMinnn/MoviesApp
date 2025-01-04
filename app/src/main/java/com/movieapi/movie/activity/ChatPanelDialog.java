@@ -140,29 +140,22 @@ public class ChatPanelDialog extends BottomSheetDialog {
         new Handler(Looper.getMainLooper()).postDelayed(() ->
                 setSendButtonState(true), REQUEST_DELAY_MS - (currentTime - lastRequestTime));
 
-        //find movie
-        /*if (userMessage.toLowerCase().startsWith("find movie")){
-            String movieName = userMessage.replaceFirst("(?i)find movie", "").trim();
-            if (!movieName.isEmpty())
-                searchMovie(movieName);
-            else
-                chatViewModel.addMessage(new Message("Enter movie name u want to find.", false));
-        }else if (userMessage.startsWith("suggest movie")){
-            suggestMovie();
-        }else {
-            callChatBot(userMessage);
-        }*/
         SendQuestion.analyzeQuestion(userMessage, new SendQuestion.AnalyzeCallback() {
             @Override
             public void onSuccess(String intent, Map<String, String> entities) {
+
                 if ("find_movie".equals(intent) || "search_movie".equals(intent)) {
                     //String movieName = entities.getOrDefault("MOVIE", "unknown");
-                    String key = entities.keySet().iterator().next();
-                    String movieName = entities.get(key);
+                    if (!entities.isEmpty()){
+                        String key = entities.keySet().iterator().next();
+                        String movieName = entities.get(key);
+                        chatViewModel.addMessage(new Message("Searching for movie: " + movieName, false));
+                        // Gọi TMDB API để tìm kiếm phim
+                        searchMovie(movieName);
+                    } else {
+                        chatViewModel.addMessage(new Message("I need movie name !", false));
+                    }
 
-                    chatViewModel.addMessage(new Message("Searching for movie: " + movieName, false));
-                    // Gọi TMDB API để tìm kiếm phim
-                    searchMovie(movieName);
                 } else if ("suggest_movie".equals(intent) || "recommend_movie".equals(intent)) {
                     chatViewModel.addMessage(new Message("Suggesting movies...", false));
                     // Gợi ý phim

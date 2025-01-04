@@ -9,24 +9,36 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.media3.common.MediaItem;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.PlayerView;
 
 import com.movieapi.movie.databinding.ActivityStreamMovieBinding;
 import com.movieapi.movie.utils.AdBlocker;
+import com.movieapi.movie.utils.Browser;
 import com.movieapi.movie.utils.Constants;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import java.io.IOException;
 
 public class StreamMovieActivity extends AppCompatActivity {
     ActivityStreamMovieBinding binding;
 
-    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +51,30 @@ public class StreamMovieActivity extends AppCompatActivity {
         binding = ActivityStreamMovieBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.webView.setWebViewClient(new AdBlockingWebViewClient());
+        //binding.webView.setWebViewClient(new AdBlockingWebViewClient());
+        binding.webView.setWebViewClient(new Browser());
         binding.webView.setWebChromeClient(new ChromeClient());
-        binding.webView.getSettings().setJavaScriptEnabled(false);
-        binding.webView.getSettings().setDomStorageEnabled(false);
+        binding.webView.getSettings().setJavaScriptEnabled(true);
+        binding.webView.getSettings().setDomStorageEnabled(true);
         binding.webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+        CookieManager.getInstance().setAcceptCookie(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(binding.webView, true);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
+        // Clear cache and cookies
+        binding.webView.clearCache(true);
+        binding.webView.clearHistory();
+        CookieManager.getInstance().removeAllCookies(null);
+        CookieManager.getInstance().flush();
+
+        binding.webView.getSettings().setUserAgentString(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36"
+        );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
@@ -67,7 +98,7 @@ public class StreamMovieActivity extends AppCompatActivity {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
             String url = request.getUrl().toString();
-            if (AdBlocker.isAd(url)) {
+            if (url == null || url.isEmpty() || AdBlocker.isAd(url)) {
                 Log.d("AdBlocker", "Blocked URL: " + url);
                 return AdBlocker.createEmptyResource();
             }

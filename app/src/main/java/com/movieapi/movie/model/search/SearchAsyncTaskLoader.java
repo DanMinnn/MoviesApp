@@ -114,7 +114,7 @@ public class SearchAsyncTaskLoader extends AsyncTaskLoader<SearchResponse>   {
                     case "tv":
                         searchResult.setId(result.getInt("id"));
                         searchResult.setPosterPath(result.getString("poster_path"));
-                        searchResult.setTitle(result.getString("title"));
+                        searchResult.setTitle(result.getString("name"));
                         searchResult.setMediaType("tv");
                         searchResult.setOverview(result.getString("overview"));
                         searchResult.setVoteAverage(result.getDouble("vote_average"));

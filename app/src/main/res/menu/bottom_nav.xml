@@ -4,11 +4,11 @@
         android:id="@+id/nav_movie"
         android:icon="@drawable/home_ic_bottom"
         android:iconTint="@color/white"
-        android:title="@string/home_nav"/>
+        android:title="@string/movie_nav"/>
 
     <item
         android:id="@+id/nav_series"
-        android:icon="@drawable/ic_tv"
+        android:icon="@drawable/tv_series_ic_bottom"
         android:iconTint="@color/white"
         android:title="@string/series_nav"/>
 
